@@ -55,4 +55,9 @@ public class WallSegment : MonoBehaviour
 
         }
     }
+
+    public WallAutomata.WallState GetWallState()
+    {
+        return _automata.CurrentState;
+    }
 }
