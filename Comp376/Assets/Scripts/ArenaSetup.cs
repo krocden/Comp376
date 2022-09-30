@@ -9,6 +9,7 @@ public class ArenaSetup : MonoBehaviour
     [SerializeField] private Transform _floor;
     [SerializeField] private Transform _zAxis;
     [SerializeField] private Transform _xAxis;
+    [SerializeField] private Transform _pathDebugger;
     private int _buildingLayer;
 
     private WallSegment[,] wallSegmentsX;
@@ -18,6 +19,8 @@ public class ArenaSetup : MonoBehaviour
     private int maxX;
     private int maxZ;
 
+    private Pathfinding pathfinding;
+
     void Start()
     {
         maxX = (int)_floor.localScale.x;
@@ -25,7 +28,44 @@ public class ArenaSetup : MonoBehaviour
 
         InstantiateWallSegments();
         CreatePathNodes();
-        DebugNodeWalls();
+
+        pathfinding = new Pathfinding(pathNodeGrid);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            List<PathNode> path = pathfinding.FindPath(0, 0, 19, 19);
+            DebugPath(path);
+        }
+    }
+
+    private void DebugNodeNeighbours(PathNode pathNode)
+    {
+        var nodes = pathNode.GetAvailableNeighbours();
+        foreach (PathNode node in nodes)
+        {
+            GameObject cubeNode = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cubeNode.transform.localScale = new Vector3(5, 1, 5);
+            cubeNode.transform.position = node.position;
+        }
+
+    }
+
+    private void DebugPath(List<PathNode> path)
+    {
+        for (int i = 0; i < _pathDebugger.childCount; i++)
+            Destroy(_pathDebugger.GetChild(i).gameObject);
+
+        foreach (PathNode node in path)
+        {
+            GameObject cubeNode = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cubeNode.transform.localScale = new Vector3(5, 1, 5);
+            cubeNode.transform.position = node.position;
+            cubeNode.transform.parent = _pathDebugger;
+            cubeNode.name = node.ToString();
+        }
     }
 
     private void InstantiateWallSegments()
@@ -61,9 +101,6 @@ public class ArenaSetup : MonoBehaviour
                 wallSegmentsZ[x, z] = o;
             }
         }
-
-        //_xAxis = Instantiate(_zAxis, Vector3.zero, Quaternion.Euler(0, 90, 0), transform);
-        //_xAxis.name = "X-Axis";
     }
 
     private void CreatePathNodes()
@@ -81,64 +118,12 @@ public class ArenaSetup : MonoBehaviour
                 PathNode node = pathNodeGrid[x, z] = new PathNode(x, z, nodePosition);
 
                 node.SetWalls(wallSegmentsX, wallSegmentsZ, maxX, maxZ);
-
-                //GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                //cube.transform.position = node.position;
-                //cube.name = "Node " + node.ToString();
-                //cube.transform.parent = transform;
             }
         }
 
         foreach (PathNode node in pathNodeGrid)
         {
             node.SetNeighbours(pathNodeGrid, maxX - 1, maxZ - 1);
-        }
-    }
-
-
-    private void DebugNodeWalls()
-    {
-        foreach (PathNode node in pathNodeGrid)
-        {
-            Color wallColor = new Color(UnityEngine.Random.Range(0F, 1F), UnityEngine.Random.Range(0, 1F), UnityEngine.Random.Range(0, 1F)); ;
-            GameObject cubeNode = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cubeNode.transform.position = node.position;
-            cubeNode.GetComponent<MeshRenderer>().material.color = wallColor;
-            cubeNode.name = node.ToString();
-
-
-            if (node.topWall != null)
-            {
-                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.transform.position = node.topWall.transform.position - Vector3.forward;
-                cube.name = "top wall";
-                cube.GetComponent<MeshRenderer>().material.color = wallColor;
-            }
-
-            if (node.bottomWall != null)
-            {
-                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.transform.position = node.bottomWall.transform.position - Vector3.back;
-                cube.name = "bottom wall";
-                cube.GetComponent<MeshRenderer>().material.color = wallColor;
-            }
-
-            if (node.rightWall != null)
-            {
-                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.transform.position = node.rightWall.transform.position - Vector3.right;
-                cube.name = "right wall";
-                cube.GetComponent<MeshRenderer>().material.color = wallColor;
-            }
-
-
-            if (node.leftWall != null)
-            {
-                GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cube.transform.position = node.leftWall.transform.position - Vector3.left;
-                cube.name = "left wall";
-                cube.GetComponent<MeshRenderer>().material.color = wallColor;
-            }
         }
     }
 }
