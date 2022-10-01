@@ -82,8 +82,6 @@ public class PathNode
     /// <param name="height"> height of the grids</param>
     public void SetWalls(WallSegment[,] wallsX, WallSegment[,] wallsZ, int width, int height)
     {
-        Debug.Log(ToString());
-
         if(z > 0)
             bottomWall = wallsZ[x, z];
         if(z < height - 1)
