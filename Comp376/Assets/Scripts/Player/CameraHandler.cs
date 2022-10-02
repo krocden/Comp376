@@ -18,6 +18,11 @@ public class CameraHandler : MonoBehaviour
         rotation.y -= Input.GetAxis("Mouse Y") * sensitivity;
         rotation.y = Mathf.Clamp(rotation.y, -89, 89); 
 
-        transform.localRotation = Quaternion.AngleAxis(rotation.x, Vector3.up) * Quaternion.AngleAxis(rotation.y, Vector3.right);
+        Quaternion localRotation = Quaternion.AngleAxis(rotation.x, Vector3.up) * Quaternion.AngleAxis(rotation.y, Vector3.right);
+        transform.rotation = localRotation;
+
+        Vector3 eulerRotation = localRotation.eulerAngles;
+        eulerRotation.x = 0;
+        transform.parent.rotation = Quaternion.Euler(eulerRotation);
     }
 }
