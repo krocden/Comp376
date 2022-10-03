@@ -89,7 +89,6 @@ public class ArenaSetup : MonoBehaviour
         }
 
         pathRenderer.SetPathNodes(paths);
-        // DebugPaths();
     }
 
     private void DebugPaths()
