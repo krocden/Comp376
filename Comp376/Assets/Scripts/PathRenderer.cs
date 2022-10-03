@@ -9,6 +9,8 @@ public class PathRenderer : MonoBehaviour
     [SerializeField] private float ballSpeed = 3f;
     [SerializeField] private GameObject ball;
     [SerializeField] private float newBallCooldown = 3f;
+
+    [SerializeField] private float pathTrailHeight = 1f;
     private float timeSinceLastBall;
 
     public List<List<PathNode>> paths = new List<List<PathNode>>();
@@ -43,23 +45,48 @@ public class PathRenderer : MonoBehaviour
         int currentNodeIndex = 0;
 
         GameObject ball = GameObject.Instantiate(this.ball, transform);
-        ball.transform.position = nodes[currentNodeIndex].position + Vector3.up; 
+        ball.transform.position = nodes[currentNodeIndex].position + (Vector3.up * pathTrailHeight); 
 
         while (currentNodeIndex < nodes.Count - 1)
         {
             if (cancellationToken.IsCancellationRequested) {
-                GameObject.Destroy(ball);
+                DestroyBall(ball);
                 return;
             }
 
 
-            ball.transform.position = Vector3.MoveTowards(ball.transform.position, nodes[currentNodeIndex + 1].position + Vector3.up, Time.deltaTime * ballSpeed);
+            ball.transform.position = Vector3.MoveTowards(ball.transform.position, nodes[currentNodeIndex + 1].position + (Vector3.up * pathTrailHeight), Time.deltaTime * ballSpeed);
             await Task.Yield();
 
-            if (ball.transform.position == nodes[currentNodeIndex + 1].position + Vector3.up)
+            if (cancellationToken.IsCancellationRequested)
+            {
+                DestroyBall(ball);
+                return;
+            }
+
+            if (ball.transform.position == nodes[currentNodeIndex + 1].position + (Vector3.up * pathTrailHeight))
                 currentNodeIndex++;
         }
 
+        DestroyBall(ball);
+    }
+
+    private void DestroyBall(GameObject ball)
+    {
+#if UNITY_EDITOR
+        GameObject.DestroyImmediate(ball);
+#else
         GameObject.Destroy(ball);
+#endif
+    }
+
+    private void OnApplicationQuit()
+    {
+        tokenSource.Cancel();
+    }
+
+    private void OnDisable()
+    { 
+        tokenSource.Cancel();
     }
 }
