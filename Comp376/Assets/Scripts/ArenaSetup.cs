@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ArenaSetup : MonoBehaviour
 {
@@ -10,6 +12,10 @@ public class ArenaSetup : MonoBehaviour
     [SerializeField] private Transform _zAxis;
     [SerializeField] private Transform _xAxis;
     [SerializeField] private Transform _pathDebugger;
+
+    //temp
+    [SerializeField] private PathRenderer pathRenderer;
+
     private int _buildingLayer;
 
     private WallSegment[,] wallSegmentsX;
@@ -21,6 +27,9 @@ public class ArenaSetup : MonoBehaviour
 
     private Pathfinding pathfinding;
 
+    List<Tuple<Vector2Int, Vector2Int>> pathStartEndCoordinatesList = new List<Tuple<Vector2Int, Vector2Int>>();
+    List<List<PathNode>> paths = new List<List<PathNode>>();
+
     void Start()
     {
         maxX = (int)_floor.localScale.x;
@@ -30,41 +39,79 @@ public class ArenaSetup : MonoBehaviour
         CreatePathNodes();
 
         pathfinding = new Pathfinding(pathNodeGrid);
+
+        AddBuildingChecks();
+
+        pathStartEndCoordinatesList.Add(new Tuple<Vector2Int, Vector2Int>(new Vector2Int(0, 0), new Vector2Int(19, 19)));
+        pathStartEndCoordinatesList.Add(new Tuple<Vector2Int, Vector2Int>(new Vector2Int(0, 19), new Vector2Int(19, 0)));
+
+        UpdatePaths();
     }
 
-    private void Update()
+    private bool CheckPathValidity()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        List<bool> pathsValid = new List<bool>();
+        foreach (Tuple<Vector2Int, Vector2Int> coords in pathStartEndCoordinatesList)
         {
-            List<PathNode> path = pathfinding.FindPath(0, 0, 19, 19);
-            DebugPath(path);
+            pathsValid.Add(pathfinding.TryFindPath(coords.Item1.x, coords.Item1.y, coords.Item2.x, coords.Item2.y));
+        }
+        return pathsValid.All(x => x);
+    }
+
+
+    private void AddBuildingChecks()
+    {
+        // Add all the building conditions when trying to place a wall
+        foreach (WallSegment wall in wallSegmentsX)
+        {
+            if (wall != null)
+            {
+                wall.tryCalculatePaths = CheckPathValidity;
+                wall.createNewPaths = UpdatePaths;                
+            }
+        }
+
+        foreach (WallSegment wall in wallSegmentsZ)
+        {
+            if (wall != null)
+            {
+                wall.tryCalculatePaths = CheckPathValidity;
+                wall.createNewPaths = UpdatePaths;
+            }
         }
     }
-
-    private void DebugNodeNeighbours(PathNode pathNode)
+    private void UpdatePaths()
     {
-        var nodes = pathNode.GetAvailableNeighbours();
-        foreach (PathNode node in nodes)
+        paths.Clear();
+        foreach (Tuple<Vector2Int, Vector2Int> coords in pathStartEndCoordinatesList)
         {
-            GameObject cubeNode = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cubeNode.transform.localScale = new Vector3(5, 1, 5);
-            cubeNode.transform.position = node.position;
+            paths.Add(pathfinding.FindPath(coords.Item1.x, coords.Item1.y, coords.Item2.x, coords.Item2.y));
         }
 
+        pathRenderer.SetPathNodes(paths);
+        // DebugPaths();
     }
 
-    private void DebugPath(List<PathNode> path)
+    private void DebugPaths()
     {
         for (int i = 0; i < _pathDebugger.childCount; i++)
             Destroy(_pathDebugger.GetChild(i).gameObject);
 
-        foreach (PathNode node in path)
+        int index = 1;
+
+        foreach (List<PathNode> path in paths)
         {
-            GameObject cubeNode = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            cubeNode.transform.localScale = new Vector3(5, 1, 5);
-            cubeNode.transform.position = node.position;
-            cubeNode.transform.parent = _pathDebugger;
-            cubeNode.name = node.ToString();
+            Color rand = Random.ColorHSV();
+            foreach (PathNode node in path)
+            {
+                GameObject cubeNode = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                cubeNode.transform.localScale = new Vector3(5, 1, 5);
+                cubeNode.transform.position = node.position;
+                cubeNode.transform.parent = _pathDebugger;
+                cubeNode.name = "Path " + index + " " + node.ToString();
+                cubeNode.GetComponent<MeshRenderer>().material.color = rand;
+            }
+            index++;
         }
     }
 

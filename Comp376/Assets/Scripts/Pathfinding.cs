@@ -15,6 +15,11 @@ public class Pathfinding
         this.pathNodeGrid = grid;
     }
 
+    public bool TryFindPath(int startX, int startZ, int endX, int endZ)
+    {
+        return FindPath(startX, startZ, endX, endZ) != null;
+    }
+
     public List<PathNode> FindPath(int startX, int startZ, int endX, int endZ)
     {
         PathNode startNode = pathNodeGrid[startX, startZ];
