@@ -54,7 +54,6 @@ public class PathRenderer : MonoBehaviour
                 return;
             }
 
-
             ball.transform.position = Vector3.MoveTowards(ball.transform.position, nodes[currentNodeIndex + 1].position + (Vector3.up * pathTrailHeight), Time.deltaTime * ballSpeed);
             await Task.Yield();
 
