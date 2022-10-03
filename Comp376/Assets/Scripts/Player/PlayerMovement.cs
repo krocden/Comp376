@@ -6,33 +6,43 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private float gravity;
+    [SerializeField] private float jumpHeight;
+    [SerializeField] private float verticalVelocity;
+    
+    private Vector3 movement;
     
     private CharacterController controller;
     private Camera firstPersonCamera;
 
-
     public bool grounded;
 
-    // Start is called before the first frame update
     void Start()
     {
         controller = GetComponent<CharacterController>();
         firstPersonCamera = Camera.main;
     }
 
-    // Update is called once per frame
     void Update()
     {
         grounded = controller.isGrounded;
-        
-        if (!controller.isGrounded)
+
+        if (grounded)
         {
-            Vector3 gravitationalForce = new Vector3(0, gravity * Time.deltaTime, 0);
-            controller.Move(gravitationalForce);
+            verticalVelocity = 0;
+        }
+
+        verticalVelocity += gravity * Time.deltaTime;
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            if (grounded)
+            {
+                verticalVelocity += Mathf.Sqrt(jumpHeight * -2 * gravity);
+            }
         }
 
         float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxisRaw("Vertical");
+        float z = Input.GetAxis("Vertical");
 
         Vector3 forward = firstPersonCamera.transform.forward;
         Vector3 right = firstPersonCamera.transform.right;
@@ -42,8 +52,9 @@ public class PlayerMovement : MonoBehaviour
         forward.Normalize();
         right.Normalize();
 
-        Vector3 movement = forward * z + right * x;
-
+        movement = forward * z + right * x;
+        
+        movement.y = verticalVelocity;
         controller.Move(movement * Time.deltaTime * speed);
 
     }
