@@ -12,6 +12,7 @@ public class ArenaSetup : MonoBehaviour
     [SerializeField] private Transform _zAxis;
     [SerializeField] private Transform _xAxis;
     [SerializeField] private Transform _pathDebugger;
+    [SerializeField] private Transform _player;
 
     //temp
     [SerializeField] private PathRenderer pathRenderer;
@@ -132,6 +133,7 @@ public class ArenaSetup : MonoBehaviour
                 WallSegment o = Instantiate(_wallSegment, wallPosition, Quaternion.Euler(0, 90, 0), _xAxis);
                 o.gameObject.name = "Wall (" + x + "," + z + ")";
                 o.gameObject.layer = _buildingLayer;
+                o.PlayerTransform = _player;
                 wallSegmentsX[x, z] = o;
             }
         }
@@ -144,6 +146,7 @@ public class ArenaSetup : MonoBehaviour
                 WallSegment o = Instantiate(_wallSegment, wallPosition, Quaternion.identity, _zAxis);
                 o.gameObject.name = "Wall (" + x + "," + z + ")";
                 o.gameObject.layer = _buildingLayer;
+                o.PlayerTransform = _player;
                 wallSegmentsZ[x, z] = o;
             }
         }

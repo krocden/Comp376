@@ -461,6 +461,7 @@ MonoBehaviour:
   _zAxis: {fileID: 940165208}
   _xAxis: {fileID: 2082043474}
   _pathDebugger: {fileID: 436429777}
+  _player: {fileID: 787140826}
   pathRenderer: {fileID: 380351829}
 --- !u!4 &427193917
 Transform:

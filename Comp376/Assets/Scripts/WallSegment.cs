@@ -6,7 +6,10 @@ using UnityEngine;
 
 public class WallSegment : MonoBehaviour
 {
+    public Transform PlayerTransform { get; set; }
+
     [SerializeField] private Renderer _renderer;
+    [SerializeField] private Canvas _canvas;
     private bool _isBeingHovered = false;
     private WallAutomata _automata = new WallAutomata();
 
@@ -16,6 +19,8 @@ public class WallSegment : MonoBehaviour
     private void OnEnable()
     {
         _automata.StateVisualsChanged += VisualsChanged;
+        //_canvas.worldCamera = Camera.main;
+        _canvas.enabled = false;
     }
 
     private void OnDisable()
@@ -33,30 +38,51 @@ public class WallSegment : MonoBehaviour
     {
         _isBeingHovered = false;
         _renderer.material.color = Color.white;
+        _canvas.enabled = false;
     }
 
     private void Update()
     {
-        if (_isBeingHovered && Input.GetKeyDown(KeyCode.E))
+        if (_isBeingHovered)
         {
-            if (_automata.CurrentState == WallAutomata.WallState.Empty)
+
+            if (_automata.CurrentState == WallAutomata.WallState.Plain)
             {
-                // position the wall in place so the pathfinder algo can look with this new wall
-                _automata.GoToState(WallAutomata.WallState.Plain);
+                _canvas.enabled = true;
 
-
-                // if all the paths are valid we can place the wall
-                // otherwise reset the wall to the empty state
-                if (tryCalculatePaths.Invoke())
-                    createNewPaths.Invoke();
+                if (Vector3.Dot(transform.forward, PlayerTransform.forward) > 0)
+                {
+                    _canvas.transform.localScale = new Vector3(1, 1, 10);
+                    _canvas.transform.localPosition = new Vector3(0, 0, -0.51f);
+                }
                 else
-                    _automata.GoToState(WallAutomata.WallState.Empty);
+                {
+                    _canvas.transform.localScale = new Vector3(-1, 1, 10);
+                    _canvas.transform.localPosition = new Vector3(0, 0, 0.51f);
+                }
             }
-            else
+
+            if (Input.GetMouseButtonDown(0))
             {
-                // update the paths when the wall is removed
-                _automata.GoToState(WallAutomata.WallState.Empty);
-                createNewPaths.Invoke();
+                if (_automata.CurrentState == WallAutomata.WallState.Empty)
+                {
+                    // position the wall in place so the pathfinder algo can look with this new wall
+                    _automata.GoToState(WallAutomata.WallState.Plain);
+
+
+                    // if all the paths are valid we can place the wall
+                    // otherwise reset the wall to the empty state
+                    if (tryCalculatePaths.Invoke())
+                        createNewPaths.Invoke();
+                    else
+                        _automata.GoToState(WallAutomata.WallState.Empty);
+                }
+                else
+                {
+                    // update the paths when the wall is removed
+                    _automata.GoToState(WallAutomata.WallState.Empty);
+                    createNewPaths.Invoke();
+                }
             }
         }
     }
@@ -70,6 +96,7 @@ public class WallSegment : MonoBehaviour
                 transform.localPosition = new Vector3(transform.localPosition.x, 5, transform.localPosition.z);
                 break;
             case WallAutomata.WallState.Empty:
+                _canvas.enabled = false;
                 transform.localScale = new Vector3(transform.localScale.x, 0.2f, transform.localScale.z);
                 transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
                 break;
