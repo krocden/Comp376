@@ -43,7 +43,7 @@ public class ArenaSetup : MonoBehaviour
         AddBuildingChecks();
 
         pathStartEndCoordinatesList.Add(new Tuple<Vector2Int, Vector2Int>(new Vector2Int(0, 0), new Vector2Int(19, 19)));
-        pathStartEndCoordinatesList.Add(new Tuple<Vector2Int, Vector2Int>(new Vector2Int(0, 19), new Vector2Int(19, 0)));
+        pathStartEndCoordinatesList.Add(new Tuple<Vector2Int, Vector2Int>(new Vector2Int(4, 0), new Vector2Int(4, 16)));
 
         UpdatePaths();
     }

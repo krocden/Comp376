@@ -8,7 +8,7 @@ public class PathRenderer : MonoBehaviour
 {
     [SerializeField] private float ballSpeed = 3f;
     [SerializeField] private GameObject ball;
-    [SerializeField] private float newBallCooldown = 3f;
+    [SerializeField] private float newBallCooldown = 1000f;
 
     [SerializeField] private float pathTrailHeight = 1f;
     private float timeSinceLastBall;
@@ -20,54 +20,61 @@ public class PathRenderer : MonoBehaviour
     public void SetPathNodes(List<List<PathNode>> nodes)
     {
         tokenSource.Cancel();
-        this.paths = nodes;
+        paths = nodes;
         tokenSource = new CancellationTokenSource();
     }
 
     private void Update()
     {
-        if (this.paths.Count > 0)
+        if (paths.Count > 0)
         {
             timeSinceLastBall += Time.deltaTime;
-            if (timeSinceLastBall >= newBallCooldown) {
-                foreach (List<PathNode> path in paths)
-                {
-                    MoveTroughPath(path, tokenSource.Token);
-                }
-                timeSinceLastBall = 0;
+            if (timeSinceLastBall <= newBallCooldown)
+            {
+                MoveTroughPaths(paths, tokenSource.Token);
+                timeSinceLastBall = 1001;
             }
         }
 
     }
 
-    private async void MoveTroughPath(List<PathNode> nodes, CancellationToken cancellationToken)
+    private async void MoveTroughPaths(List<List<PathNode>> paths, CancellationToken cancellationToken)
     {
-        int currentNodeIndex = 0;
-
-        GameObject ball = GameObject.Instantiate(this.ball, transform);
-        ball.transform.position = nodes[currentNodeIndex].position + (Vector3.up * pathTrailHeight); 
-
-        while (currentNodeIndex < nodes.Count - 1)
+        //foreach (List<PathNode> nodes in this.paths)
+        //{
+        foreach (PathNode node in paths[1])
         {
-            if (cancellationToken.IsCancellationRequested) {
-                DestroyBall(ball);
-                return;
-            }
-
-            ball.transform.position = Vector3.MoveTowards(ball.transform.position, nodes[currentNodeIndex + 1].position + (Vector3.up * pathTrailHeight), Time.deltaTime * ballSpeed);
-            await Task.Yield();
-
-            if (cancellationToken.IsCancellationRequested)
-            {
-                DestroyBall(ball);
-                return;
-            }
-
-            if (ball.transform.position == nodes[currentNodeIndex + 1].position + (Vector3.up * pathTrailHeight))
-                currentNodeIndex++;
+            if (node.parentNode != null)
+                await MoveTroughNode(node, Vector3.Distance(node.position, node.parentNode.position), cancellationToken);
         }
 
-        DestroyBall(ball);
+        foreach (PathNode node in paths[0])
+        {
+            if (node.parentNode != null)
+                await MoveTroughNode(node, Vector3.Distance(node.position, node.parentNode.position), cancellationToken);
+        }
+        //}
+    }
+
+    private async Task MoveTroughNode(PathNode node, float distance, CancellationToken cancellationToken)
+    {
+        GameObject ball = Instantiate(this.ball, transform);
+        ball.transform.position = node.parentNode.position + (Vector3.up * pathTrailHeight);
+        ball.name = node.parentNode.ToString();
+
+        //while (ball.transform.position != node.position + (Vector3.up * pathTrailHeight))
+        //{
+        //    ball.transform.position = Vector3.MoveTowards(ball.transform.position, node.position + (Vector3.up * pathTrailHeight), Time.deltaTime * ballSpeed * distance);
+        //    await Task.Yield();
+
+        //    if (cancellationToken.IsCancellationRequested)
+        //    {
+        //        DestroyBall(ball);
+        //        return;
+        //    }
+        //}
+
+        //DestroyBall(ball);
     }
 
     private void DestroyBall(GameObject ball)
@@ -85,7 +92,7 @@ public class PathRenderer : MonoBehaviour
     }
 
     private void OnDisable()
-    { 
+    {
         tokenSource.Cancel();
     }
 }
