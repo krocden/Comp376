@@ -7,6 +7,7 @@ public class PathNode
 {
     // coordinates on the grid
     private readonly int x, z;
+    public readonly float nodeSize;
     public readonly Vector3 position;
 
     public int hCost;
@@ -18,11 +19,12 @@ public class PathNode
 
     public PathNode parentNode;
 
-    public PathNode(int x, int z, Vector3 position)
+    public PathNode(int x, int z, Vector3 position, float nodeSize)
     {
         this.x = x;
         this.z = z;
         this.position = position;
+        this.nodeSize = nodeSize;
     }
 
     public override string ToString()
