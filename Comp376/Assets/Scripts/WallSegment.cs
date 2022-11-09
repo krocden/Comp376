@@ -10,11 +10,19 @@ public class WallSegment : MonoBehaviour
 
     [SerializeField] private Renderer _renderer;
     [SerializeField] private Canvas _canvas;
+    [SerializeField] private Transform _player;
     private bool _isBeingHovered = false;
     private WallAutomata _automata = new WallAutomata();
 
     public Func<bool> tryCalculatePaths;
     public Action createNewPaths;
+
+    private bool _isInteractable => _isBeingHovered && Vector3.Distance(transform.position, _player.position) < 20 && _player.GetComponent<Shooting>().IsHoldingWrench && GameStateManager.Instance.GetCurrentGameState() == GameState.Building;
+
+    private void Start()
+    {
+        _player = GameObject.FindWithTag("Player").transform;
+    }
 
     private void OnEnable()
     {
@@ -31,7 +39,6 @@ public class WallSegment : MonoBehaviour
     private void OnMouseEnter()
     {
         _isBeingHovered = true;
-        _renderer.material.color = Color.green;
     }
 
     private void OnMouseExit()
@@ -43,8 +50,9 @@ public class WallSegment : MonoBehaviour
 
     private void Update()
     {
-        if (_isBeingHovered)
+        if (_isInteractable)
         {
+            _renderer.material.color = Color.green;
 
             if (_automata.CurrentState == WallAutomata.WallState.Plain)
             {
@@ -85,6 +93,9 @@ public class WallSegment : MonoBehaviour
                 }
             }
         }
+        else { 
+        _renderer.material.color = Color.white;
+        }
     }
 
     private void VisualsChanged(object sender, WallAutomata.WallState state)
@@ -107,5 +118,10 @@ public class WallSegment : MonoBehaviour
     public WallAutomata.WallState GetWallState()
     {
         return _automata.CurrentState;
+    }
+
+    public void SetEmptyWall()
+    {
+        _automata.GoToState(WallAutomata.WallState.Empty);
     }
 }

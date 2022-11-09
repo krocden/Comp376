@@ -1530,7 +1530,7 @@ GameObject:
   - component: {fileID: 1865326910123446520}
   m_Layer: 0
   m_Name: WallSegment
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1626,6 +1626,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _renderer: {fileID: 7912568823029714067}
   _canvas: {fileID: 3259510038508669294}
+  _player: {fileID: 0}
 --- !u!1 &8242365838442075864
 GameObject:
   m_ObjectHideFlags: 0
