@@ -9,7 +9,7 @@ using UnityEngine.Events;
 
 public class GameStateManager : MonoBehaviour
 {
-    public static GameStateManager gameStateManager;
+    public static GameStateManager Instance { get; private set; }
 
     [SerializeField] private CoreUIHandler coreUIHandler;
     [SerializeField] private ArenaSetup arenaSetup;
@@ -19,42 +19,55 @@ public class GameStateManager : MonoBehaviour
 
     private GameState currentGameState;
 
-    private int currentRound = 0;
-    private int totalRounds = 30;
+    private int currentLevel = 1;
+    private int currentWave = 0;
+
+    private Level level;
+    private Wave[] waves;
 
     [SerializeField] private float buildingPhaseTimer = 30;
     [SerializeField] private float gameStateTransitionTimer = 5f;
     [SerializeField] private float timeBetweenEnemySpawns = 0.5f;
 
-    [SerializeField] private Monster monsterPrefab;
-
-    private CancellationTokenSource timerCancellationTokenSource;
+    private CancellationTokenSource timerCancellationTokenSource = new CancellationTokenSource();
+    private CancellationTokenSource spawningCancellationTokenSource = new CancellationTokenSource();
     private bool canSkipPhase = false;
-
-    private Dictionary<int, List<GameObject>> roundEnemies = new Dictionary<int, List<GameObject>>()
-    {
-        {1, new List<GameObject>(100) { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null } },
-        {2, new List<GameObject>(100) { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null }},
-        {3, new List<GameObject>(100) { null, null, null, null, null, null, null, null, null, null, null,  }},
-        {4, new List<GameObject>(100) { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null }},
-        {5, new List<GameObject>(100) { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, }}
-    };
 
     private void Awake()
     {
-        gameStateManager = this;
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
     }
 
     private void Start()
     {
+        level = LoadLevel();
+        waves = LoadWaves();
+
         GoToState(GameState.Initialize);
+    }
+
+    private Level LoadLevel()
+    {
+        return Resources.Load<Level>($"Levels\\Level {currentLevel}\\Level {currentLevel}");
+    }
+
+    private Wave[] LoadWaves()
+    {
+        return Resources.LoadAll<Wave>($"Levels\\Level {currentLevel}\\Waves");
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return) && canSkipPhase)
         {
-            if(currentGameState == GameState.Building)
+            if (currentGameState == GameState.Building)
                 timerCancellationTokenSource.Cancel();
             else
                 GoToNextState();
@@ -98,7 +111,7 @@ public class GameStateManager : MonoBehaviour
                 break;
             case GameState.Completed:
                 break;
-        }       
+        }
     }
 
     private void GoToNextState()
@@ -106,15 +119,14 @@ public class GameStateManager : MonoBehaviour
         switch (currentGameState)
         {
             case GameState.Initialize:
-                currentRound++;
                 TransitionToState(GameState.Building);
                 break;
             case GameState.Building:
                 TransitionToState(GameState.Shooting);
                 break;
             case GameState.Shooting:
-                currentRound++;
-                if (currentRound == roundEnemies.Count)
+                currentWave++;
+                if (currentWave == waves.Length)
                     GoToState(GameState.Completed);
                 else
                     TransitionToState(GameState.Building);
@@ -135,6 +147,12 @@ public class GameStateManager : MonoBehaviour
 
     private async Task SetBuildingPhase()
     {
+        canSkipPhase = false;
+        if (currentWave % level.addSpawnerWaveInterval == 0 && level.maximumSpawners > arenaSetup.pathStartEndCoordinatesList.Count)
+        {
+            for (int i = 0; i < level.numberOfSpawnersToAdd; i++)
+                await arenaSetup.AddPath();
+        }
         canSkipPhase = true;
         timerCancellationTokenSource = new CancellationTokenSource();
 
@@ -143,7 +161,7 @@ public class GameStateManager : MonoBehaviour
         timeTicking.ProgressChanged += (object sender, float e) =>
         {
             coreUIHandler.UpdateBuildingSecondsLeft(e);
-        };        
+        };
 
         float timeLeft = await StartTimer(buildingPhaseTimer, timerCancellationTokenSource.Token, timeTicking);
 
@@ -156,32 +174,57 @@ public class GameStateManager : MonoBehaviour
     {
         canSkipPhase = false;
         coreUIHandler.UpdateMonstersLeft(0);
-        List<GameObject> enemies = roundEnemies[currentRound];
-        foreach (GameObject enemy in enemies)
+        List<MonsterDetails> monsterDetails = waves[currentWave].GetMonsterDetails();
+        for (int i = 0; i < monsterDetails.Count; i++)
         {
-            foreach (List<PathNode> path in arenaSetup.paths)
+            bool repeatGroup = monsterDetails[i].commandType == CommandType.RepeatGroup;
+            int repeatNextXRows = repeatGroup ? monsterDetails[i].repeatNextXRows : 1;
+            int repeatTimes = repeatGroup ? monsterDetails[i].repeatTimes : 1;
+
+            if (repeatGroup)
+                i++;
+
+            for (int y = 0; y < repeatTimes; y++)
             {
-                Vector3 spawnPoint = path[0].position + Vector3.up;
-                Monster monster = Instantiate(monsterPrefab, spawnPoint, Quaternion.identity);
-                monster.Initialize(path, arenaSetup.nexus.nexusBase);
-                monster.health = 35;
+                for (int x = 0; x < repeatNextXRows; x++)
+                {
+                    // spawn the monsterQuantity
+                    for (int j = 0; j < monsterDetails[i + x].monsterQuantity; j++)
+                    {
+                        foreach (List<PathNode> path in arenaSetup.paths)
+                        {
+                            if (spawningCancellationTokenSource.IsCancellationRequested)
+                                return;
+                            Vector3 spawnPoint = path[0].position + Vector3.up;
+                            Monster monster = Instantiate(monsterDetails[i + x].monsterPrefab, spawnPoint, Quaternion.identity);
+                            monster.Initialize(path, arenaSetup.nexus.nexusBase);                            
+                        }
+
+                        float timeSinceLastSpawn = 0;
+                        while (timeSinceLastSpawn < timeBetweenEnemySpawns)
+                        {
+                            timeSinceLastSpawn += Time.deltaTime;
+                            await Task.Yield();
+                        }
+                    }
+                }
             }
 
-            float timeSinceLastSpawn = 0;
-            while (timeSinceLastSpawn < timeBetweenEnemySpawns)
-            {
-                timeSinceLastSpawn += Time.deltaTime;
-                await Task.Yield();
-            }
+            if (repeatGroup)
+                i += repeatNextXRows - 1;            
         }
 
         int enemiesLeft = FindObjectsOfType<Monster>().Length;
 
         while (enemiesLeft > 0)
         {
-            await Task.Yield();
+            if (spawningCancellationTokenSource.IsCancellationRequested)
+                return;
+
             enemiesLeft = FindObjectsOfType<Monster>().Length;
             coreUIHandler.UpdateMonstersLeft(enemiesLeft);
+
+            await Task.Yield();
         }
 
         GoToNextState();
@@ -197,7 +240,7 @@ public class GameStateManager : MonoBehaviour
                 return timer - timeElapsed;
             }
 
-            if(progress != null)
+            if (progress != null)
                 progress.Report(timer - timeElapsed);
 
             timeElapsed += Time.deltaTime;
@@ -207,11 +250,34 @@ public class GameStateManager : MonoBehaviour
         return 0f;
     }
 
+    private void OnApplicationQuit()
+    {
+        spawningCancellationTokenSource.Cancel();
+        timerCancellationTokenSource.Cancel();
+    }
+}
 
+public static class Helper
+{
+    public static int GetSpawnerNumberAtWave(int wave)
+    {
+        if (wave == 1)
+        {
+            return 100;
+        }
+        else if (wave == 2)
+            return 200;
+        else if (wave == 3)
+            return 300;
+        else if (wave == 4)
+            return 400;
+        else
+            return 0;
+    }
 }
 
 public enum GameState
-{ 
+{
     Initialize,
     Building,
     Shooting,
