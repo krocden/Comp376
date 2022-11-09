@@ -19,4 +19,9 @@ public class Monster : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+
+    public void takeDamage(float incomingDamage)
+    {
+        health -= incomingDamage;
+    }
 }
