@@ -98,9 +98,31 @@ public class PathNode
     /// Get the neighbours that are not blocked by a wall
     /// </summary>
     /// <returns></returns>
-    public List<PathNode> GetAvailableNeighbours()
+    public List<PathNode> GetAvailableNeighbours(bool ignoreWalls = false)
     {
         List<PathNode> neighbours = new List<PathNode>();
+        if (ignoreWalls)
+        {
+            if (topNode != null)
+                neighbours.Add(topNode);
+            if (bottomNode != null)
+                neighbours.Add(bottomNode);
+            if (rightNode != null)
+                neighbours.Add(rightNode);
+            if (leftNode != null)
+                neighbours.Add(leftNode);
+            if (topRightNode != null)
+                neighbours.Add(topRightNode);
+            if (topLeftNode != null)
+                neighbours.Add(topLeftNode);
+            if (bottomRightNode != null)
+                neighbours.Add(bottomRightNode);
+            if (bottomLeftNode != null)
+                neighbours.Add(bottomLeftNode);
+            return neighbours;
+        }
+
+
         if (topNode != null && (topWall == null || topWall.GetWallState() == WallAutomata.WallState.Empty))
             neighbours.Add(topNode);
         if (bottomNode != null && (bottomWall == null || bottomWall.GetWallState() == WallAutomata.WallState.Empty))
@@ -108,8 +130,7 @@ public class PathNode
         if (rightNode != null && (rightWall == null || rightWall.GetWallState() == WallAutomata.WallState.Empty))
             neighbours.Add(rightNode);
         if (leftNode != null && (leftWall == null || leftWall.GetWallState() == WallAutomata.WallState.Empty))
-            neighbours.Add(leftNode);
-
+            neighbours.Add(leftNode);        
 
         // ___|___|_x_ 
         // ___|_x_|___

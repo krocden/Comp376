@@ -19,8 +19,8 @@ public class CoreUIHandler : MonoBehaviour
 
     private void Start()
     {
-        GameStateManager.gameStateManager.onGameStateChanged.AddListener(UpdateUIGroup);
-        GameStateManager.gameStateManager.onGameStateTransitionStarted.AddListener(UpdateStateTransitionUI);
+        GameStateManager.Instance.onGameStateChanged.AddListener(UpdateUIGroup);
+        GameStateManager.Instance.onGameStateTransitionStarted.AddListener(UpdateStateTransitionUI);
     }
 
 
