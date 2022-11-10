@@ -10,14 +10,22 @@ public class WallSegment : MonoBehaviour
 
     [SerializeField] private Renderer _renderer;
     [SerializeField] private Canvas _canvas;
-    [SerializeField] private Transform _player;
+
+    [SerializeField] private Turret _frontTurret;
+    [SerializeField] private Turret _backTurret;
+
+    private Transform _player;
+
     private bool _isBeingHovered = false;
     private WallAutomata _automata = new WallAutomata();
+
+    private bool _isFacingFrontFace => Vector3.Dot(transform.forward, PlayerTransform.forward) > 0;
 
     public Func<bool> tryCalculatePaths;
     public Action createNewPaths;
 
-    private bool _isInteractable => _isBeingHovered && Vector3.Distance(transform.position, _player.position) < 20 && _player.GetComponent<PlayerShooting>().IsHoldingWrench && GameStateManager.Instance.GetCurrentGameState() == GameState.Building;
+    private bool _isInteractable => _isBeingHovered && Vector3.Distance(transform.position, _player.position) < 20 && GameStateManager.Instance.GetCurrentGameState() == GameState.Building;
+
 
     private void Start()
     {
@@ -27,6 +35,7 @@ public class WallSegment : MonoBehaviour
     private void OnEnable()
     {
         _automata.StateVisualsChanged += VisualsChanged;
+        _automata.TurretVisualsChanged += TurretVisualsChanged;
         //_canvas.worldCamera = Camera.main;
         _canvas.enabled = false;
     }
@@ -34,6 +43,7 @@ public class WallSegment : MonoBehaviour
     private void OnDisable()
     {
         _automata.StateVisualsChanged -= VisualsChanged;
+        _automata.TurretVisualsChanged -= TurretVisualsChanged;
     }
 
     private void OnMouseEnter()
@@ -70,14 +80,15 @@ public class WallSegment : MonoBehaviour
                 }
             }
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && _isInteractable)
             {
-                if (_automata.CurrentState == WallAutomata.WallState.Empty)
+                if (WrenchMenu.Instance.Selected < 6)
                 {
-                    // position the wall in place so the pathfinder algo can look with this new wall
+                    //create tower
                     _automata.GoToState(WallAutomata.WallState.Plain);
+                    _automata.GoToTurretState(_isFacingFrontFace, (WallAutomata.TurretState)(WrenchMenu.Instance.Selected + 1));
 
-
+                    // position the wall in place so the pathfinder algo can look with this new wall
                     // if all the paths are valid we can place the wall
                     // otherwise reset the wall to the empty state
                     if (tryCalculatePaths.Invoke())
@@ -85,9 +96,13 @@ public class WallSegment : MonoBehaviour
                     else
                         _automata.GoToState(WallAutomata.WallState.Empty);
                 }
-                else
+                else if (WrenchMenu.Instance.Selected == 6)
                 {
-                    // update the paths when the wall is removed
+                    //upgrading
+                }
+                else if (WrenchMenu.Instance.Selected == 7)
+                {
+                    //destroy
                     _automata.GoToState(WallAutomata.WallState.Empty);
                     createNewPaths.Invoke();
                 }
@@ -102,16 +117,15 @@ public class WallSegment : MonoBehaviour
     {
         switch (state)
         {
-            case WallAutomata.WallState.Plain:
-                transform.localScale = new Vector3(transform.localScale.x, 10, transform.localScale.z);
-                transform.localPosition = new Vector3(transform.localPosition.x, 5, transform.localPosition.z);
-                break;
             case WallAutomata.WallState.Empty:
                 _canvas.enabled = false;
                 transform.localScale = new Vector3(transform.localScale.x, 0.2f, transform.localScale.z);
                 transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
                 break;
-
+            default:
+                transform.localScale = new Vector3(transform.localScale.x, 10, transform.localScale.z);
+                transform.localPosition = new Vector3(transform.localPosition.x, 5, transform.localPosition.z);
+                break;
         }
     }
 
@@ -119,9 +133,18 @@ public class WallSegment : MonoBehaviour
     {
         return _automata.CurrentState;
     }
-
     public void SetEmptyWall()
     {
         _automata.GoToState(WallAutomata.WallState.Empty);
+    }
+
+    private void TurretVisualsChanged(object sender, WallAutomata.TurretState state)
+    {
+        bool isFrontFacing = !(bool)sender;
+
+        if (isFrontFacing)
+            _frontTurret.SetMode(state);
+        else
+            _backTurret.SetMode(state);
     }
 }
