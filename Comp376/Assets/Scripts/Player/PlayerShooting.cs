@@ -7,7 +7,7 @@ public class PlayerShooting : MonoBehaviour
 {
     [SerializeField] private GunType selectedGun;
     [SerializeField] private GameObject gunHolder;
-    private enum GunType { Pistol, Rifle, Shotgun, Launcher }
+    private enum GunType { Pistol, Rifle, Shotgun, Launcher, Wrench }
     private Gun currentGun;
     private Pistol pistol;
     private Rifle rifle;
@@ -17,9 +17,22 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private Text ammoText;
     [SerializeField] GunUpgrade upgrade;
 
+    [SerializeField] private Image[] handhelds;
+    private int currentHandheld = 0;
+
+    public bool IsHoldingWrench => currentHandheld > 0;
+    public bool IsDamageWrench => currentHandheld == 1;
+    public bool IsSupportWrench => currentHandheld == 2;
+    public bool IsDefenseWrench => currentHandheld == 3;
+
     // Start is called before the first frame update
     void Start()
     {
+        foreach (Image handheld in handhelds)
+            handheld.enabled = false;
+
+        handhelds[currentHandheld].enabled = true;
+
         pistol = gunHolder.transform.GetChild(0).GetComponent<Pistol>();
         pistol.player = this.gameObject;
 
@@ -58,9 +71,26 @@ public class PlayerShooting : MonoBehaviour
         {
             changeGun(GunType.Launcher);
         }
-        
 
-        //changeGun();
+        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        {
+            if (currentHandheld == handhelds.Length - 1)
+                currentHandheld = 0;
+            else
+                currentHandheld++;
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        {
+            if (currentHandheld == 0)
+                currentHandheld = handhelds.Length - 1;
+            else
+                currentHandheld--;
+        }
+
+        foreach (Image handheld in handhelds)
+            handheld.enabled = false;
+
+        handhelds[currentHandheld].enabled = true;
 
         if (!this.gameObject.GetComponentInChildren<CameraHandler>().usingMenu)
         {
@@ -70,10 +100,22 @@ public class PlayerShooting : MonoBehaviour
                 updateUI();
             }
             
-            if (currentGun.shoot())
+            if (!IsHoldingWrench)
             {
-                updateUI();
+                if (currentGun.shoot())
+                {
+                    updateUI();
+                }
             }
+        }
+
+        if (IsHoldingWrench)
+        {
+            deactivatePreviousGun();
+        } 
+        else
+        {
+            deactivateWrench();
         }
         
     }
@@ -134,5 +176,11 @@ public class PlayerShooting : MonoBehaviour
                 gun.gameObject.SetActive(false);
             }
         }
+    }
+
+    void deactivateWrench()
+    {
+        handhelds[currentHandheld].enabled = false;
+        currentHandheld = 0;
     }
 }
