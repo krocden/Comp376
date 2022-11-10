@@ -26,6 +26,7 @@ public class WrenchMenu : MonoBehaviour
 
     private void Start()
     {
+        wrenchPanel.SetActive(GameStateManager.Instance.GetCurrentGameState() == GameState.Building);
         GameStateManager.Instance.onGameStateChanged.AddListener(OnGameStateChanged);
     }
     private void OnDestroy()
@@ -41,14 +42,27 @@ public class WrenchMenu : MonoBehaviour
     void Update()
     {
         if (Input.mouseScrollDelta.y > 0)
-            selected = Mathf.Clamp(selected + 1, 0, panels.Length - 1);
+            UpdateSelected(true);
         else if (Input.mouseScrollDelta.y < 0)
-            selected = Mathf.Clamp(selected - 1, 0, panels.Length - 1);
+            UpdateSelected(false);
 
         for (int i = 0; i < panels.Length; i++)
             if (i == selected)
                 panels[i].color = new Color(panels[i].color.r, panels[i].color.g, panels[i].color.b, 1);
             else
                 panels[i].color = new Color(panels[i].color.r, panels[i].color.g, panels[i].color.b, 0.2f);
+    }
+
+    private void UpdateSelected(bool isPos)
+    {
+        if (isPos)
+        {
+            selected++;
+            if (selected > panels.Length - 1) selected = 0;
+        }
+        else {
+            selected--;
+            if (selected < 0) selected = panels.Length - 1;
+        }
     }
 }

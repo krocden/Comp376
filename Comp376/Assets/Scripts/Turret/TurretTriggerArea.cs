@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class TurretTriggerArea : MonoBehaviour
 {
-    List<Monster> monstersInArea = new List<Monster>();
+    public List<Monster> monstersInArea = new List<Monster>();
 
     public void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "Enemy") { 
-            
+        if (col.gameObject.tag == "Enemy") {
+            monstersInArea.Add(col.gameObject.GetComponent<Monster>());
         }
     }
 

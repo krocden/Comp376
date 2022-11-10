@@ -210,9 +210,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 0
-  desc: {fileID: 8034960143023229808}
+  rateOfFire: 1
+  damage: 25
   turretMaterials:
   - {fileID: 2100000, guid: 59c257b8530e6f44590cf2e1f6b4ad39, type: 2}
+  turretArea: {fileID: 9049723483069431706}
+  turretGunBulletPrefab: {fileID: 6008000480893494911, guid: abc5ee368ec5e6249b672909ad633953, type: 3}
 --- !u!1 &3877181766270271039
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,6 +228,7 @@ GameObject:
   - component: {fileID: 2152180327353358808}
   - component: {fileID: 3776201041019535195}
   - component: {fileID: 2268230127994740902}
+  - component: {fileID: 9049723483069431706}
   m_Layer: 2
   m_Name: TriggerArea
   m_TagString: Untagged
@@ -308,6 +312,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &9049723483069431706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3877181766270271039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e21eb8f5f5dd7e04ba2f6f22e0529e34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monstersInArea: []
 --- !u!1 &4795133259727377694
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,6 +337,7 @@ GameObject:
   - component: {fileID: 4742061684324420664}
   - component: {fileID: 7424205050201654114}
   - component: {fileID: 5541119667910300498}
+  - component: {fileID: 7465020307714501898}
   m_Layer: 2
   m_Name: TriggerArea
   m_TagString: Untagged
@@ -403,6 +421,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7465020307714501898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4795133259727377694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e21eb8f5f5dd7e04ba2f6f22e0529e34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monstersInArea: []
 --- !u!1 &7367895034886558752
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,9 +544,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentState: 0
-  desc: {fileID: 8034960143023229808}
+  rateOfFire: 1
+  damage: 25
   turretMaterials:
   - {fileID: 2100000, guid: 59c257b8530e6f44590cf2e1f6b4ad39, type: 2}
+  turretArea: {fileID: 7465020307714501898}
+  turretGunBulletPrefab: {fileID: 6008000480893494911, guid: abc5ee368ec5e6249b672909ad633953, type: 3}
 --- !u!1 &7912568823029714077
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,6 +663,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _renderer: {fileID: 7912568823029714067}
   _canvas: {fileID: 3259510038508669294}
+  _text: {fileID: 8034960143023229808}
   _frontTurret: {fileID: 2818401236732296667}
   _backTurret: {fileID: 8590294920883307386}
 --- !u!1 &8903135871162108159

@@ -10,6 +10,7 @@ public class WallSegment : MonoBehaviour
 
     [SerializeField] private Renderer _renderer;
     [SerializeField] private Canvas _canvas;
+    [SerializeField] private TMPro.TMP_Text _text;
 
     [SerializeField] private Turret _frontTurret;
     [SerializeField] private Turret _backTurret;
@@ -70,11 +71,13 @@ public class WallSegment : MonoBehaviour
 
                 if (Vector3.Dot(transform.forward, PlayerTransform.forward) > 0)
                 {
+                    _text.text = Turret.GetTurretText(_automata.FrontFaceState);
                     _canvas.transform.localScale = new Vector3(1, 1, 10);
                     _canvas.transform.localPosition = new Vector3(0, 0, -0.51f);
                 }
                 else
                 {
+                    _text.text = Turret.GetTurretText(_automata.BackFaceState);
                     _canvas.transform.localScale = new Vector3(-1, 1, 10);
                     _canvas.transform.localPosition = new Vector3(0, 0, 0.51f);
                 }
