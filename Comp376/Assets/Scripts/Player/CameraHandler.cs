@@ -20,6 +20,12 @@ public class CameraHandler : MonoBehaviour
 
     void Update()
     {
+        if (GameStateManager.Instance.BlockInput)
+        { 
+            Cursor.lockState = CursorLockMode.None;
+            return;
+        }
+
         if (Input.GetKey(KeyCode.N))
         {
             //Time.timeScale = 0f; Prevent movement while using menu ?

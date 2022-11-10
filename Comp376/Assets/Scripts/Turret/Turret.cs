@@ -95,9 +95,7 @@ public class Turret : MonoBehaviour
     {
         if (monster == null) return;
 
-        if (monster.health - damage < 0)
+        if (monster.TakeDamage(damage))
             turretArea.monstersInArea.Remove(monster);
-
-        monster.takeDamage(damage);
     }
 }

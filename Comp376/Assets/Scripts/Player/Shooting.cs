@@ -55,14 +55,14 @@ public class Shooting : MonoBehaviour
             }
         }
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
             if (currentHandheld == handhelds.Length - 1)
                 currentHandheld = 0;
             else
                 currentHandheld++;
         }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        else if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
             if (currentHandheld == 0)
                 currentHandheld = handhelds.Length - 1;

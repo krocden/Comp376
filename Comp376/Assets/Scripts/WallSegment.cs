@@ -25,7 +25,7 @@ public class WallSegment : MonoBehaviour
     public Func<bool> tryCalculatePaths;
     public Action createNewPaths;
 
-    private bool _isInteractable => _isBeingHovered && Vector3.Distance(transform.position, _player.position) < 20 && GameStateManager.Instance.GetCurrentGameState() == GameState.Building;
+    private bool _isInteractable => _isBeingHovered && Vector3.Distance(transform.position, _player.position) < 20 && GameStateManager.Instance.GetCurrentGameState() == GameState.Planning;
 
 
     private void Start()

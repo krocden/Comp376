@@ -20,7 +20,7 @@ public class PlayerShooting : MonoBehaviour
 
     //private bool isHoldingWrench = GameStateManager.Instance.GetCurrentGameState() == GameState.Building;
 
-    public bool IsHoldingWrench => GameStateManager.Instance.GetCurrentGameState() == GameState.Building;
+    public bool IsHoldingWrench => GameStateManager.Instance.GetCurrentGameState() == GameState.Planning;
 
     // Start is called before the first frame update
     void Start()
@@ -45,7 +45,8 @@ public class PlayerShooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameStateManager.Instance == null) return;
+        if (GameStateManager.Instance.BlockInput)
+            return;
         //Call this when changing gun
 
         if (Input.GetKeyDown(KeyCode.Alpha1))

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CoreUIHandler : MonoBehaviour
 {
@@ -11,11 +12,16 @@ public class CoreUIHandler : MonoBehaviour
     [SerializeField] private GameObject buildingPhaseUIGroup;
     [SerializeField] private GameObject shootingPhaseUIGroup;
     [SerializeField] private GameObject transitionUIGroup;
+    [SerializeField] private GameObject additionalInfoUIGroup;
 
     [SerializeField] private TextMeshProUGUI buildingPhaseSecondsLeftUI;
     [SerializeField] private TextMeshProUGUI monstersLeftCountUI;
     [SerializeField] private TextMeshProUGUI monstersLeftTextUI;
     [SerializeField] private TextMeshProUGUI transitionTimeLeftTextUI;
+    [SerializeField] private TextMeshProUGUI additionalInfoTextUI;
+
+    [SerializeField] private Slider nexusHealthSlider;
+    [SerializeField] private TextMeshProUGUI nexusHealthText;
 
     private void Start()
     {
@@ -26,12 +32,19 @@ public class CoreUIHandler : MonoBehaviour
 
     public void UpdateUIGroup(GameState state)
     {
-        buildingPhaseUIGroup.SetActive(state == GameState.Building);
+        buildingPhaseUIGroup.SetActive(state == GameState.Planning);
         shootingPhaseUIGroup.SetActive(state == GameState.Shooting);
         transitionUIGroup.SetActive(false);
 
         StringBuilder currentPhaseText = new StringBuilder(Enum.GetName(typeof(GameState), state));
-        currentPhaseText.Append(state == GameState.Building || state == GameState.Shooting ? " Phase" : " Game");
+        currentPhaseText.Append(state == GameState.Planning || state == GameState.Shooting ? " Phase" : " Game");
+
+        if (GameStateManager.Instance.GetCurrentGameState() == GameState.Completed && GameStateManager.Instance.levelFailed)
+        {
+            currentPhaseText.AppendLine("\n GAME OVER \n");
+            additionalInfoUIGroup.SetActive(true);
+            additionalInfoTextUI.text = "The enemies have crossed the dimensional portal and have destroyed the mortal realm.";
+        }
 
         currentPhaseUI.text = currentPhaseText.ToString();
     }
@@ -49,7 +62,7 @@ public class CoreUIHandler : MonoBehaviour
         }
         else
         {
-            if (nextState == GameState.Building)
+            if (nextState == GameState.Planning)
             {
                 text = "Next Round Starting in ";
             }
@@ -79,5 +92,11 @@ public class CoreUIHandler : MonoBehaviour
         monstersLeftCountUI.gameObject.SetActive(showMonstersLeft);
         monstersLeftTextUI.gameObject.SetActive(showMonstersLeft);
         monstersLeftCountUI.text = monstersLeft.ToString();
+    }
+
+    public void UpdateNexusHealthSlider(float health, float maxHealth)
+    {
+        nexusHealthText.text = health.ToString();
+        nexusHealthSlider.value = health / maxHealth;
     }
 }
