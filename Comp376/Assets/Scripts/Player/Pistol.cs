@@ -104,7 +104,7 @@ public class Pistol : MonoBehaviour, Gun
                         GameObject hitObject = bulletHit.transform.gameObject;
                         Monster enemy = hitObject.GetComponent<Monster>();
 
-                        enemy.takeDamage(damage);
+                        enemy.TakeDamage(damage);
                         Debug.Log("Health: " + enemy.health);
                     }
                 }

@@ -26,7 +26,7 @@ public class WrenchMenu : MonoBehaviour
 
     private void Start()
     {
-        wrenchPanel.SetActive(GameStateManager.Instance.GetCurrentGameState() == GameState.Building);
+        wrenchPanel.SetActive(GameStateManager.Instance.GetCurrentGameState() == GameState.Planning);
         GameStateManager.Instance.onGameStateChanged.AddListener(OnGameStateChanged);
     }
     private void OnDestroy()
@@ -36,7 +36,7 @@ public class WrenchMenu : MonoBehaviour
 
     private void OnGameStateChanged(GameState state)
     {
-        wrenchPanel.SetActive(state == GameState.Building);
+        wrenchPanel.SetActive(state == GameState.Planning);
     }
 
     void Update()

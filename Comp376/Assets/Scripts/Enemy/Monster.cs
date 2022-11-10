@@ -10,7 +10,7 @@ public class Monster : MonoBehaviour
     [SerializeField] private float attackRange;
 
     protected List<PathNode> path;
-    protected Transform target;
+    protected Nexus target;
 
     // Start is called before the first frame update
     void Start()
@@ -21,13 +21,10 @@ public class Monster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (health <= 0)
-        {
-            Destroy(this.gameObject);
-        }        
+             
     }
 
-    public void Initialize(List<PathNode> path, Transform target)
+    public void Initialize(List<PathNode> path, Nexus target)
     {
         this.path = path;
         this.target = target;
@@ -42,7 +39,7 @@ public class Monster : MonoBehaviour
         float nodeSizeOffset = path[currentNodeIndex].nodeSize / 2;
         Vector2 randomPoint = Random.insideUnitCircle;
         Vector3 randomPathOffset = new Vector3(randomPoint.x, 0, randomPoint.y) * nodeSizeOffset;
-        while ((this != null && currentNodeIndex + 1 != path.Count) && Vector3.Distance(transform.position, target.position) > target.localScale.x / 2 + attackRange)
+        while ((this != null && currentNodeIndex + 1 != path.Count) && Vector3.Distance(transform.position, target.nexusBase.position) > target.nexusBase.localScale.x / 2 + attackRange)
         {
             transform.position = Vector3.MoveTowards(transform.position, path[currentNodeIndex + 1].position + Vector3.up + randomPathOffset, Time.deltaTime * speed);
 
@@ -62,17 +59,33 @@ public class Monster : MonoBehaviour
     async Task AttackTarget()
     {
         // move in range
-        while (this != null && Vector3.Distance(transform.position, target.position) > target.localScale.x / 2 + attackRange)
+        while (this != null && Vector3.Distance(transform.position, target.nexusBase.position) > target.nexusBase.localScale.x / 2 + attackRange)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target.position + Vector3.up, Time.deltaTime * speed);
+            transform.position = Vector3.MoveTowards(transform.position, target.nexusBase.position + Vector3.up, Time.deltaTime * speed);
             await Task.Yield();
         }
 
         // attack the nexus
+        if (gameObject != null)
+        {
+            target.TakeDamage(1f);
+            Destroy(gameObject);
+        }
     }
 
-    public void takeDamage(float incomingDamage)
+    public bool TakeDamage(float incomingDamage)
     {
         health -= incomingDamage;
+        if (health <= 0)
+        {
+            Die();
+            return true;
+        }
+        return false;
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }

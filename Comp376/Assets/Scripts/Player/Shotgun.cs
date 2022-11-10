@@ -156,7 +156,7 @@ public class Shotgun : MonoBehaviour, Gun
                                     float rangeDiff = bulletHit.distance - range;
                                     finalDamage *= Mathf.Clamp((1 - (rangeDiff * 0.02f)), 0.001f, 1);
                                 }
-                                enemy.takeDamage(finalDamage);
+                                enemy.TakeDamage(finalDamage);
                             }
                         }
                         Vector3 gunSpritePos = player.transform.position + (Camera.main.transform.rotation * gunEffectPos);

@@ -97,7 +97,7 @@ public class ArenaSetup : MonoBehaviour
             List<PathNode> pathToDestroy = pathfinding.FindPath(newPath, ignoreWalls: true);
             Vector3 spawnPoint = pathToDestroy[0].position + Vector3.up;
             WallDestroyerMonster monster = Instantiate(monsterWallDestroyerPrefab, spawnPoint, Quaternion.identity);
-            monster.Initialize(pathToDestroy, nexus.nexusBase);
+            monster.Initialize(pathToDestroy, nexus);
 
             while (monster != null)
             {

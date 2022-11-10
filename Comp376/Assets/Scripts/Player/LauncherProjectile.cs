@@ -21,7 +21,7 @@ public class LauncherProjectile : MonoBehaviour
                 if (enemy.tag == "Enemy")
                 {
                     Monster mob = enemy.GetComponent<Monster>();
-                    mob.takeDamage(gun.damage);
+                    mob.TakeDamage(gun.damage);
                     Debug.Log("Health: " + mob.health);
                 }
             }

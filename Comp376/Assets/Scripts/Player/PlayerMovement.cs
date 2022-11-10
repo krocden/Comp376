@@ -27,6 +27,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (GameStateManager.Instance.BlockInput)
+            return;
+
         grounded = controller.isGrounded;
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && grounded)

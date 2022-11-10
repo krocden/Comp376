@@ -33,6 +33,9 @@ public class GameStateManager : MonoBehaviour
     private CancellationTokenSource spawningCancellationTokenSource = new CancellationTokenSource();
     private bool canSkipPhase = false;
 
+    public bool levelFailed = false;
+    public bool BlockInput { get { return levelFailed; } }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -47,9 +50,6 @@ public class GameStateManager : MonoBehaviour
 
     private void Start()
     {
-        level = LoadLevel();
-        waves = LoadWaves();
-
         GoToState(GameState.Initialize);
     }
 
@@ -67,7 +67,7 @@ public class GameStateManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return) && canSkipPhase)
         {
-            if (currentGameState == GameState.Building)
+            if (currentGameState == GameState.Planning)
                 timerCancellationTokenSource.Cancel();
             else
                 GoToNextState();
@@ -103,7 +103,7 @@ public class GameStateManager : MonoBehaviour
             case GameState.Initialize:
                 SetInitializeState();
                 break;
-            case GameState.Building:
+            case GameState.Planning:
                 await SetBuildingPhase();
                 break;
             case GameState.Shooting:
@@ -119,9 +119,9 @@ public class GameStateManager : MonoBehaviour
         switch (currentGameState)
         {
             case GameState.Initialize:
-                TransitionToState(GameState.Building);
+                TransitionToState(GameState.Planning);
                 break;
-            case GameState.Building:
+            case GameState.Planning:
                 TransitionToState(GameState.Shooting);
                 break;
             case GameState.Shooting:
@@ -129,7 +129,7 @@ public class GameStateManager : MonoBehaviour
                 if (currentWave == waves.Length)
                     GoToState(GameState.Completed);
                 else
-                    TransitionToState(GameState.Building);
+                    TransitionToState(GameState.Planning);
                 break;
         }
     }
@@ -141,8 +141,14 @@ public class GameStateManager : MonoBehaviour
 
     private void SetInitializeState()
     {
-        canSkipPhase = true;
         arenaSetup.InitializeArena();
+
+        level = LoadLevel();
+        waves = LoadWaves();
+
+        arenaSetup.nexus.OnNexusExploded.AddListener(NexusExploded);
+
+        canSkipPhase = true;
     }
 
     private async Task SetBuildingPhase()
@@ -197,7 +203,7 @@ public class GameStateManager : MonoBehaviour
                                 return;
                             Vector3 spawnPoint = path[0].position + Vector3.up;
                             Monster monster = Instantiate(monsterDetails[i + x].monsterPrefab, spawnPoint, Quaternion.identity);
-                            monster.Initialize(path, arenaSetup.nexus.nexusBase);                            
+                            monster.Initialize(path, arenaSetup.nexus);                            
                         }
 
                         float timeSinceLastSpawn = 0;
@@ -250,6 +256,23 @@ public class GameStateManager : MonoBehaviour
         return 0f;
     }
 
+    public void UpdateNexusHealth(float health, float maxHealth)
+    {
+        coreUIHandler.UpdateNexusHealthSlider(health, maxHealth);
+    }
+
+    private void NexusExploded()
+    {
+        spawningCancellationTokenSource.Cancel();
+        timerCancellationTokenSource.Cancel();
+
+        levelFailed = true;
+
+        GoToState(GameState.Completed);
+    }
+
+
+
     private void OnApplicationQuit()
     {
         spawningCancellationTokenSource.Cancel();
@@ -257,29 +280,10 @@ public class GameStateManager : MonoBehaviour
     }
 }
 
-public static class Helper
-{
-    public static int GetSpawnerNumberAtWave(int wave)
-    {
-        if (wave == 1)
-        {
-            return 100;
-        }
-        else if (wave == 2)
-            return 200;
-        else if (wave == 3)
-            return 300;
-        else if (wave == 4)
-            return 400;
-        else
-            return 0;
-    }
-}
-
 public enum GameState
 {
     Initialize,
-    Building,
+    Planning,
     Shooting,
     Completed,
 }
