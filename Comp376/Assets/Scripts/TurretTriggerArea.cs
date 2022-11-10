@@ -4,8 +4,20 @@ using UnityEngine;
 
 public class TurretTriggerArea : MonoBehaviour
 {
-    public void OnTriggerEnter(Collider enemy)
+    List<Monster> monstersInArea = new List<Monster>();
+
+    public void OnTriggerEnter(Collider col)
     {
-        
+        if (col.gameObject.tag == "Enemy") { 
+            
+        }
+    }
+
+    public void OnTriggerExit(Collider col)
+    {
+        if (col.gameObject.tag == "Enemy")
+        {
+            monstersInArea.Remove(col.gameObject.GetComponent<Monster>());
+        }
     }
 }

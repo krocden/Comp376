@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 4188156133174057482}
   - component: {fileID: 5824972403433790180}
   - component: {fileID: 8590294920883307386}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Turret (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 2152180327353358808}
   - component: {fileID: 3776201041019535195}
   - component: {fileID: 2268230127994740902}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TriggerArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 4742061684324420664}
   - component: {fileID: 7424205050201654114}
   - component: {fileID: 5541119667910300498}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TriggerArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -416,7 +416,7 @@ GameObject:
   - component: {fileID: 8388744596136835342}
   - component: {fileID: 9113265811123158224}
   - component: {fileID: 2818401236732296667}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}

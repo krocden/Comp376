@@ -24,11 +24,11 @@ public class WrenchMenu : MonoBehaviour
 
     public int Selected => selected;
 
-    private void OnEnable()
+    private void Start()
     {
         GameStateManager.Instance.onGameStateChanged.AddListener(OnGameStateChanged);
     }
-    private void OnDisable()
+    private void OnDestroy()
     {
         GameStateManager.Instance.onGameStateChanged.RemoveListener(OnGameStateChanged);
     }
