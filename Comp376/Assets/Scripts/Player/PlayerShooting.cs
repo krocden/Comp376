@@ -7,7 +7,7 @@ public class PlayerShooting : MonoBehaviour
 {
     [SerializeField] private GunType selectedGun;
     [SerializeField] private GameObject gunHolder;
-    private enum GunType { Pistol, Rifle, Shotgun, Launcher }
+    private enum GunType { Pistol, Rifle, Shotgun, Launcher, Wrench }
     private Gun currentGun;
     private Pistol pistol;
     private Rifle rifle;
@@ -107,7 +107,15 @@ public class PlayerShooting : MonoBehaviour
                     updateUI();
                 }
             }
-            
+        }
+
+        if (IsHoldingWrench)
+        {
+            deactivatePreviousGun();
+        } 
+        else
+        {
+            deactivateWrench();
         }
         
     }
@@ -168,5 +176,11 @@ public class PlayerShooting : MonoBehaviour
                 gun.gameObject.SetActive(false);
             }
         }
+    }
+
+    void deactivateWrench()
+    {
+        handhelds[currentHandheld].enabled = false;
+        currentHandheld = 0;
     }
 }
