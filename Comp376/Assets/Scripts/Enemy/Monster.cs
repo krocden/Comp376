@@ -70,4 +70,9 @@ public class Monster : MonoBehaviour
 
         // attack the nexus
     }
+
+    public void takeDamage(float incomingDamage)
+    {
+        health -= incomingDamage;
+    }
 }
