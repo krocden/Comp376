@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54211a794f5f1f54191d89a582706c2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 2
+  damage: 3
   currentAmmo: 30
   maxAmmo: 240
   magazineSize: 30
