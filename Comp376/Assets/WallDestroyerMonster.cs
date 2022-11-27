@@ -12,9 +12,9 @@ public class WallDestroyerMonster : Monster
         float nodeSizeOffset = path[currentNodeIndex].nodeSize / 2;
         while ((this != null && currentNodeIndex + 1 != path.Count) && Vector3.Distance(transform.position, target.nexusBase.position) > target.nexusBase.localScale.x / 2 + attackRange)
         {
-            transform.position = Vector3.MoveTowards(transform.position, path[currentNodeIndex + 1].position + Vector3.up, Time.deltaTime * speed);
+            transform.position = Vector3.MoveTowards(transform.position, path[currentNodeIndex + 1].position + Vector3.up * 2, Time.deltaTime * speed);
 
-            if (Vector3.Distance(transform.position, path[currentNodeIndex + 1].position + Vector3.up) < 0.5f)
+            if (Vector3.Distance(transform.position, path[currentNodeIndex + 1].position + Vector3.up * 2) < 0.5f)
             {
                 currentNodeIndex++;
             }
@@ -29,8 +29,9 @@ public class WallDestroyerMonster : Monster
     {
         if (collision.collider.CompareTag("Wall"))
         {
-            WallSegment wall = collision.collider.GetComponent<WallSegment>();
-            wall.SetEmptyWall();
+            Destroy(collision.gameObject);
+            //WallSegment wall = collision.collider.GetComponent<WallSegment>();
+            //wall.SetEmptyWall();
         }
     }
 }

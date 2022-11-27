@@ -100,11 +100,17 @@ public class WallSegment : MonoBehaviour
                     // otherwise reset the wall to the empty state
 
                     if (currentWallState == WallAutomata.WallState.Empty)
+                    {
                         if (tryCalculatePaths.Invoke())
+                        {
                             createNewPaths.Invoke();
+                        }
                         else
+                        {
                             _automata.GoToState(WallAutomata.WallState.Empty);
                             _automata.GoToTurretState(_isFacingFrontFace, WallAutomata.TurretState.EmptyTurret);
+                        }
+                    }
                 }
                 else if (WrenchMenu.Instance.Selected == 6)
                 {
@@ -114,6 +120,8 @@ public class WallSegment : MonoBehaviour
                 {
                     //destroy
                     _automata.GoToState(WallAutomata.WallState.Empty);
+                    _automata.GoToTurretState(true, WallAutomata.TurretState.EmptyTurret);
+                    _automata.GoToTurretState(false, WallAutomata.TurretState.EmptyTurret);
                     createNewPaths.Invoke();
                 }
             }

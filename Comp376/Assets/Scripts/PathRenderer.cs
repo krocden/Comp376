@@ -17,6 +17,8 @@ public class PathRenderer : MonoBehaviour
 
     private CancellationTokenSource tokenSource = new CancellationTokenSource();
 
+    private bool displayBalls = true;
+
     public void SetPathNodes(List<List<PathNode>> nodes)
     {
         tokenSource.Cancel();
@@ -58,6 +60,9 @@ public class PathRenderer : MonoBehaviour
         ball.transform.position = node.parentNode.position + (Vector3.up * pathTrailHeight);
         ball.name = node.parentNode.ToString();
 
+        ball.GetComponent<MeshRenderer>().enabled = displayBalls;
+        ball.GetComponent<TrailRenderer>().enabled = displayBalls;
+
         while (Vector3.Distance(ball.transform.position, node.position + (Vector3.up * pathTrailHeight)) > 0.1f)
         {
             if (cancellationToken.IsCancellationRequested)
@@ -78,13 +83,19 @@ public class PathRenderer : MonoBehaviour
         GameObject.Destroy(ball);
     }
 
-    private void OnApplicationQuit()
+    private void OnEnable()
     {
-        tokenSource.Cancel();
+        GameStateManager.Instance.onGameStateChanged.AddListener((currentGameState) => UpdateVisuals(currentGameState));
     }
 
     private void OnDisable()
     {
+        GameStateManager.Instance.onGameStateChanged.RemoveListener(UpdateVisuals);
         tokenSource.Cancel();
+    }
+
+    void UpdateVisuals(GameState currentGameState)
+    {
+        displayBalls = currentGameState == GameState.Planning;
     }
 }
