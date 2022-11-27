@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Level 1
   m_EditorClassIdentifier: 
   maximumSpawners: 4
-  addSpawnerWaveInterval: 3
+  addSpawnerWaveInterval: 1
   numberOfSpawnersToAdd: 1

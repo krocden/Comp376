@@ -50,6 +50,7 @@ public class ArenaSetup : MonoBehaviour
         AddBuildingChecks();
     }
 
+
     public async Task AddPath()
     {
         List<Vector2Int> possiblePathEnds = new List<Vector2Int>() 
@@ -156,7 +157,8 @@ public class ArenaSetup : MonoBehaviour
         paths.Clear();
         foreach (Vector4 coords in pathStartEndCoordinatesList)
         {
-            paths.Add(pathfinding.FindPath(coords));
+            List<PathNode> path = pathfinding.FindPath(coords);
+            paths.Add(path);
         }
 
         pathRenderer.SetPathNodes(paths);

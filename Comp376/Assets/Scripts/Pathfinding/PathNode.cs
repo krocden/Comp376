@@ -27,6 +27,34 @@ public class PathNode
         this.nodeSize = nodeSize;
     }
 
+    public PathNode(PathNode source)
+    {
+        this.x = source.x;
+        this.z = source.z;
+        this.position = source.position;
+        this.nodeSize = source.nodeSize;
+
+        this.hCost = source.hCost;
+        this.fCost = source.fCost;
+        this.gCost = source.gCost;
+
+        this.topWall = source.topWall;
+        this.bottomWall = source.bottomWall;
+        this.rightWall = source.rightWall;
+        this.leftWall = source.leftWall;
+
+        this.topNode = source.topNode;
+        this.bottomNode = source.bottomNode;
+        this.rightNode = source.rightNode;
+        this.leftNode = source.leftNode;
+        this.topRightNode = source.topRightNode;
+        this.topLeftNode = source.topLeftNode;
+        this.bottomRightNode = source.bottomRightNode;
+        this.bottomLeftNode = source.bottomLeftNode;
+
+        this.parentNode = source.parentNode;
+    }
+
     public override string ToString()
     {
         return "X: " + x + " z: " + z;

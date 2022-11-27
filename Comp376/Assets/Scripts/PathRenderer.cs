@@ -8,7 +8,7 @@ public class PathRenderer : MonoBehaviour
 {
     [SerializeField] private float ballSpeed = 3f;
     [SerializeField] private GameObject ball;
-    [SerializeField] private float newBallCooldown = 3f;
+    [SerializeField] private float newBallCooldown = 1000f;
 
     [SerializeField] private float pathTrailHeight = 1f;
     private float timeSinceLastBall;
@@ -17,54 +17,62 @@ public class PathRenderer : MonoBehaviour
 
     private CancellationTokenSource tokenSource = new CancellationTokenSource();
 
+    private bool displayBalls = true;
+
     public void SetPathNodes(List<List<PathNode>> nodes)
     {
         tokenSource.Cancel();
-        this.paths = nodes;
+        paths = nodes;
         tokenSource = new CancellationTokenSource();
+        timeSinceLastBall = newBallCooldown;
     }
 
     private void Update()
     {
-        if (this.paths.Count > 0)
+        if (paths.Count > 0)
         {
             timeSinceLastBall += Time.deltaTime;
-            if (timeSinceLastBall >= newBallCooldown) {
-                foreach (List<PathNode> path in paths)
-                {
-                    MoveTroughPath(path, tokenSource.Token);
-                }
+            if (timeSinceLastBall > newBallCooldown)
+            {
+                MoveTroughPaths(paths, tokenSource.Token);
                 timeSinceLastBall = 0;
             }
         }
 
     }
 
-    private async void MoveTroughPath(List<PathNode> nodes, CancellationToken cancellationToken)
+    private async void MoveTroughPaths(List<List<PathNode>> paths, CancellationToken cancellationToken)
     {
-        int currentNodeIndex = 0;
-
-        GameObject ball = GameObject.Instantiate(this.ball, transform);
-        ball.transform.position = nodes[currentNodeIndex].position + (Vector3.up * pathTrailHeight); 
-
-        while (currentNodeIndex < nodes.Count - 1)
+        foreach (List<PathNode> nodes in paths)
         {
-            if (cancellationToken.IsCancellationRequested) {
-                DestroyBall(ball);
-                return;
+            foreach (PathNode node in nodes)
+            {
+                Debug.Log("WAZA");
+                if (node.parentNode != null)
+                    MoveTroughNode(node, Vector3.Distance(node.position, node.parentNode.position), cancellationToken);
             }
+        }
+    }
 
-            ball.transform.position = Vector3.MoveTowards(ball.transform.position, nodes[currentNodeIndex + 1].position + (Vector3.up * pathTrailHeight), Time.deltaTime * ballSpeed);
-            await Task.Yield();
+    private async Task MoveTroughNode(PathNode node, float distance, CancellationToken cancellationToken)
+    {
+        GameObject ball = Instantiate(this.ball, transform);
+        ball.transform.position = node.parentNode.position + (Vector3.up * pathTrailHeight);
+        ball.name = node.parentNode.ToString();
 
+        ball.GetComponent<MeshRenderer>().enabled = displayBalls;
+        ball.GetComponent<TrailRenderer>().enabled = displayBalls;
+
+        while (Vector3.Distance(ball.transform.position, node.position + (Vector3.up * pathTrailHeight)) > 0.1f)
+        {
             if (cancellationToken.IsCancellationRequested)
             {
                 DestroyBall(ball);
                 return;
             }
 
-            if (ball.transform.position == nodes[currentNodeIndex + 1].position + (Vector3.up * pathTrailHeight))
-                currentNodeIndex++;
+            ball.transform.position = Vector3.MoveTowards(ball.transform.position, node.position + (Vector3.up * pathTrailHeight), Time.deltaTime * ballSpeed * distance);
+            await Task.Yield();
         }
 
         DestroyBall(ball);
@@ -72,20 +80,22 @@ public class PathRenderer : MonoBehaviour
 
     private void DestroyBall(GameObject ball)
     {
-#if UNITY_EDITOR
-        GameObject.DestroyImmediate(ball);
-#else
         GameObject.Destroy(ball);
-#endif
     }
 
-    private void OnApplicationQuit()
+    private void OnEnable()
     {
-        tokenSource.Cancel();
+        GameStateManager.Instance.onGameStateChanged.AddListener((currentGameState) => UpdateVisuals(currentGameState));
     }
 
     private void OnDisable()
-    { 
+    {
+        GameStateManager.Instance.onGameStateChanged.RemoveListener(UpdateVisuals);
         tokenSource.Cancel();
+    }
+
+    void UpdateVisuals(GameState currentGameState)
+    {
+        displayBalls = currentGameState == GameState.Planning;
     }
 }
