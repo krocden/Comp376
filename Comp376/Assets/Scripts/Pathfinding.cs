@@ -15,9 +15,9 @@ public class Pathfinding
         this.pathNodeGrid = grid;
     }
 
-    public bool TryFindPath(Vector4 coords)
+    public bool TryFindPath(Vector4 coords, bool ignoreWalls = false)
     {
-        return FindPath(coords) != null;
+        return FindPath(coords, ignoreWalls) != null;
     }
 
     public List<PathNode> FindPath(Vector4 coords, bool ignoreWalls = false)

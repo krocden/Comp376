@@ -10,17 +10,13 @@ public class WallDestroyerMonster : Monster
         int currentNodeIndex = 0;
 
         float nodeSizeOffset = path[currentNodeIndex].nodeSize / 2;
-        Vector2 randomPoint = Random.insideUnitCircle;
-        Vector3 randomPathOffset = new Vector3(randomPoint.x, 0, randomPoint.y) * nodeSizeOffset;
-        while (this != null && currentNodeIndex + 1 != path.Count)
+        while ((this != null && currentNodeIndex + 1 != path.Count) && Vector3.Distance(transform.position, target.nexusBase.position) > target.nexusBase.localScale.x / 2 + attackRange)
         {
-            transform.position = Vector3.MoveTowards(transform.position, path[currentNodeIndex + 1].position + Vector3.up + randomPathOffset, Time.deltaTime * speed);
+            transform.position = Vector3.MoveTowards(transform.position, path[currentNodeIndex + 1].position + Vector3.up, Time.deltaTime * speed);
 
-            if (Vector3.Distance(transform.position, path[currentNodeIndex + 1].position + Vector3.up + randomPathOffset) < 0.5f)
+            if (Vector3.Distance(transform.position, path[currentNodeIndex + 1].position + Vector3.up) < 0.5f)
             {
                 currentNodeIndex++;
-                randomPoint = Random.insideUnitCircle;
-                randomPathOffset = new Vector3(randomPoint.x, 0, randomPoint.y) * nodeSizeOffset;
             }
 
             await Task.Yield();

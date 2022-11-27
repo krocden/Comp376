@@ -92,7 +92,7 @@ public class ArenaSetup : MonoBehaviour
 
         newPath = new Vector4(pathStart.x, pathStart.y, pathEnd.x, pathEnd.y);
 
-        if (!pathfinding.TryFindPath(newPath))
+        if (pathStartEndCoordinatesList.Count > 0)
         {
             List<PathNode> pathToDestroy = pathfinding.FindPath(newPath, ignoreWalls: true);
             Vector3 spawnPoint = pathToDestroy[0].position + Vector3.up;

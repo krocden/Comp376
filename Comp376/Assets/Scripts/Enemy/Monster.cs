@@ -7,7 +7,7 @@ public class Monster : MonoBehaviour
 {
     public float health;
     [SerializeField] protected float speed;
-    [SerializeField] private float attackRange;
+    [SerializeField] protected float attackRange;
 
     protected List<PathNode> path;
     protected Nexus target;
