@@ -22,6 +22,7 @@ public class PathRenderer : MonoBehaviour
         tokenSource.Cancel();
         paths = nodes;
         tokenSource = new CancellationTokenSource();
+        timeSinceLastBall = newBallCooldown;
     }
 
     private void Update()
@@ -29,10 +30,10 @@ public class PathRenderer : MonoBehaviour
         if (paths.Count > 0)
         {
             timeSinceLastBall += Time.deltaTime;
-            if (timeSinceLastBall <= newBallCooldown)
+            if (timeSinceLastBall > newBallCooldown)
             {
                 MoveTroughPaths(paths, tokenSource.Token);
-                timeSinceLastBall = 1001;
+                timeSinceLastBall = 0;
             }
         }
 
@@ -40,20 +41,15 @@ public class PathRenderer : MonoBehaviour
 
     private async void MoveTroughPaths(List<List<PathNode>> paths, CancellationToken cancellationToken)
     {
-        //foreach (List<PathNode> nodes in this.paths)
-        //{
-        foreach (PathNode node in paths[1])
+        foreach (List<PathNode> nodes in paths)
         {
-            if (node.parentNode != null)
-                await MoveTroughNode(node, Vector3.Distance(node.position, node.parentNode.position), cancellationToken);
+            foreach (PathNode node in nodes)
+            {
+                Debug.Log("WAZA");
+                if (node.parentNode != null)
+                    MoveTroughNode(node, Vector3.Distance(node.position, node.parentNode.position), cancellationToken);
+            }
         }
-
-        foreach (PathNode node in paths[0])
-        {
-            if (node.parentNode != null)
-                await MoveTroughNode(node, Vector3.Distance(node.position, node.parentNode.position), cancellationToken);
-        }
-        //}
     }
 
     private async Task MoveTroughNode(PathNode node, float distance, CancellationToken cancellationToken)
@@ -62,28 +58,24 @@ public class PathRenderer : MonoBehaviour
         ball.transform.position = node.parentNode.position + (Vector3.up * pathTrailHeight);
         ball.name = node.parentNode.ToString();
 
-        //while (ball.transform.position != node.position + (Vector3.up * pathTrailHeight))
-        //{
-        //    ball.transform.position = Vector3.MoveTowards(ball.transform.position, node.position + (Vector3.up * pathTrailHeight), Time.deltaTime * ballSpeed * distance);
-        //    await Task.Yield();
+        while (Vector3.Distance(ball.transform.position, node.position + (Vector3.up * pathTrailHeight)) > 0.1f)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                DestroyBall(ball);
+                return;
+            }
 
-        //    if (cancellationToken.IsCancellationRequested)
-        //    {
-        //        DestroyBall(ball);
-        //        return;
-        //    }
-        //}
+            ball.transform.position = Vector3.MoveTowards(ball.transform.position, node.position + (Vector3.up * pathTrailHeight), Time.deltaTime * ballSpeed * distance);
+            await Task.Yield();
+        }
 
-        //DestroyBall(ball);
+        DestroyBall(ball);
     }
 
     private void DestroyBall(GameObject ball)
     {
-#if UNITY_EDITOR
-        GameObject.DestroyImmediate(ball);
-#else
         GameObject.Destroy(ball);
-#endif
     }
 
     private void OnApplicationQuit()

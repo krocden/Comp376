@@ -89,6 +89,8 @@ public class WallSegment : MonoBehaviour
             {
                 if (WrenchMenu.Instance.Selected < 6)
                 {
+                    WallAutomata.WallState currentWallState = GetWallState();
+
                     //create tower
                     _automata.GoToState(WallAutomata.WallState.Plain);
                     _automata.GoToTurretState(_isFacingFrontFace, (WallAutomata.TurretState)(WrenchMenu.Instance.Selected + 1));
@@ -96,10 +98,13 @@ public class WallSegment : MonoBehaviour
                     // position the wall in place so the pathfinder algo can look with this new wall
                     // if all the paths are valid we can place the wall
                     // otherwise reset the wall to the empty state
-                    if (tryCalculatePaths.Invoke())
-                        createNewPaths.Invoke();
-                    else
-                        _automata.GoToState(WallAutomata.WallState.Empty);
+
+                    if (currentWallState == WallAutomata.WallState.Empty)
+                        if (tryCalculatePaths.Invoke())
+                            createNewPaths.Invoke();
+                        else
+                            _automata.GoToState(WallAutomata.WallState.Empty);
+                            _automata.GoToTurretState(_isFacingFrontFace, WallAutomata.TurretState.EmptyTurret);
                 }
                 else if (WrenchMenu.Instance.Selected == 6)
                 {
