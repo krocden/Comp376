@@ -15,15 +15,15 @@ public class Pathfinding
         this.pathNodeGrid = grid;
     }
 
-    public bool TryFindPath(int startX, int startZ, int endX, int endZ)
+    public bool TryFindPath(Vector4 coords, bool ignoreWalls = false)
     {
-        return FindPath(startX, startZ, endX, endZ) != null;
+        return FindPath(coords, ignoreWalls) != null;
     }
 
-    public List<PathNode> FindPath(int startX, int startZ, int endX, int endZ)
+    public List<PathNode> FindPath(Vector4 coords, bool ignoreWalls = false)
     {
-        PathNode startNode = pathNodeGrid[startX, startZ];
-        PathNode endNode = pathNodeGrid[endX, endZ];
+        PathNode startNode = pathNodeGrid[(int)coords.x, (int)coords.y];
+        PathNode endNode = pathNodeGrid[(int)coords.z, (int)coords.w];
 
         List<PathNode> openNodes = new List<PathNode> { startNode };
         List<PathNode> closedNodes = new List<PathNode>();
@@ -49,7 +49,7 @@ public class Pathfinding
             openNodes.Remove(currentNode);
             closedNodes.Add(currentNode);
 
-            List<PathNode> neighbours = currentNode.GetAvailableNeighbours();
+            List<PathNode> neighbours = currentNode.GetAvailableNeighbours(ignoreWalls);
 
             foreach (PathNode neighbour in neighbours)
             {

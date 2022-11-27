@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float speed;
+    private float speed;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float runningSpeed;
     [SerializeField] private float gravity;
     [SerializeField] private float jumpHeight;
     [SerializeField] private float verticalVelocity;
@@ -20,11 +22,31 @@ public class PlayerMovement : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         firstPersonCamera = Camera.main;
+        speed = walkSpeed;
     }
 
     void Update()
     {
+        if (GameStateManager.Instance.BlockInput)
+            return;
+
         grounded = controller.isGrounded;
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && grounded)
+        {
+            speed = runningSpeed;
+        } 
+        if (Input.GetKeyUp(KeyCode.LeftShift)) 
+        {
+            if (grounded)
+            {
+                speed = walkSpeed;
+            } 
+            else 
+            {
+                StartCoroutine(landing());
+            }
+        }
 
         if (grounded)
         {
@@ -33,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
 
         verticalVelocity += gravity * Time.deltaTime;
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButton("Jump"))
         {
             if (grounded)
             {
@@ -56,6 +78,17 @@ public class PlayerMovement : MonoBehaviour
         
         movement.y = verticalVelocity;
         controller.Move(movement * Time.deltaTime * speed);
-
     }
+
+    void handleInput()
+    {
+        //Move code here
+    }
+
+    IEnumerator landing()
+    {
+        yield return new WaitUntil(() => grounded);
+        speed = walkSpeed;
+    }
+
 }
