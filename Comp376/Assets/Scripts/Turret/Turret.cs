@@ -10,7 +10,7 @@ public class Turret : MonoBehaviour
     [SerializeField] private WallAutomata.TurretState _currentState;
     private MeshRenderer rend;
     public float rateOfFire = 1f;
-    public int damage = 10;
+    public int damage = 2;
 
     [SerializeField] Material[] turretMaterials;
     [SerializeField] TurretTriggerArea turretArea;
@@ -95,7 +95,7 @@ public class Turret : MonoBehaviour
     {
         if (monster == null) return;
 
-        if (monster.TakeDamage(damage))
+        if (monster.TakeDamage(2))
             turretArea.monstersInArea.Remove(monster);
     }
 }

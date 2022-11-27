@@ -96,7 +96,7 @@ MonoBehaviour:
   currentAmmo: 8
   maxAmmo: 40
   magazineSize: 8
-  fireRate: 0.5
+  fireRate: 0.2
   fireCd: 0
   range: 40
   automatic: 0

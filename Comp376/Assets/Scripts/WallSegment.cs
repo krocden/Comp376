@@ -15,6 +15,8 @@ public class WallSegment : MonoBehaviour
     [SerializeField] private Turret _frontTurret;
     [SerializeField] private Turret _backTurret;
 
+    [SerializeField] private GameObject _minimapVisual;
+
     private Transform _player;
 
     private bool _isBeingHovered = false;
@@ -124,10 +126,12 @@ public class WallSegment : MonoBehaviour
                 _canvas.enabled = false;
                 transform.localScale = new Vector3(transform.localScale.x, 0.2f, transform.localScale.z);
                 transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
+                _minimapVisual.SetActive(false);
                 break;
             default:
                 transform.localScale = new Vector3(transform.localScale.x, 10, transform.localScale.z);
                 transform.localPosition = new Vector3(transform.localPosition.x, 5, transform.localPosition.z);
+                _minimapVisual.SetActive(true);
                 break;
         }
     }
