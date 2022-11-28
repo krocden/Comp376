@@ -22,11 +22,20 @@ public class CoreUIHandler : MonoBehaviour
 
     [SerializeField] private Slider nexusHealthSlider;
     [SerializeField] private TextMeshProUGUI nexusHealthText;
+    [SerializeField] private TMP_Text currencyText;
 
-    private void Start()
+    private void OnEnable()
     {
         GameStateManager.Instance.onGameStateChanged.AddListener(UpdateUIGroup);
         GameStateManager.Instance.onGameStateTransitionStarted.AddListener(UpdateStateTransitionUI);
+        CurrencyManager.Instance.OnCurrencyChanged.AddListener(UpdateCurrencyText);
+    }
+
+    private void OnDisable()
+    {
+        GameStateManager.Instance.onGameStateChanged.RemoveListener(UpdateUIGroup);
+        GameStateManager.Instance.onGameStateTransitionStarted.RemoveListener(UpdateStateTransitionUI);
+        CurrencyManager.Instance.OnCurrencyChanged.RemoveListener(UpdateCurrencyText);
     }
 
 
@@ -98,5 +107,9 @@ public class CoreUIHandler : MonoBehaviour
     {
         nexusHealthText.text = health.ToString();
         nexusHealthSlider.value = health / maxHealth;
+    }
+
+    public void UpdateCurrencyText(int currency) {
+        currencyText.text = $"Current Wallet: {currency}$";
     }
 }

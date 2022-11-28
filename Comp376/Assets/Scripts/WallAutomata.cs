@@ -33,15 +33,19 @@ public class WallAutomata
     {
         if (_currentState == newState) return;
 
+        bool isValidState = true;
         switch (newState)
         {
             case WallState.Empty:
-                SetEmptyWall(_currentState);
+                isValidState = SetEmptyWall(_currentState);
                 break;
             case WallState.Plain:
-                SetPlainWall(_currentState);
+                isValidState = SetPlainWall(_currentState);
                 break;
         }
+
+        if (!isValidState) return;
+
         _currentState = newState;
         StateVisualsChanged.Invoke(this, _currentState);
     }
@@ -62,13 +66,16 @@ public class WallAutomata
         }
     }
 
-    private void SetPlainWall(WallState previousState)
+    private bool SetPlainWall(WallState previousState)
     {
         //handle any non-visual elements (money down, etc.)
+        return CurrencyManager.Instance.SubtractCurrency(20);
     }
 
-    private void SetEmptyWall(WallState previousState)
+    private bool SetEmptyWall(WallState previousState)
     {
+        CurrencyManager.Instance.AddCurrency(10);
+        return true;
         //handle any non-visual elements (money down, etc.)
     }
 }

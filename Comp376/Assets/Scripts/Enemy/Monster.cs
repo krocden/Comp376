@@ -8,6 +8,7 @@ public class Monster : MonoBehaviour
     public float health;
     [SerializeField] protected float speed;
     [SerializeField] protected float attackRange;
+    [SerializeField] protected int currencyOnKill;
 
     protected List<PathNode> path;
     protected Nexus target;
@@ -86,6 +87,7 @@ public class Monster : MonoBehaviour
 
     private void Die()
     {
+        CurrencyManager.Instance.AddCurrency(currencyOnKill);
         Destroy(gameObject);
     }
 }
