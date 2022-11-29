@@ -171,7 +171,10 @@ public class GameStateManager : MonoBehaviour
 
         float timeLeft = await StartTimer(buildingPhaseTimer, timerCancellationTokenSource.Token, timeTicking);
 
-        if (timeLeft > 0) { } // add currency to the player
+        if (timeLeft > 0) 
+        {
+            CurrencyManager.Instance.AddCurrency(Mathf.RoundToInt(timeLeft / buildingPhaseTimer) * 100);
+        } // add currency to the player
 
         GoToNextState();
     }

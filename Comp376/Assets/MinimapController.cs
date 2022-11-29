@@ -11,6 +11,7 @@ public class MinimapController : MonoBehaviour
 
     private void Update()
     {
+        minimap.SetActive(!Input.GetKey(KeyCode.Tab));
         mapOverlay.SetActive(Input.GetKey(KeyCode.Tab));
     }
 }

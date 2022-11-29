@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34719a5aeca26f9448fb94db2f552d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballSpeed: 15
+  ballSpeed: 1
   ball: {fileID: 4683019697757331437, guid: 6c64f95eedadcd54f9cc3ef1e601685c, type: 3}
-  newBallCooldown: 1
-  pathTrailHeight: 0.5
+  newBallCooldown: 0.96
+  pathTrailHeight: 0.3
