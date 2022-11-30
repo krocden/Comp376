@@ -30,6 +30,9 @@ public class Nexus : MonoBehaviour
     public void TakeDamage(float damage)
     {
         nexusHealth -= damage;
+
+        NotificationManager.Instance.PlayPositionnalNotification(NotificationType.NexusUnderAttack, transform.position, true);
+
         if (nexusHealth <= 0)
         {
             nexusHealth = 0;

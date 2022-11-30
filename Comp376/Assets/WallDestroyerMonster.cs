@@ -22,7 +22,11 @@ public class WallDestroyerMonster : Monster
             await Task.Yield();
         }
 
+#if !UNITY_EDITOR
         Destroy(gameObject);
+#else
+        DestroyImmediate(gameObject);
+#endif    
     }
 
     private void OnCollisionEnter(Collision collision)
