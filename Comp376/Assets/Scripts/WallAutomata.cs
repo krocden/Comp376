@@ -53,6 +53,23 @@ public class WallAutomata
 
     public void GoToTurretState(bool isFrontFace, TurretState newState)
     {
+        bool isValidState = true;
+        switch (newState)
+        {
+            case TurretState.GunTurret:
+                isValidState = CurrencyManager.Instance.SubtractCurrency(5);
+                break;
+            case TurretState.CannonTurret:
+                isValidState = CurrencyManager.Instance.SubtractCurrency(10);
+                break;
+            case TurretState.EmptyTurret:
+                CurrencyManager.Instance.AddCurrency(10);
+                break;
+        }
+
+        if (!isValidState) return;
+
+
         if (isFrontFace)
         {
             if (_frontFace == newState) return;

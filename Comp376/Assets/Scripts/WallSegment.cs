@@ -92,8 +92,8 @@ public class WallSegment : MonoBehaviour
                     WallAutomata.WallState currentWallState = GetWallState();
 
                     //create tower
-                    if (_automata.GoToState(WallAutomata.WallState.Plain))
-                        _automata.GoToTurretState(_isFacingFrontFace, (WallAutomata.TurretState)(WrenchMenu.Instance.Selected + 1));
+                    _automata.GoToState(WallAutomata.WallState.Plain);
+                    _automata.GoToTurretState(_isFacingFrontFace, (WallAutomata.TurretState)(WrenchMenu.Instance.Selected + 1));
 
                     // position the wall in place so the pathfinder algo can look with this new wall
                     // if all the paths are valid we can place the wall
