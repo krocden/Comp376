@@ -29,9 +29,9 @@ public class WallAutomata
         SlowTurret
     }
 
-    public void GoToState(WallState newState)
+    public bool GoToState(WallState newState)
     {
-        if (_currentState == newState) return;
+        if (_currentState == newState) return false;
 
         bool isValidState = true;
         switch (newState)
@@ -44,10 +44,11 @@ public class WallAutomata
                 break;
         }
 
-        if (!isValidState) return;
+        if (!isValidState) return false;
 
         _currentState = newState;
         StateVisualsChanged.Invoke(this, _currentState);
+        return true;
     }
 
     public void GoToTurretState(bool isFrontFace, TurretState newState)

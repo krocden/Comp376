@@ -15,6 +15,7 @@ public class Turret : MonoBehaviour
     [SerializeField] Material[] turretMaterials;
     [SerializeField] TurretTriggerArea turretArea;
     [SerializeField] GameObject turretGunBulletPrefab;
+    [SerializeField] ParticleSystem cannonGunExplosion;
 
     void Start()
     {
@@ -38,6 +39,8 @@ public class Turret : MonoBehaviour
                 InvokeRepeating(nameof(ShootGunTurret), 1f, rateOfFire);
                 break;
             case CannonTurret:
+                rend.material = turretMaterials[0];
+                InvokeRepeating(nameof(ShootCannonTurret), 1f, rateOfFire);
                 break;
             case PortalTurret:
                 break;
@@ -52,7 +55,8 @@ public class Turret : MonoBehaviour
         }
     }
 
-    public static string GetTurretText(WallAutomata.TurretState state) {
+    public static string GetTurretText(WallAutomata.TurretState state)
+    {
         switch (state)
         {
             case EmptyTurret:
@@ -71,6 +75,25 @@ public class Turret : MonoBehaviour
                 return "Slow turret";
             default:
                 return string.Empty;
+        }
+    }
+
+    private void ShootCannonTurret()
+    {
+        if (turretArea.monstersInArea.Count == 0) return;
+
+        cannonGunExplosion.Play();
+        int maxCount = turretArea.monstersInArea.Count;
+
+        for (int i = 0; i < maxCount; i++)
+        {
+            if (i > turretArea.monstersInArea.Count - 1) return;
+
+            if (turretArea.monstersInArea[i] == null)
+                turretArea.monstersInArea.RemoveAt(i);
+            else
+            if (turretArea.monstersInArea[i].TakeDamage(5))
+                turretArea.monstersInArea.RemoveAt(i);
         }
     }
 
