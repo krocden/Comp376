@@ -35,7 +35,9 @@ public class ArenaSetup : MonoBehaviour
     private Pathfinding pathfinding;
 
     public List<Vector4> pathStartEndCoordinatesList = new List<Vector4>();
+    public List<Vector4> nextWavePathStartEndCoordinatesList = new List<Vector4>();
     public List<List<PathNode>> paths = new List<List<PathNode>>();
+    public List<List<PathNode>> nextWavePaths = new List<List<PathNode>>();
 
     public void InitializeArena()
     {
@@ -51,49 +53,56 @@ public class ArenaSetup : MonoBehaviour
     }
 
 
-    public async Task AddPath()
+    public async Task AddPath(bool isSpawnerAddedNextWave = false)
     {
-        List<Vector2Int> possiblePathEnds = new List<Vector2Int>() 
-        { 
-            new Vector2Int(maxX / 2 - 1, maxZ / 2 - 1), // bottom left
-            new Vector2Int(maxX / 2, maxZ / 2 - 1), // bottom right
-            new Vector2Int(maxX / 2 - 1, maxZ / 2), // top left
-            new Vector2Int(maxX / 2, maxZ / 2) // top right
-        };
-
-        int rowOrCol = Random.Range(0, 2);
-
         // x is random, z is min or max
         Vector4 newPath;
 
-        int randomX;
-        int randomZ;
-        do
+        if (isSpawnerAddedNextWave || (!isSpawnerAddedNextWave && nextWavePathStartEndCoordinatesList.Count == 0))
         {
-            if (rowOrCol == 0)
+            List<Vector2Int> possiblePathEnds = new List<Vector2Int>()
             {
-                randomX = Random.Range(0, maxX);
-                randomZ = Random.Range(0, 2) * (maxZ - 1);
-            }
-            else
-            {
-                randomX = Random.Range(0, 2) * (maxX - 1);
-                randomZ = Random.Range(0, maxZ);
-            }
-        }
-        while (PathAlreadyExists(new Vector2Int(randomX, randomZ)));
+                new Vector2Int(maxX / 2 - 1, maxZ / 2 - 1), // bottom left
+                new Vector2Int(maxX / 2, maxZ / 2 - 1), // bottom right
+                new Vector2Int(maxX / 2 - 1, maxZ / 2), // top left
+                new Vector2Int(maxX / 2, maxZ / 2) // top right
+            };
 
-        Vector2Int pathStart = new Vector2Int(randomX, randomZ);
-        Vector2Int pathEnd = possiblePathEnds[0];
-        for (int i = 0; i < possiblePathEnds.Count; i++)
+            int rowOrCol = Random.Range(0, 2);
+            int randomX;
+            int randomZ;
+            do
+            {
+                if (rowOrCol == 0)
+                {
+                    randomX = Random.Range(0, maxX);
+                    randomZ = Random.Range(0, 2) * (maxZ - 1);
+                }
+                else
+                {
+                    randomX = Random.Range(0, 2) * (maxX - 1);
+                    randomZ = Random.Range(0, maxZ);
+                }
+            }
+            while (PathAlreadyExists(new Vector2Int(randomX, randomZ)));
+
+            Vector2Int pathStart = new Vector2Int(randomX, randomZ);
+            Vector2Int pathEnd = possiblePathEnds[0];
+            for (int i = 0; i < possiblePathEnds.Count; i++)
+            {
+                if (Vector2.Distance(pathStart, possiblePathEnds[i]) < Vector2.Distance(pathStart, pathEnd))
+                    pathEnd = possiblePathEnds[i];
+            }
+
+            newPath = new Vector4(pathStart.x, pathStart.y, pathEnd.x, pathEnd.y);
+        }
+        else
         {
-            if (Vector2.Distance(pathStart, possiblePathEnds[i]) < Vector2.Distance(pathStart, pathEnd))
-                pathEnd = possiblePathEnds[i];
+            newPath = nextWavePathStartEndCoordinatesList[0];
+            nextWavePathStartEndCoordinatesList.RemoveAt(0);
         }
 
-        newPath = new Vector4(pathStart.x, pathStart.y, pathEnd.x, pathEnd.y);
-
-        if (pathStartEndCoordinatesList.Count > 0)
+        if (!isSpawnerAddedNextWave && pathStartEndCoordinatesList.Count > 0)
         {
             List<PathNode> pathToDestroy = pathfinding.FindPath(newPath, ignoreWalls: true);
             Vector3 spawnPoint = pathToDestroy[0].position + Vector3.up;
@@ -104,15 +113,32 @@ public class ArenaSetup : MonoBehaviour
             {
                 await Task.Yield();
             }
+
+        }
+        
+        Vector3 pingPos = pathfinding.FindPath(newPath, ignoreWalls: true)[0].position;
+
+        if (!isSpawnerAddedNextWave) 
+        { 
+            if (pathStartEndCoordinatesList.Count > 0)
+                NotificationManager.Instance.PingOnMap(pingPos);
+            pathStartEndCoordinatesList.Add(newPath);
+        }
+        else
+        {
+            nextWavePathStartEndCoordinatesList.Add(newPath);
+            NotificationManager.Instance.PingOnMap(pingPos);
         }
 
-        pathStartEndCoordinatesList.Add(newPath);
         UpdatePaths();
     }
 
     private bool PathAlreadyExists(Vector2Int pathStart)
     {
-        foreach (Vector4 pathCoord in pathStartEndCoordinatesList)
+        List<Vector4> currentPaths = new List<Vector4>();
+        currentPaths.AddRange(pathStartEndCoordinatesList);
+        currentPaths.AddRange(nextWavePathStartEndCoordinatesList);
+        foreach (Vector4 pathCoord in currentPaths)
         {
             if ((int)pathCoord.x == pathStart.x && (int)pathCoord.y == pathStart.y)
                 return true;
@@ -139,7 +165,7 @@ public class ArenaSetup : MonoBehaviour
             if (wall != null)
             {
                 wall.tryCalculatePaths = CheckPathValidity;
-                wall.createNewPaths = UpdatePaths;                
+                wall.createNewPaths = UpdatePaths;
             }
         }
 
@@ -155,41 +181,25 @@ public class ArenaSetup : MonoBehaviour
     private void UpdatePaths()
     {
         paths.Clear();
+        nextWavePaths.Clear();
         foreach (Vector4 coords in pathStartEndCoordinatesList)
         {
             List<PathNode> path = pathfinding.FindPath(coords);
             paths.Add(path);
         }
 
-        pathRenderer.SetPathNodes(paths);
-    }
-
-    private void DebugPaths()
-    {
-        for (int i = 0; i < _pathDebugger.childCount; i++)
-            Destroy(_pathDebugger.GetChild(i).gameObject);
-
-        int index = 1;
-
-        foreach (List<PathNode> path in paths)
+        foreach (Vector4 coords in nextWavePathStartEndCoordinatesList)
         {
-            Color rand = Random.ColorHSV();
-            foreach (PathNode node in path)
-            {
-                GameObject cubeNode = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                cubeNode.transform.localScale = new Vector3(5, 1, 5);
-                cubeNode.transform.position = node.position;
-                cubeNode.transform.parent = _pathDebugger;
-                cubeNode.name = "Path " + index + " " + node.ToString();
-                cubeNode.GetComponent<MeshRenderer>().material.color = rand;
-            }
-            index++;
+            List<PathNode> path = pathfinding.FindPath(coords, ignoreWalls: true);
+            nextWavePaths.Add(path);
         }
+
+        pathRenderer.SetPathNodes(paths, nextWavePaths);
     }
 
     private void InstantiateWallSegments()
     {
-        int xOffset = maxX * nodeSize / 2 - (nodeSize / 2) ;
+        int xOffset = maxX * nodeSize / 2 - (nodeSize / 2);
         int zOffset = maxZ * nodeSize / 2;
 
         int width = maxX / 2;

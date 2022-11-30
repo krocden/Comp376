@@ -153,12 +153,32 @@ public class GameStateManager : MonoBehaviour
 
     private async Task SetBuildingPhase()
     {
+        if (spawningCancellationTokenSource.IsCancellationRequested)
+            return;
         canSkipPhase = false;
+
+        // add spawner
         if (currentWave % level.addSpawnerWaveInterval == 0 && level.maximumSpawners > arenaSetup.pathStartEndCoordinatesList.Count)
         {
             for (int i = 0; i < level.numberOfSpawnersToAdd; i++)
-                await arenaSetup.AddPath();
+            {
+                await arenaSetup.AddPath(false);
+            }
+
+            if (currentWave != 0)
+                NotificationManager.Instance.PlayStandardNotification(NotificationType.NewSpawnerAdded, true);
         }
+
+        // Add next wave spawner
+        if ((currentWave + 1) % level.addSpawnerWaveInterval == 0 && level.maximumSpawners > arenaSetup.pathStartEndCoordinatesList.Count + arenaSetup.nextWavePathStartEndCoordinatesList.Count)
+        {
+            for (int i = 0; i < level.numberOfSpawnersToAdd; i++)
+            {
+                await arenaSetup.AddPath(true);
+            }
+            NotificationManager.Instance.PlayStandardNotification(NotificationType.NewSpawnerNextRound, true);
+        }
+
         canSkipPhase = true;
         timerCancellationTokenSource = new CancellationTokenSource();
 
@@ -171,15 +191,22 @@ public class GameStateManager : MonoBehaviour
 
         float timeLeft = await StartTimer(buildingPhaseTimer, timerCancellationTokenSource.Token, timeTicking);
 
-        if (timeLeft > 0) { } // add currency to the player
+        if (timeLeft > 0) 
+        {
+            CurrencyManager.Instance.AddCurrency(Mathf.RoundToInt(timeLeft / buildingPhaseTimer * 100));
+        }
 
         GoToNextState();
     }
 
     private async void SetShootingPhase()
     {
+        if (spawningCancellationTokenSource.IsCancellationRequested)
+            return;
+
         canSkipPhase = false;
         coreUIHandler.UpdateMonstersLeft(0);
+        NotificationManager.Instance.PlayNotificationSFX(NotificationType.WaveIncoming);
         List<MonsterDetails> monsterDetails = waves[currentWave].GetMonsterDetails();
         for (int i = 0; i < monsterDetails.Count; i++)
         {
@@ -201,6 +228,7 @@ public class GameStateManager : MonoBehaviour
                         {
                             if (spawningCancellationTokenSource.IsCancellationRequested)
                                 return;
+
                             Vector3 spawnPoint = path[0].position + Vector3.up;
                             Monster monster = Instantiate(monsterDetails[i + x].monsterPrefab, spawnPoint, Quaternion.identity);
                             monster.Initialize(path, arenaSetup.nexus);                            
@@ -232,6 +260,8 @@ public class GameStateManager : MonoBehaviour
 
             await Task.Yield();
         }
+
+        NotificationManager.Instance.PlayNotificationSFX(NotificationType.WaveCompleted);
 
         GoToNextState();
     }
@@ -267,6 +297,8 @@ public class GameStateManager : MonoBehaviour
         timerCancellationTokenSource.Cancel();
 
         levelFailed = true;
+
+        NotificationManager.Instance.PlayNotificationSFX(NotificationType.GameOver);
 
         GoToState(GameState.Completed);
     }

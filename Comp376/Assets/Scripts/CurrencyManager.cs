@@ -38,7 +38,11 @@ public class CurrencyManager : MonoBehaviour
         //return false if cannot afford transaction
         int newCurrency = _currency - toRemove;
 
-        if (newCurrency < 0) return false;
+        if (newCurrency < 0)
+        {
+            NotificationManager.Instance.PlayStandardNotification(NotificationType.NotEnoughCurrency);
+            return false;
+        }
 
         _currency -= toRemove;
         OnCurrencyChanged.Invoke(_currency);
