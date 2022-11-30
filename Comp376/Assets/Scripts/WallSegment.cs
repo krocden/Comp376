@@ -93,7 +93,9 @@ public class WallSegment : MonoBehaviour
 
                     //create tower
                     _automata.GoToState(WallAutomata.WallState.Plain);
-                    _automata.GoToTurretState(_isFacingFrontFace, (WallAutomata.TurretState)(WrenchMenu.Instance.Selected + 1));
+
+                    if (WrenchMenu.Instance.Selected > 0)
+                        _automata.GoToTurretState(_isFacingFrontFace, (WallAutomata.TurretState)(WrenchMenu.Instance.Selected));
 
                     // position the wall in place so the pathfinder algo can look with this new wall
                     // if all the paths are valid we can place the wall
@@ -112,11 +114,11 @@ public class WallSegment : MonoBehaviour
                         }
                     }
                 }
-                else if (WrenchMenu.Instance.Selected == 6)
+                else if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 2)
                 {
                     //upgrading
                 }
-                else if (WrenchMenu.Instance.Selected == 7)
+                else if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 1)
                 {
                     //destroy
                     _automata.GoToState(WallAutomata.WallState.Empty);

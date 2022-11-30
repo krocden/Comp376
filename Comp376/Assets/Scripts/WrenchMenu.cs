@@ -23,6 +23,7 @@ public class WrenchMenu : MonoBehaviour
     [SerializeField] private int selected = 0;
 
     public int Selected => selected;
+    public int PanelNumber => panels.Length;
 
     private void Start()
     {
