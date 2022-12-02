@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private Camera firstPersonCamera;
 
     public bool grounded;
-    [SerializeField] private bool isBuffed = false;
+    [SerializeField] private int buffZones = 0;
     private float buffModifier = 0f;
     private bool isRunning;
 
@@ -38,14 +38,12 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift) && grounded)
         {
             isRunning = true;
-            speed =  isBuffed ? runningSpeed * buffModifier : runningSpeed;
         } 
         if (Input.GetKeyUp(KeyCode.LeftShift)) 
         {
             if (grounded)
             {
                 isRunning = false;
-                speed = isBuffed ? walkSpeed * buffModifier : walkSpeed;
             } 
             else 
             {
@@ -53,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        speed = isBuffed ? buffModifier * (isRunning ? runningSpeed : walkSpeed) : (isRunning ? runningSpeed : walkSpeed);
+        speed = (buffZones > 0) ? buffModifier * (isRunning ? runningSpeed : walkSpeed) : (isRunning ? runningSpeed : walkSpeed);
 
         if (grounded)
         {
@@ -99,16 +97,18 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public void ApplyBuff() {
-        isBuffed = true;
+        buffZones++;
         buffModifier = 1.5f;
     }
 
     public void RemoveBuff() {
-        isBuffed = false;
+        buffZones--;
     }
 
     public void SetPosition(Vector3 newPos) {
+        controller.enabled = false;
         this.transform.position = newPos;
+        controller.enabled = true;
     }
 
 }

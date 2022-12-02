@@ -146,9 +146,9 @@ public class Turret : MonoBehaviour
 
 
         if (this == activePortals[0])
-            player.SetPosition(activePortals[1].transform.position);
+            player.SetPosition(activePortals[1].turretArea.transform.position);
         else
-            player.SetPosition(activePortals[0].transform.position);
+            player.SetPosition(activePortals[0].turretArea.transform.position);
 
         Debug.Log($"New Position: {player.transform.position}");
     }
