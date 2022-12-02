@@ -87,7 +87,7 @@ public class WallSegment : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0) && _isInteractable)
             {
-                if (WrenchMenu.Instance.Selected < 6)
+                if (WrenchMenu.Instance.Selected < WrenchMenu.Instance.PanelNumber - 2)
                 {
                     WallAutomata.WallState currentWallState = GetWallState();
 

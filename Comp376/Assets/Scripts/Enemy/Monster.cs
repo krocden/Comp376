@@ -13,16 +13,12 @@ public class Monster : MonoBehaviour
     protected List<PathNode> path;
     protected Nexus target;
 
+    private float baseSpeed;
+
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-             
+        baseSpeed = speed;
     }
 
     public void Initialize(List<PathNode> path, Nexus target)
@@ -31,6 +27,15 @@ public class Monster : MonoBehaviour
         this.target = target;
 
         MoveAlongPath();
+    }
+
+    public void ApplySlow()
+    {
+        speed = 0.5f * baseSpeed;
+    }
+
+    public void RemoveSlow() {
+        speed = baseSpeed;
     }
 
     protected virtual async Task MoveAlongPath()
