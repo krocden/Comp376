@@ -7,6 +7,10 @@ using static WallAutomata.TurretState;
 
 public class Turret : MonoBehaviour
 {
+    public static Turret[] activePortals = new Turret[2];
+    public static Turret lastUsedPortal;
+    public static bool isTeleportDisabled = false;
+
     [SerializeField] private WallAutomata.TurretState _currentState;
     private MeshRenderer rend;
     public float rateOfFire = 1f;
@@ -22,12 +26,30 @@ public class Turret : MonoBehaviour
         rend = GetComponent<MeshRenderer>();
     }
 
+    private void OnEnable()
+    {
+        turretArea.TeleportIn.AddListener(TeleportIn);
+        turretArea.TeleportOut.AddListener(TeleportOut);
+    }
+
+    private void OnDisable()
+    {
+        turretArea.TeleportIn.RemoveListener(TeleportIn);
+        turretArea.TeleportOut.RemoveListener(TeleportOut);
+    }
+
     public void SetMode(WallAutomata.TurretState state)
     {
         _currentState = state;
 
+        for (int i = 0; i < activePortals.Length; i++)
+            if (activePortals[i] == this)
+                activePortals[i] = null;
+
         rend.enabled = true;
         CancelInvoke();
+
+        turretArea.state = _currentState;
 
         switch (state)
         {
@@ -43,12 +65,26 @@ public class Turret : MonoBehaviour
                 InvokeRepeating(nameof(ShootCannonTurret), 1f, rateOfFire);
                 break;
             case PortalTurret:
+                if (activePortals[0] && activePortals[1])
+                {
+                    SetMode(EmptyTurret);
+                    break;
+                }
+                else if (!activePortals[0])
+                    activePortals[0] = this;
+                else
+                    activePortals[1] = this;
+                rend.material = turretMaterials[0];
                 break;
             case BuffTurret:
+                //Logic in turret trigger area (onenter)
+                rend.material = turretMaterials[0];
                 break;
             case WallTurret:
                 break;
             case SlowTurret:
+                //Logic in turret trigger area (onenter)
+                rend.material = turretMaterials[0];
                 break;
             default:
                 break;
@@ -95,6 +131,32 @@ public class Turret : MonoBehaviour
             if (turretArea.monstersInArea[i].TakeDamage(5))
                 turretArea.monstersInArea.RemoveAt(i);
         }
+    }
+
+    private void TeleportIn()
+    {
+        if (!activePortals[0] || !activePortals[1] || isTeleportDisabled) return;
+
+        lastUsedPortal = this;
+        isTeleportDisabled = true;
+
+        PlayerMovement player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+
+        Debug.Log($"Last Position: {player.transform.position}");
+
+
+        if (this == activePortals[0])
+            player.SetPosition(activePortals[1].turretArea.transform.position);
+        else
+            player.SetPosition(activePortals[0].turretArea.transform.position);
+
+        Debug.Log($"New Position: {player.transform.position}");
+    }
+
+    private void TeleportOut()
+    {
+        if (lastUsedPortal == this) return;
+        isTeleportDisabled = false;
     }
 
     private void ShootGunTurret()

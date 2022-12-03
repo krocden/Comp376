@@ -26,6 +26,7 @@ public class WallSegment : MonoBehaviour
 
     public Func<bool> tryCalculatePaths;
     public Action createNewPaths;
+    private BoxCollider col;
 
     private bool _isInteractable => _isBeingHovered && Vector3.Distance(transform.position, _player.position) < 20 && GameStateManager.Instance.GetCurrentGameState() == GameState.Planning;
 
@@ -33,12 +34,14 @@ public class WallSegment : MonoBehaviour
     private void Start()
     {
         _player = GameObject.FindWithTag("Player").transform;
+        col = GetComponent<BoxCollider>();
     }
 
     private void OnEnable()
     {
         _automata.StateVisualsChanged += VisualsChanged;
         _automata.TurretVisualsChanged += TurretVisualsChanged;
+        GameStateManager.Instance.onGameStateChanged.AddListener(OnGameStateChanged);
         //_canvas.worldCamera = Camera.main;
         _canvas.enabled = false;
     }
@@ -47,6 +50,7 @@ public class WallSegment : MonoBehaviour
     {
         _automata.StateVisualsChanged -= VisualsChanged;
         _automata.TurretVisualsChanged -= TurretVisualsChanged;
+        GameStateManager.Instance.onGameStateChanged.RemoveListener(OnGameStateChanged);
     }
 
     private void OnMouseEnter()
@@ -59,6 +63,13 @@ public class WallSegment : MonoBehaviour
         _isBeingHovered = false;
         _renderer.material.color = Color.white;
         _canvas.enabled = false;
+    }
+
+    private void OnGameStateChanged(GameState state) {
+        bool isShootingAndEmpty = (state == GameState.Shooting && _automata.CurrentState == WallAutomata.WallState.Empty);
+
+        col.enabled = !isShootingAndEmpty;
+        _renderer.enabled = !isShootingAndEmpty;
     }
 
     private void Update()
@@ -87,7 +98,7 @@ public class WallSegment : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0) && _isInteractable)
             {
-                if (WrenchMenu.Instance.Selected < 6)
+                if (WrenchMenu.Instance.Selected < WrenchMenu.Instance.PanelNumber - 2)
                 {
                     WallAutomata.WallState currentWallState = GetWallState();
 

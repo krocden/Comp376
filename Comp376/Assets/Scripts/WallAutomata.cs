@@ -62,6 +62,12 @@ public class WallAutomata
             case TurretState.CannonTurret:
                 isValidState = CurrencyManager.Instance.SubtractCurrency(10);
                 break;
+            case TurretState.BuffTurret:
+                isValidState = CurrencyManager.Instance.SubtractCurrency(5);
+                break;
+            case TurretState.SlowTurret:
+                isValidState = CurrencyManager.Instance.SubtractCurrency(5);
+                break;
             case TurretState.EmptyTurret:
                 CurrencyManager.Instance.AddCurrency(10);
                 break;
