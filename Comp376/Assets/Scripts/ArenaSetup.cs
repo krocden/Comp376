@@ -106,6 +106,7 @@ public class ArenaSetup : MonoBehaviour
         {
             List<PathNode> pathToDestroy = pathfinding.FindPath(newPath, ignoreWalls: true);
             Vector3 spawnPoint = pathToDestroy[0].position + Vector3.up;
+            NotificationManager.Instance.PlayPositionnalNotification(NotificationType.DetonatorsSpawned, transform.position, true);
             WallDestroyerMonster monster = Instantiate(monsterWallDestroyerPrefab, spawnPoint, Quaternion.identity);
             monster.Initialize(pathToDestroy, nexus);
 
@@ -113,7 +114,6 @@ public class ArenaSetup : MonoBehaviour
             {
                 await Task.Yield();
             }
-
         }
         
         Vector3 pingPos = pathfinding.FindPath(newPath, ignoreWalls: true)[0].position;

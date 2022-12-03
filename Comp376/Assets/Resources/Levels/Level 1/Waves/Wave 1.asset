@@ -16,6 +16,7 @@ MonoBehaviour:
   - monsterPrefab: {fileID: 5578211910298818360, guid: 10e3cff97bc7f024ca19abc0e59fd096, type: 3}
     monsterQuantity: 10
     monsterTier: 1
+    monsterSpawnRate: 0.5
     commandType: 0
     repeatNextXRows: 0
     repeatTimes: 0

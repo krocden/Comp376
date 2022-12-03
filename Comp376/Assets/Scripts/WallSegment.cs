@@ -158,6 +158,8 @@ public class WallSegment : MonoBehaviour
     public void SetEmptyWall()
     {
         _automata.GoToState(WallAutomata.WallState.Empty);
+        _automata.GoToTurretState(true, WallAutomata.TurretState.EmptyTurret);
+        _automata.GoToTurretState(false, WallAutomata.TurretState.EmptyTurret);
     }
 
     private void TurretVisualsChanged(object sender, WallAutomata.TurretState state)

@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class NotificationManager : MonoBehaviour
 {
     [SerializeField] private AudioSource source;
+    [SerializeField] private AudioSource sfxSource;
 
     [SerializeField] private AudioClip[] notificationSounds; // has to match the notification enum
 
@@ -56,7 +57,7 @@ public class NotificationManager : MonoBehaviour
 
     public void PlayNotificationSFX(NotificationType notificationType)
     {
-        source.PlayOneShot(notificationSounds[(int)notificationType]);
+        sfxSource.PlayOneShot(notificationSounds[(int)notificationType]);
     }
 
     public void PlayStandardNotification(NotificationType notificationType, bool waitToPlay = false)
@@ -113,4 +114,6 @@ public enum NotificationType
     PlayerDied,
     NotEnoughCurrency,
     GameOver,
+    DetonatorsSpawned,
+    FortificationsDestroyed,
 }
