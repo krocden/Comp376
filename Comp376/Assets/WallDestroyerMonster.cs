@@ -33,9 +33,9 @@ public class WallDestroyerMonster : Monster
     {
         if (collision.collider.CompareTag("Wall"))
         {
-            Destroy(collision.gameObject);
-            //WallSegment wall = collision.collider.GetComponent<WallSegment>();
-            //wall.SetEmptyWall();
+            //Destroy(collision.gameObject);
+            WallSegment wall = collision.collider.GetComponent<WallSegment>();
+            wall.SetEmptyWall();
         }
     }
 }
