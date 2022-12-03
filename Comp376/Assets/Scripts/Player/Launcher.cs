@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Launcher : MonoBehaviour, Gun
+public class Launcher : Gun
 {
     public float damage;
     public int currentAmmo;
@@ -39,7 +39,7 @@ public class Launcher : MonoBehaviour, Gun
         isReloading = false;
     }
 
-    public void reload()
+    public override void reload()
     {
         if (maxAmmo > 0)
         {
@@ -86,7 +86,7 @@ public class Launcher : MonoBehaviour, Gun
             currentAmmo -= ammo;
         }
     }
-    public bool shoot()
+    public override bool shoot()
     {
         RaycastHit bulletHit;
 
@@ -151,7 +151,7 @@ public class Launcher : MonoBehaviour, Gun
         Physics.IgnoreCollision(bullet.GetComponent<Collider>(), player.GetComponent<Collider>());
     }
 
-    public void getAmmo(out int currAmmo, out int maxAmmo)
+    public override void getAmmo(out int currAmmo, out int maxAmmo)
     {
         currAmmo = currentAmmo;
         maxAmmo = this.maxAmmo;

@@ -6,9 +6,9 @@ public class GunUpgrade : MonoBehaviour
 {
     public static GunUpgrade gunUpgrade;
 
-    public string[] upgradeName;
-    public string[] upgradeDescription;
-    public int upgradePoints;
+    //public string[] upgradeName;
+    //public string[] upgradeDescription;
+    //public int upgradePoints;
 
     public List<Upgrade> upgradeList;
     public GameObject upgradeHolder;
@@ -20,8 +20,9 @@ public class GunUpgrade : MonoBehaviour
 
     private void Start()
     {
-        upgradePoints = 33;
+        //upgradePoints = 33;
 
+        /*
         upgradeName = new[] { "Pistol", "Assault Rifle", "Shotgun", "Launcher" };
         upgradeDescription = new[]
         {
@@ -30,6 +31,7 @@ public class GunUpgrade : MonoBehaviour
             " 2",
             " 3"
         };
+        */
 
         initializeUpgrades();
     }

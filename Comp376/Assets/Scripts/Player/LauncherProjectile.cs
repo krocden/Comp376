@@ -23,6 +23,7 @@ public class LauncherProjectile : MonoBehaviour
                     Monster mob = enemy.GetComponent<Monster>();
                     mob.TakeDamage(gun.damage);
                     Debug.Log("Health: " + mob.health);
+                    CurrencyManager.Instance.AddCurrency(Gun.currencyPerHit);
                 }
             }
 

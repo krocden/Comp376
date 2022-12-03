@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rifle : MonoBehaviour, Gun
+public class Rifle : Gun
 {
     public float damage;
     public int currentAmmo;
@@ -38,7 +38,7 @@ public class Rifle : MonoBehaviour, Gun
         isReloading = false;
     }
 
-    public void reload()
+    public override void reload()
     {
         if (maxAmmo > 0)
         {
@@ -87,7 +87,7 @@ public class Rifle : MonoBehaviour, Gun
 
     }
 
-    public bool shoot()
+    public override bool shoot()
     {
         RaycastHit bulletHit;
 
@@ -110,6 +110,7 @@ public class Rifle : MonoBehaviour, Gun
                                 GameObject hitObject = bulletHit.transform.gameObject;
                                 Monster enemy = hitObject.GetComponent<Monster>();
                                 enemy.TakeDamage(damage);
+                                CurrencyManager.Instance.AddCurrency(currencyPerHit);
                                 Debug.Log("Health: " + enemy.health);
                             }
                         }
@@ -177,7 +178,7 @@ public class Rifle : MonoBehaviour, Gun
         Destroy(trail.gameObject, trail.time);
     }
 
-    public void getAmmo(out int currentAmmo, out int maxAmmo)
+    public override void getAmmo(out int currentAmmo, out int maxAmmo)
     {
         currentAmmo = this.currentAmmo;
         maxAmmo = this.maxAmmo;

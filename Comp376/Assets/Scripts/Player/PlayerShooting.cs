@@ -122,7 +122,7 @@ public class PlayerShooting : MonoBehaviour
         }
         else if (gunType == GunType.Shotgun)
         {
-            if (upgrade.upgradeList[2].unlocked)
+            if (upgrade.upgradeList[14].unlocked)
             {
                 deactivatePreviousGun();
                 currentGun = shotgun;
@@ -131,7 +131,7 @@ public class PlayerShooting : MonoBehaviour
         }
         else if (gunType == GunType.Launcher)
         {
-            if (upgrade.upgradeList[3].unlocked)
+            if (upgrade.upgradeList[27].unlocked)
             {
                 deactivatePreviousGun();
                 currentGun = launcher;
