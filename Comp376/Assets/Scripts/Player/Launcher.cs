@@ -13,6 +13,7 @@ public class Launcher : Gun
     public float range;
     public bool automatic;
     public bool canShoot;
+    public float explosionRadius;
     bool isReloading = false;
 
     public GameObject player;
@@ -147,6 +148,7 @@ public class Launcher : Gun
     {
         //Vector3 gunSpritePos = player.transform.position + (Camera.main.transform.rotation * gunEffectPos);
         GameObject bullet = Instantiate(bulletProjectile, player.transform.position, Quaternion.identity); ;
+        bullet.GetComponent<LauncherProjectile>().damageRadius = explosionRadius;
         bullet.GetComponent<Rigidbody>().velocity = (bulletDestination - player.transform.position).normalized * bulletSpeed;
         Physics.IgnoreCollision(bullet.GetComponent<Collider>(), player.GetComponent<Collider>());
     }

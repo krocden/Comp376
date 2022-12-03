@@ -13,6 +13,7 @@ public class Rifle : Gun
     public float range;
     public bool automatic;
     public bool canShoot;
+    public float headshotMultiplier;
     bool isReloading = false;
 
     public GameObject player;
