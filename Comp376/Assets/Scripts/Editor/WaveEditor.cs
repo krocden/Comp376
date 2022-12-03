@@ -91,6 +91,7 @@ public class WaveEditor : Editor
 			element.FindPropertyRelative("monsterQuantity").intValue = 10;
 			element.FindPropertyRelative("monsterPrefab").objectReferenceValue =
 				AssetDatabase.LoadAssetAtPath(data.Path, typeof(GameObject)) as GameObject;
+			element.FindPropertyRelative("monsterSpawnRate").floatValue = 0.5f;
 		}
 		serializedObject.ApplyModifiedProperties();
 	}
@@ -118,6 +119,12 @@ public class WaveEditor : Editor
 			EditorGUI.PropertyField(
 				new Rect(rect.x + 280, rect.y, 30, EditorGUIUtility.singleLineHeight),
 				element.FindPropertyRelative("monsterQuantity"), GUIContent.none);
+			EditorGUI.LabelField(
+				new Rect(rect.x + 320, rect.y, 80, EditorGUIUtility.singleLineHeight),
+				"Spawn Rate");
+			EditorGUI.PropertyField(
+				new Rect(rect.x + 400, rect.y, 30, EditorGUIUtility.singleLineHeight),
+				element.FindPropertyRelative("monsterSpawnRate"), GUIContent.none);
 		}
 		else if(element.FindPropertyRelative("commandType").enumValueIndex == (int)CommandType.RepeatGroup)
 		{
