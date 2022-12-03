@@ -20,6 +20,7 @@ public class MonsterDetails
     public Monster monsterPrefab;
     public int monsterQuantity;
     public int monsterTier;
+    public float monsterSpawnRate;
     public CommandType commandType;
     public int repeatNextXRows;
     public int repeatTimes;
