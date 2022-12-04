@@ -333,6 +333,9 @@ MonoBehaviour:
   TeleportOut:
     m_PersistentCalls:
       m_Calls: []
+  modifier: 1
+  rangeX: 0
+  rangeZ: 1
   monstersInArea: []
 --- !u!1 &4795133259727377694
 GameObject:
@@ -449,6 +452,9 @@ MonoBehaviour:
   TeleportOut:
     m_PersistentCalls:
       m_Calls: []
+  modifier: 1
+  rangeX: 0
+  rangeZ: 1
   monstersInArea: []
 --- !u!1 &5030919909639806583
 GameObject:

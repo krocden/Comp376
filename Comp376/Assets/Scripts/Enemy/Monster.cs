@@ -29,9 +29,9 @@ public class Monster : MonoBehaviour
         MoveAlongPath();
     }
 
-    public void ApplySlow()
+    public void ApplySlow(float modifier)
     {
-        speed = 0.5f * baseSpeed;
+        speed = modifier * baseSpeed;
     }
 
     public void RemoveSlow() {
