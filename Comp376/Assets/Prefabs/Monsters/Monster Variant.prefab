@@ -12,8 +12,16 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5578211910298818360, guid: 10e3cff97bc7f024ca19abc0e59fd096, type: 3}
+      propertyPath: damage
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 5578211910298818360, guid: 10e3cff97bc7f024ca19abc0e59fd096, type: 3}
       propertyPath: health
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5578211910298818360, guid: 10e3cff97bc7f024ca19abc0e59fd096, type: 3}
+      propertyPath: pushPower
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 5578211910298818360, guid: 10e3cff97bc7f024ca19abc0e59fd096, type: 3}
       propertyPath: currencyOnKill

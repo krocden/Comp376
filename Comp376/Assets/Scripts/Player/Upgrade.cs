@@ -12,7 +12,7 @@ public class Upgrade : MonoBehaviour
     public int upgradePreRequisite;
     public GameObject tooltip;
     TextMeshProUGUI tooltipText;
-    readonly List<int> twoLinkId = new List<int>() { 1, 6, 10, 19, 23, 28, 36 };
+    readonly List<int> twoLinkId = new List<int>() { 1, 6, 10, 19, 23, 27, 28, 36 };
 
     private void Start()
     {

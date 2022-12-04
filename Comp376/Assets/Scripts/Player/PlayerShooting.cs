@@ -8,12 +8,15 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private GunType selectedGun;
     [SerializeField] private GameObject gunHolder;
     [SerializeField] private GameObject wrench;
-    private enum GunType { Pistol, Rifle, Shotgun, Launcher, Wrench }
+    [SerializeField] private GameObject currentGunUI;
+    private enum GunType { Pistol, Rifle, Shotgun, Launcher, Wrench, Raygun }
     private Gun currentGun;
     private Pistol pistol;
     private Rifle rifle;
     private Shotgun shotgun;
     private Launcher launcher;
+    private Raygun raygun;
+    private bool holdingWrench;
 
     [SerializeField] private Text ammoText;
     [SerializeField] GunUpgrade upgrade;
@@ -37,8 +40,14 @@ public class PlayerShooting : MonoBehaviour
 
         launcher = gunHolder.transform.GetChild(3).GetComponent<Launcher>();
         launcher.player = this.gameObject;
-        
+
+        raygun = gunHolder.transform.GetChild(4).GetComponent<Raygun>();
+        raygun.player = this.gameObject;
+
         currentGun = pistol;
+        selectedGun = GunType.Pistol;
+        holdingWrench = true;
+
         updateUI();
     }
 
@@ -47,50 +56,65 @@ public class PlayerShooting : MonoBehaviour
     {
         if (GameStateManager.Instance.BlockInput)
             return;
-        //Call this when changing gun
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            changeGun(GunType.Pistol);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            changeGun(GunType.Rifle);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            changeGun(GunType.Shotgun);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            changeGun(GunType.Launcher);
-        }
+        if (gameObject.GetComponent<PlayerMovement>().isDead)
+            return;
 
-        if (!this.gameObject.GetComponentInChildren<CameraHandler>().usingMenu)
+        if (GameStateManager.Instance.GetCurrentGameState() == GameState.Shooting)
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                currentGun.reload();
-                updateUI();
+                changeGun(GunType.Pistol);
             }
-            
-            if (!IsHoldingWrench)
+            if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                if (currentGun.shoot())
+                changeGun(GunType.Rifle);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                changeGun(GunType.Shotgun);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                changeGun(GunType.Launcher);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                changeGun(GunType.Raygun);
+            }
+
+            if (!this.gameObject.GetComponentInChildren<CameraHandler>().usingMenu)
+            {
+                if (Input.GetKeyDown(KeyCode.R))
                 {
+                    currentGun.reload();
                     updateUI();
+                }
+
+                if (!IsHoldingWrench)
+                {
+                    if (currentGun.shoot())
+                    {
+                        updateUI();
+                    }
                 }
             }
         }
 
         if (IsHoldingWrench)
         {
+            holdingWrench = true;
             wrench.SetActive(true);
             deactivatePreviousGun();
-        } 
+        }
         else
         {
-            wrench.SetActive(false);
+            if (holdingWrench)
+            {
+                wrench.SetActive(false);
+                holdingWrench = false;
+                changeGun(selectedGun);
+            }
         }
         
     }
@@ -109,7 +133,13 @@ public class PlayerShooting : MonoBehaviour
         {
             deactivatePreviousGun();
             currentGun = pistol;
+            selectedGun = GunType.Pistol;
             gunHolder.transform.GetChild(0).gameObject.SetActive(true);
+
+            Image img = currentGunUI.transform.GetChild(0).GetComponent<Image>();
+            Color active = Color.white;
+            active.a = 0.75f;
+            img.color = active;
         }
         else if (gunType == GunType.Rifle)
         {
@@ -117,7 +147,13 @@ public class PlayerShooting : MonoBehaviour
             {
                 deactivatePreviousGun();
                 currentGun = rifle;
+                selectedGun = GunType.Rifle;
                 gunHolder.transform.GetChild(1).gameObject.SetActive(true);
+
+                Image img = currentGunUI.transform.GetChild(1).GetComponent<Image>();
+                Color active = Color.white;
+                active.a = 0.75f;
+                img.color = active;
             }
         }
         else if (gunType == GunType.Shotgun)
@@ -126,7 +162,13 @@ public class PlayerShooting : MonoBehaviour
             {
                 deactivatePreviousGun();
                 currentGun = shotgun;
+                selectedGun = GunType.Shotgun;
                 gunHolder.transform.GetChild(2).gameObject.SetActive(true);
+
+                Image img = currentGunUI.transform.GetChild(2).GetComponent<Image>();
+                Color active = Color.white;
+                active.a = 0.75f;
+                img.color = active;
             }
         }
         else if (gunType == GunType.Launcher)
@@ -135,7 +177,28 @@ public class PlayerShooting : MonoBehaviour
             {
                 deactivatePreviousGun();
                 currentGun = launcher;
+                selectedGun = GunType.Launcher;
                 gunHolder.transform.GetChild(3).gameObject.SetActive(true);
+
+                Image img = currentGunUI.transform.GetChild(3).GetComponent<Image>();
+                Color active = Color.white;
+                active.a = 0.75f;
+                img.color = active;
+            }
+        }
+        else if (gunType == GunType.Raygun)
+        {
+            if (upgrade.upgradeList[99].unlocked)
+            {
+                deactivatePreviousGun();
+                currentGun = raygun;
+                selectedGun = GunType.Raygun;
+                gunHolder.transform.GetChild(4).gameObject.SetActive(true);
+
+                Image img = currentGunUI.transform.GetChild(4).GetComponent<Image>();
+                Color active = Color.white;
+                active.a = 0.75f;
+                img.color = active;
             }
         }
 
@@ -150,6 +213,14 @@ public class PlayerShooting : MonoBehaviour
             {
                 gun.gameObject.SetActive(false);
             }
+        }
+        
+        foreach (Transform gun in currentGunUI.transform)
+        {
+            Image img = gun.GetComponent<Image>();
+            Color active = Color.black;
+            active.a = 0.39215f;
+            img.color = active;
         }
     }
 }

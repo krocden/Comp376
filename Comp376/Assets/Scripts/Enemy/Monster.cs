@@ -13,6 +13,9 @@ public class Monster : MonoBehaviour
     protected List<PathNode> path;
     protected Nexus target;
 
+    public int damage;
+    public int pushPower;
+
     // Start is called before the first frame update
     void Start()
     {
