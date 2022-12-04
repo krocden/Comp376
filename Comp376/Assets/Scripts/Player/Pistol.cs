@@ -18,9 +18,9 @@ public class Pistol : Gun
 
     public GameObject player;
     Animator anim;
-    AudioSource shootShound;
-    AudioSource reloadSound;
-    AudioSource emptyMagSound;
+    [SerializeField] AudioClip shootShound;
+    [SerializeField] AudioClip reloadSound;
+    [SerializeField] AudioClip emptyMagSound;
 
     public GameObject impactParticle;
     public TrailRenderer bulletTrail;
@@ -30,9 +30,6 @@ public class Pistol : Gun
     void Start()
     {
         anim = GetComponent<Animator>();
-        shootShound = GetComponents<AudioSource>()[0];
-        reloadSound = GetComponents<AudioSource>()[1];
-        emptyMagSound = GetComponents<AudioSource>()[2];
     }
     void reloadFinish()
     {
@@ -66,7 +63,7 @@ public class Pistol : Gun
                 isReloading = true;
 
                 anim.SetTrigger("reload");
-                reloadSound.Play();
+                AudioManager.Instance.PlaySFX(reloadSound);
             }
         }
     }
@@ -76,7 +73,7 @@ public class Pistol : Gun
         if (currentAmmo <= 0)
         {
             canShoot = false;
-            emptyMagSound.Play();
+            AudioManager.Instance.PlaySFX(emptyMagSound);
         }
         else
         {
@@ -133,7 +130,7 @@ public class Pistol : Gun
                 StartCoroutine(spawnBulletTrail(trail, actualHit));
 
                 anim.SetTrigger("shoot");
-                shootShound.Play();
+                AudioManager.Instance.PlaySFX(shootShound);
 
                 return true;
             }

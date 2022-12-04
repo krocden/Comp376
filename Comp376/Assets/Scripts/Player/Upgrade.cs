@@ -58,6 +58,7 @@ public class Upgrade : MonoBehaviour
     public void enterHover()
     {
         tooltip.SetActive(true);
+        transform.SetAsLastSibling();
     }
     public void exitHover()
     {
