@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Rifle : MonoBehaviour, Gun
@@ -103,20 +104,41 @@ public class Rifle : MonoBehaviour, Gun
                         fireCd = Time.time + fireRate;
                         Ray bullet = new Ray(player.transform.position, Camera.main.transform.forward);
                         Debug.DrawRay(player.transform.position, Camera.main.transform.forward * 1000, Color.white, 1);
-                        if (Physics.Raycast(bullet, out bulletHit))
+
+                        RaycastHit[] hits = Physics.RaycastAll(bullet).OrderBy(x => x.distance).ToArray();
+                        RaycastHit actualHit = hits[0];
+
+                        if (hits.Length > 0)    //hits will always have atleast 1, but to be safe
                         {
-                            if (bulletHit.collider.tag == "Enemy")
+                            for (int i = 0; i < hits.Length; i++)
                             {
-                                GameObject hitObject = bulletHit.transform.gameObject;
-                                Monster enemy = hitObject.GetComponent<Monster>();
-                                enemy.TakeDamage(damage);
-                                Debug.Log("Health: " + enemy.health);
+                                if (hits[i].collider.tag == "Wall")
+                                    if (hits[i].collider.GetComponent<WallSegment>().GetWallState() == WallAutomata.WallState.Barrier)
+                                        continue;
+
+                                Debug.Log("Hit: " + hits[i].collider.tag);
+                                if (hits[i].collider.tag == "Enemy")
+                                {
+                                    GameObject hitObject = hits[i].transform.gameObject;
+                                    Monster enemy = hitObject.GetComponent<Monster>();
+
+                                    enemy.TakeDamage((i + 1) * damage);
+                                    Debug.Log("Health: " + enemy.health);
+                                    Debug.Log("Damage: " + damage + ", Boost: " + (i + 1) + "x");
+                                    actualHit = hits[i];
+                                    break;
+                                }
+                                else
+                                {
+                                    actualHit = hits[i];
+                                    break;
+                                }
                             }
                         }
 
                         Vector3 gunSpritePos = player.transform.position + (Camera.main.transform.rotation * gunEffectPos);
                         TrailRenderer trail = Instantiate(bulletTrail, gunSpritePos, Quaternion.identity);
-                        StartCoroutine(spawnBulletTrail(trail, bulletHit));
+                        StartCoroutine(spawnBulletTrail(trail, actualHit));
 
                         anim.SetTrigger("shoot");
 

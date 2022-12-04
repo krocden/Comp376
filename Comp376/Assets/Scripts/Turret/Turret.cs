@@ -80,11 +80,12 @@ public class Turret : MonoBehaviour
                 //Logic in turret trigger area (onenter)
                 rend.material = turretMaterials[0];
                 break;
-            case WallTurret:
-                break;
             case SlowTurret:
                 //Logic in turret trigger area (onenter)
                 rend.material = turretMaterials[0];
+                break;
+            case BarrierTurret:
+                rend.enabled = false;
                 break;
             default:
                 break;
@@ -105,7 +106,7 @@ public class Turret : MonoBehaviour
                 return "Portal turret";
             case BuffTurret:
                 return "Buff turret";
-            case WallTurret:
+            case BarrierTurret:
                 return "Wall turret";
             case SlowTurret:
                 return "Slow turret";

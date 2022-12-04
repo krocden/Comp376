@@ -768,6 +768,9 @@ MonoBehaviour:
   _frontTurret: {fileID: 2818401236732296667}
   _backTurret: {fileID: 8590294920883307386}
   _minimapVisual: {fileID: 5030919909639806583}
+  _wallMaterials:
+  - {fileID: 2100000, guid: fb615bcd3c4d42744b5a8b4a809cbdcd, type: 2}
+  - {fileID: 2100000, guid: b29b127f50168df42bc2c9d2913eeb22, type: 2}
 --- !u!1 &8903135871162108159
 GameObject:
   m_ObjectHideFlags: 0
