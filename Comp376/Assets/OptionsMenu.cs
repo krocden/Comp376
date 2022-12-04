@@ -25,5 +25,7 @@ public class OptionsMenu : MonoBehaviour
     public void Close()
     {
         gameObject.SetActive(false);
+        audioPanel.SetActive(false);
+        helpPanel.SetActive(false);
     }
 }
