@@ -1,13 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    [SerializeField] private GameObject container;
     [SerializeField] private OptionsMenu optionsMenu;
+
+    private void Awake()
+    {
+        container.SetActive(false);
+    }
 
     private void Update()
     {
+        if (GameStateManager.Instance.BlockInput && !GameStateManager.Instance.gamePaused) return;
         if (Input.GetKeyDown(KeyCode.Escape))
             ToggleMenu();
     }
@@ -17,13 +25,25 @@ public class PauseMenu : MonoBehaviour
         optionsMenu.gameObject.SetActive(true);
     }
 
+    public void MainMenu()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
     public void ToggleMenu()
     {
-        gameObject.SetActive(!gameObject.activeSelf);
+        container.SetActive(!container.activeSelf);
 
-        Time.timeScale = gameObject.activeSelf ? 0 : 1;
+        Time.timeScale = container.activeSelf ? 0 : 1;
+        GameStateManager.Instance.gamePaused = container.activeSelf;
 
-        if (!gameObject.activeSelf)
+        if (!container.activeSelf)
             optionsMenu.Close();
     }
 }

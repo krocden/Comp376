@@ -19,13 +19,13 @@ public class OptionsMenu : MonoBehaviour
 
     public void OpenHelpPanel()
     {
-        helpPanel.SetActive(true);
+        //helpPanel.SetActive(true);
     }
 
     public void Close()
     {
         gameObject.SetActive(false);
         audioPanel.SetActive(false);
-        helpPanel.SetActive(false);
+        //helpPanel.SetActive(false);
     }
 }

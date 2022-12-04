@@ -20,7 +20,7 @@ public class GameStateManager : MonoBehaviour
     private GameState currentGameState;
 
     private int currentLevel = 1;
-    private int currentWave = 0;
+    public int currentWave = 0;
 
     private Level level;
     private Wave[] waves;
@@ -33,7 +33,8 @@ public class GameStateManager : MonoBehaviour
     private bool canSkipPhase = false;
 
     public bool levelFailed = false;
-    public bool BlockInput { get { return levelFailed; } }
+    public bool BlockInput { get { return levelFailed || gamePaused; } }
+    public bool gamePaused = false;
 
     private void Awake()
     {
@@ -77,6 +78,8 @@ public class GameStateManager : MonoBehaviour
     {
         canSkipPhase = false;
         onGameStateTransitionStarted?.Invoke(currentGameState, state);
+        currentGameState = GameState.Transition;
+        onGameStateChanged?.Invoke(GameState.Transition);
 
         timerCancellationTokenSource = new CancellationTokenSource();
 
@@ -155,6 +158,7 @@ public class GameStateManager : MonoBehaviour
         if (spawningCancellationTokenSource.IsCancellationRequested)
             return;
         canSkipPhase = false;
+        coreUIHandler.UpdateBuildingSecondsLeft(buildingPhaseTimer);
 
         // add spawner
         if (currentWave % level.addSpawnerWaveInterval == 0 && level.maximumSpawners > arenaSetup.pathStartEndCoordinatesList.Count)
@@ -303,7 +307,6 @@ public class GameStateManager : MonoBehaviour
     }
 
 
-
     private void OnApplicationQuit()
     {
         spawningCancellationTokenSource.Cancel();
@@ -316,5 +319,6 @@ public enum GameState
     Initialize,
     Planning,
     Shooting,
+    Transition,
     Completed,
 }
