@@ -1,28 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Raygun : Gun
 {
     public float damage;
-    //public int currentAmmo;
-    //public int maxAmmo;
-    //public int magazineSize;
-    //public float fireRate;
-    //public float fireCd;
-    //public float range;
-    //public bool automatic;
-    //public bool canShoot;
     public float headshotMultiplier;
-    //bool isReloading = false;
 
     public GameObject player;
     Animator anim;
     AudioSource shootShound;
-    AudioSource reloadSound;
-    AudioSource emptyMagSound;
 
-    public GameObject impactParticle;
+    //public GameObject impactParticle;
     public TrailRenderer bulletTrail;
 
     [SerializeField] Vector3 gunEffectPos;
@@ -31,8 +21,6 @@ public class Raygun : Gun
     {
         anim = GetComponent<Animator>();
         shootShound = GetComponents<AudioSource>()[0];
-        reloadSound = GetComponents<AudioSource>()[1];
-        emptyMagSound = GetComponents<AudioSource>()[2];
     }
 
     public override void reload()
@@ -42,29 +30,48 @@ public class Raygun : Gun
 
     public override bool shoot()
     {
-        RaycastHit bulletHit;
-
         if (Input.GetButton("Fire1"))
         {
             Ray bullet = new Ray(player.transform.position, Camera.main.transform.forward);
-            Debug.DrawRay(player.transform.position, Camera.main.transform.forward * 1000, Color.white, 1);
-            if (Physics.Raycast(bullet, out bulletHit))
+            
+            RaycastHit[] hits = Physics.RaycastAll(bullet).OrderBy(x => x.distance).ToArray();
+            RaycastHit actualHit = hits[0];
+
+            if (hits.Length > 0)    //hits will always have atleast 1, but to be safe
             {
-                if (bulletHit.collider.tag == "Enemy")
+                for (int i = 0; i < hits.Length; i++)
                 {
-                    GameObject hitObject = bulletHit.transform.gameObject;
-                    Monster enemy = hitObject.GetComponent<Monster>();
-                    enemy.TakeDamage(damage);
-                    CurrencyManager.Instance.AddCurrency(currencyPerHit);
-                    Debug.Log("Health: " + enemy.health);
+                    if (hits[i].collider.tag == "Wall")
+                        if (hits[i].collider.GetComponent<WallSegment>().GetWallState() == WallAutomata.WallState.Barrier)
+                            continue;
+
+                    Debug.Log("Hit: " + hits[i].collider.tag);
+                    if (hits[i].collider.tag == "Enemy")
+                    {
+                        GameObject hitObject = hits[i].transform.gameObject;
+                        Monster enemy = hitObject.GetComponent<Monster>();
+
+                        enemy.TakeDamage((i + 1) * damage);
+
+                        Debug.Log("Health: " + enemy.health);
+                        Debug.Log("Damage: " + damage + ", Boost: " + (i + 1) + "x");
+
+                        actualHit = hits[i];
+                        //break;
+                    }
+                    else
+                    {
+                        actualHit = hits[i];
+                        //break;
+                    }
                 }
             }
 
             Vector3 gunSpritePos = player.transform.position + (Camera.main.transform.rotation * gunEffectPos);
             TrailRenderer trail = Instantiate(bulletTrail, gunSpritePos, Quaternion.identity);
-            StartCoroutine(spawnBulletTrail(trail, bulletHit));
+            StartCoroutine(spawnBulletTrail(trail, actualHit));
 
-            anim.SetTrigger("shoot");
+            //anim.SetTrigger("shoot");
 
             if (!shootShound.isPlaying)
             {
@@ -72,6 +79,13 @@ public class Raygun : Gun
             }
 
             return true;
+        }
+        else
+        {
+            if (shootShound.isPlaying)
+            {
+                shootShound.Stop();
+            }
         }
         return false;
     }
@@ -87,7 +101,7 @@ public class Raygun : Gun
             yield return null;
         }
         trail.transform.position = hit.point;
-        Instantiate(impactParticle.GetComponentInChildren<ParticleSystem>(), hit.point, Quaternion.LookRotation(hit.normal));
+        //Instantiate(impactParticle.GetComponentInChildren<ParticleSystem>(), hit.point, Quaternion.LookRotation(hit.normal));
 
         Destroy(trail.gameObject, trail.time);
     }
