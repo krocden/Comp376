@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +20,7 @@ public class PlayerShooting : MonoBehaviour
     private bool holdingWrench;
     private bool hasRaygun;
 
-    [SerializeField] private Text ammoText;
+    [SerializeField] private TextMeshProUGUI ammoText;
     [SerializeField] GunUpgrade upgrade;
 
     //private bool isHoldingWrench = GameStateManager.Instance.GetCurrentGameState() == GameState.Building;

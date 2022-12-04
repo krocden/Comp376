@@ -34,8 +34,17 @@ public class WallDestroyerMonster : Monster
         if (collision.collider.CompareTag("Wall"))
         {
             NotificationManager.Instance.PlayPositionnalNotification(NotificationType.FortificationsDestroyed, transform.position, true);
-            //Destroy(collision.gameObject);
             WallSegment wall = collision.collider.GetComponent<WallSegment>();
+            wall.SetEmptyWall();
+        }
+    }
+
+    private void OnTriggerEnter(Collider col)
+    {
+        if (col.CompareTag("Wall"))
+        {
+            NotificationManager.Instance.PlayPositionnalNotification(NotificationType.FortificationsDestroyed, transform.position, true);
+            WallSegment wall = col.GetComponent<WallSegment>();
             wall.SetEmptyWall();
         }
     }

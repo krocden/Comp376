@@ -19,9 +19,9 @@ public class Rifle : Gun
 
     public GameObject player;
     Animator anim;
-    AudioSource shootShound;
-    AudioSource reloadSound;
-    AudioSource emptyMagSound;
+    [SerializeField] AudioClip shootShound;
+    [SerializeField] AudioClip reloadSound;
+    [SerializeField] AudioClip emptyMagSound;
 
     public GameObject impactParticle;
     public TrailRenderer bulletTrail;
@@ -31,9 +31,6 @@ public class Rifle : Gun
     void Start()
     {
         anim = GetComponent<Animator>();
-        shootShound = GetComponents<AudioSource>()[0];
-        reloadSound = GetComponents<AudioSource>()[1];
-        emptyMagSound = GetComponents<AudioSource>()[2];
     }
     void reloadFinish()
     {
@@ -67,7 +64,7 @@ public class Rifle : Gun
                 //isReloading = true; no Animation yet...
 
                 anim.SetTrigger("reload");
-                reloadSound.Play();
+                AudioManager.Instance.PlaySFX(reloadSound);
             }
         }
     }
@@ -76,10 +73,7 @@ public class Rifle : Gun
         if (currentAmmo <= 0)
         {
             canShoot = false;
-            if (!emptyMagSound.isPlaying && !reloadSound.isPlaying)
-            {
-                emptyMagSound.Play();
-            }
+            AudioManager.Instance.PlaySFX(emptyMagSound);
         }
         else
         {
@@ -99,10 +93,10 @@ public class Rifle : Gun
             {
                 if (Time.time > fireCd)
                 {
+                    fireCd = Time.time + fireRate;
                     checkAmmo(1);
                     if (canShoot && !isReloading)
                     {
-                        fireCd = Time.time + fireRate;
                         Ray bullet = new Ray(player.transform.position, Camera.main.transform.forward);
                         Debug.DrawRay(player.transform.position, Camera.main.transform.forward * 1000, Color.white, 1);
 
@@ -144,20 +138,10 @@ public class Rifle : Gun
 
                         anim.SetTrigger("shoot");
 
-                        if (!shootShound.isPlaying)
-                        {
-                            shootShound.Play();
-                        }
+                        AudioManager.Instance.PlaySFX(shootShound);
 
                         return true;
                     }
-                }
-            }
-            else
-            {
-                if (shootShound.isPlaying)
-                {
-                    shootShound.Stop();
                 }
             }
         }/*
