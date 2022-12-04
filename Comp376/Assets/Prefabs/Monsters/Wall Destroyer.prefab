@@ -112,5 +112,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 10000
-  speed: 50
+  speed: 25
   attackRange: 1
+  currencyOnKill: 0

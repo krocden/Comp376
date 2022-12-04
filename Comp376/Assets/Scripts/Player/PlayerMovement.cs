@@ -18,6 +18,9 @@ public class PlayerMovement : MonoBehaviour
     private Camera firstPersonCamera;
 
     public bool grounded;
+    [SerializeField] private int buffZones = 0;
+    [SerializeField] private float buffModifier = 0f;
+    private bool isRunning;
 
     [SerializeField] private Slider playerHealthSlider;
     public bool isInvincible;
@@ -60,19 +63,21 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && grounded)
         {
-            speed = runningSpeed;
+            isRunning = true;
         } 
         if (Input.GetKeyUp(KeyCode.LeftShift)) 
         {
             if (grounded)
             {
-                speed = walkSpeed;
+                isRunning = false;
             } 
             else 
             {
                 StartCoroutine(landing());
             }
         }
+
+        speed = (buffZones > 0) ? buffModifier * (isRunning ? runningSpeed : walkSpeed) : (isRunning ? runningSpeed : walkSpeed);
 
         if (grounded)
         {
@@ -195,4 +200,22 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitUntil(() => grounded);
         speed = walkSpeed;
     }
+
+    public void ApplyBuff(float modifier) {
+        buffZones++;
+        buffModifier = modifier;
+    }
+
+    public void RemoveBuff() {
+        buffZones--;
+        if (buffZones == 0)
+            buffModifier = 0;
+    }
+
+    public void SetPosition(Vector3 newPos) {
+        controller.enabled = false;
+        this.transform.position = newPos;
+        controller.enabled = true;
+    }
+
 }

@@ -8,12 +8,13 @@ public class GunTurretBullet : MonoBehaviour
     public Monster target;
     public float speed;
     public Turret turret;
+    public int damage;
 
     private void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.tag == "Enemy")
         {
-            turret.GunTurretMonsterHit(col.GetComponent<Monster>());
+            turret.GunTurretMonsterHit(col.GetComponent<Monster>(), damage);
             Destroy(gameObject);
         }
     }

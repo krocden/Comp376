@@ -27,7 +27,6 @@ public class GameStateManager : MonoBehaviour
 
     [SerializeField] private float buildingPhaseTimer = 30;
     [SerializeField] private float gameStateTransitionTimer = 5f;
-    [SerializeField] private float timeBetweenEnemySpawns = 0.5f;
 
     private CancellationTokenSource timerCancellationTokenSource = new CancellationTokenSource();
     private CancellationTokenSource spawningCancellationTokenSource = new CancellationTokenSource();
@@ -224,6 +223,13 @@ public class GameStateManager : MonoBehaviour
                     // spawn the monsterQuantity
                     for (int j = 0; j < monsterDetails[i + x].monsterQuantity; j++)
                     {
+                        float timeSinceLastSpawn = 0;
+                        while (timeSinceLastSpawn < monsterDetails[i + x].monsterSpawnRate)
+                        {
+                            timeSinceLastSpawn += Time.deltaTime;
+                            await Task.Yield();
+                        }
+
                         foreach (List<PathNode> path in arenaSetup.paths)
                         {
                             if (spawningCancellationTokenSource.IsCancellationRequested)
@@ -232,13 +238,6 @@ public class GameStateManager : MonoBehaviour
                             Vector3 spawnPoint = path[0].position + Vector3.up;
                             Monster monster = Instantiate(monsterDetails[i + x].monsterPrefab, spawnPoint, Quaternion.identity);
                             monster.Initialize(path, arenaSetup.nexus);                            
-                        }
-
-                        float timeSinceLastSpawn = 0;
-                        while (timeSinceLastSpawn < timeBetweenEnemySpawns)
-                        {
-                            timeSinceLastSpawn += Time.deltaTime;
-                            await Task.Yield();
                         }
                     }
                 }

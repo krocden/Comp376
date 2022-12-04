@@ -16,18 +16,21 @@ MonoBehaviour:
   - monsterPrefab: {fileID: 0}
     monsterQuantity: 0
     monsterTier: 0
+    monsterSpawnRate: 0
     commandType: 1
     repeatNextXRows: 2
     repeatTimes: 5
   - monsterPrefab: {fileID: 5578211910298818360, guid: 10e3cff97bc7f024ca19abc0e59fd096, type: 3}
     monsterQuantity: 1
     monsterTier: 1
+    monsterSpawnRate: 0.5
     commandType: 0
     repeatNextXRows: 2
     repeatTimes: 1
   - monsterPrefab: {fileID: 5614650196211662435, guid: cf522b7ebeace73439f05e3db49e9a78, type: 3}
     monsterQuantity: 1
     monsterTier: 1
+    monsterSpawnRate: 1
     commandType: 0
     repeatNextXRows: 2
     repeatTimes: 1

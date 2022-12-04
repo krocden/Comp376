@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Ping : MonoBehaviour
 {
+    [SerializeField] private float duration = 5f;
     public GameObject ring;
     public GameObject icon;
     public GameObject pointer;
@@ -16,7 +17,7 @@ public class Ping : MonoBehaviour
         initialScale = ring.transform.localScale;
         initialPointerScale = pointer.transform.localScale;
         initialRotation = transform.eulerAngles;
-        Destroy(gameObject, 5f);
+        Destroy(gameObject, duration);
     }
 
     // Update is called once per frame

@@ -128,6 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b75a5a4e382cfc4e9330cee1da79fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  duration: 7.5
   ring: {fileID: 2166583270707561868}
   icon: {fileID: 2166583270725837805}
   pointer: {fileID: 4059787783915908575}
