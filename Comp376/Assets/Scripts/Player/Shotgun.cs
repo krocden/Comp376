@@ -75,11 +75,15 @@ public class Shotgun : Gun
         {
             canShoot = false;
             AudioManager.Instance.PlaySFX(emptyMagSound);
+            reload();
         }
         else
         {
-            canShoot = true;
-            currentAmmo -= ammo;
+            if (!isReloading)
+            {
+                canShoot = true;
+                currentAmmo -= ammo;
+            }
         }
 
     }
@@ -132,7 +136,7 @@ public class Shotgun : Gun
                 {
                     fireCd = Time.time + fireRate;
 
-                    for (int i = 0; i <= pelletPerRound; i++)
+                    for (int i = 1; i <= pelletPerRound; i++)
                     {
                         Vector3 bulletDirection = Camera.main.transform.forward +
                             new Vector3(Random.Range(-spread, spread), Random.Range(-spread, spread), Random.Range(-spread, spread));
@@ -163,6 +167,7 @@ public class Shotgun : Gun
                                         finalDamage *= Mathf.Clamp((1 - (rangeDiff * 0.02f)), 0.001f, 1);
                                     }
                                     enemy.TakeDamage(finalDamage);
+                                    CurrencyManager.Instance.AddCurrency(currencyPerHit);
                                     Debug.Log("Health: " + enemy.health);
                                     Debug.Log("Damage: " + damage + ", Boost: " + (j + 1) + "x");
                                     actualHit = hits[j];
@@ -173,7 +178,6 @@ public class Shotgun : Gun
                                     actualHit = hits[j];
                                     break;
                                 }
-                                CurrencyManager.Instance.AddCurrency(currencyPerHit);
                             }
                         }
 
