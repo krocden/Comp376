@@ -41,6 +41,7 @@ public class CoreUIHandler : MonoBehaviour
 
     public void UpdateUIGroup(GameState state)
     {
+        if (state == GameState.Transition) return;
         buildingPhaseUIGroup.SetActive(state == GameState.Planning);
         shootingPhaseUIGroup.SetActive(state == GameState.Shooting);
         transitionUIGroup.SetActive(false);

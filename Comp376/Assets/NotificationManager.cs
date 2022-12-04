@@ -6,9 +6,6 @@ using UnityEngine.Events;
 
 public class NotificationManager : MonoBehaviour
 {
-    [SerializeField] private AudioSource source;
-    [SerializeField] private AudioSource sfxSource;
-
     [SerializeField] private AudioClip[] notificationSounds; // has to match the notification enum
 
     private Queue<NotificationType> notificationQueue = new Queue<NotificationType>();
@@ -46,18 +43,17 @@ public class NotificationManager : MonoBehaviour
     {
         UpdateCooldowns();
 
-        if (notificationQueue.Count > 0 && !source.isPlaying)
+        if (notificationQueue.Count > 0 && !AudioManager.Instance.announcerSource.isPlaying)
         {
             NotificationType notificationType = notificationQueue.Dequeue();
             notificationTypeCooldown[notificationType] = 0;
-            source.clip = notificationSounds[(int)notificationType];
-            source.Play();
+            AudioManager.Instance.PlayClip(notificationSounds[(int)notificationType]);
         }
     }
 
     public void PlayNotificationSFX(NotificationType notificationType)
     {
-        sfxSource.PlayOneShot(notificationSounds[(int)notificationType]);
+        AudioManager.Instance.PlaySFX(notificationSounds[(int)notificationType]);
     }
 
     public void PlayStandardNotification(NotificationType notificationType, bool waitToPlay = false)

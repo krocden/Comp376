@@ -63,7 +63,7 @@ public class PlayerShooting : MonoBehaviour
         if (gameObject.GetComponent<PlayerMovement>().isDead)
             return;
 
-        if (GameStateManager.Instance.GetCurrentGameState() == GameState.Shooting)
+        if (GameStateManager.Instance.GetCurrentGameState() == GameState.Shooting || GameStateManager.Instance.GetCurrentGameState() == GameState.Transition)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {

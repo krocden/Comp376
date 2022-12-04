@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class CurrencyManager : MonoBehaviour
 {
     public const int STARTING_CASH = 100;
+    public int totalCurrencyEarned = STARTING_CASH;
 
     public static CurrencyManager Instance { get; private set; }
     private void Awake()
@@ -28,23 +29,30 @@ public class CurrencyManager : MonoBehaviour
 
     public void AddCurrency(int toAdd) {
         _currency += toAdd;
-
+        totalCurrencyEarned += toAdd;
         OnCurrencyChanged.Invoke(_currency);
         //play SFX for add
     }
 
-    public bool SubtractCurrency(int toRemove)
+    public bool SubtractCurrency(int toRemove, bool checkEnoughCurrency = true)
     {
         //return false if cannot afford transaction
         int newCurrency = _currency - toRemove;
+       
+        if(!checkEnoughCurrency)
+            totalCurrencyEarned -= toRemove;
 
-        if (newCurrency < 0)
+        if (checkEnoughCurrency && newCurrency < 0)
         {
             NotificationManager.Instance.PlayStandardNotification(NotificationType.NotEnoughCurrency);
             return false;
         }
 
         _currency -= toRemove;
+
+        if (_currency < 0)
+            _currency = 0;
+
         OnCurrencyChanged.Invoke(_currency);
         return true;
 
