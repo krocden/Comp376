@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Shotgun : MonoBehaviour, Gun
@@ -144,24 +145,46 @@ public class Shotgun : MonoBehaviour, Gun
                         Ray bullet = new Ray(player.transform.position, bulletDirection);
                         Debug.DrawRay(player.transform.position, bulletDirection * 1000, Color.white, 1);
 
-                        if (Physics.Raycast(bullet, out bulletHit))
+                        RaycastHit[] hits = Physics.RaycastAll(bullet).OrderBy(x => x.distance).ToArray();
+                        RaycastHit actualHit = hits[0];
+
+                        if (hits.Length > 0)    //hits will always have atleast 1, but to be safe
                         {
-                            if (bulletHit.collider.tag == "Enemy")
+                            for (int j = 0; j < hits.Length; j++)
                             {
-                                GameObject hitObject = bulletHit.transform.gameObject;
-                                Monster enemy = hitObject.GetComponent<Monster>();
-                                float finalDamage = damage;
-                                if (bulletHit.distance > range)
+                                if (hits[j].collider.tag == "Wall")
+                                    if (hits[j].collider.GetComponent<WallSegment>().GetWallState() == WallAutomata.WallState.Barrier)
+                                        continue;
+
+                                Debug.Log("Hit: " + hits[j].collider.tag);
+                                if (hits[j].collider.tag == "Enemy")
                                 {
-                                    float rangeDiff = bulletHit.distance - range;
-                                    finalDamage *= Mathf.Clamp((1 - (rangeDiff * 0.02f)), 0.001f, 1);
+                                    GameObject hitObject = hits[j].transform.gameObject;
+                                    Monster enemy = hitObject.GetComponent<Monster>();
+
+                                    float finalDamage = (j + 1) * damage;
+                                    if (hits[j].distance > range)
+                                    {
+                                        float rangeDiff = hits[j].distance - range;
+                                        finalDamage *= Mathf.Clamp((1 - (rangeDiff * 0.02f)), 0.001f, 1);
+                                    }
+                                    enemy.TakeDamage(finalDamage);
+                                    Debug.Log("Health: " + enemy.health);
+                                    Debug.Log("Damage: " + damage + ", Boost: " + (j + 1) + "x");
+                                    actualHit = hits[j];
+                                    break;
                                 }
-                                enemy.TakeDamage(finalDamage);
+                                else
+                                {
+                                    actualHit = hits[j];
+                                    break;
+                                }
                             }
                         }
+
                         Vector3 gunSpritePos = player.transform.position + (Camera.main.transform.rotation * gunEffectPos);
                         TrailRenderer trail = Instantiate(bulletTrail, gunSpritePos, Quaternion.identity);
-                        StartCoroutine(spawnBulletTrail(trail, bulletHit));
+                        StartCoroutine(spawnBulletTrail(trail, actualHit));
 
                     }
 

@@ -8,6 +8,7 @@ public class LauncherProjectile : MonoBehaviour
     public float impactDuration;
     public float damageRadius;
     public Launcher gun;
+    private int boost = 1;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -21,8 +22,9 @@ public class LauncherProjectile : MonoBehaviour
                 if (enemy.tag == "Enemy")
                 {
                     Monster mob = enemy.GetComponent<Monster>();
-                    mob.TakeDamage(gun.damage);
+                    mob.TakeDamage(boost * gun.damage);
                     Debug.Log("Health: " + mob.health);
+                    Debug.Log("Dmg: " + gun.damage + ", Boost: "+boost+"x");
                 }
             }
 
@@ -30,5 +32,10 @@ public class LauncherProjectile : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Wall") {
+            boost++;
+        }
+    }
 }

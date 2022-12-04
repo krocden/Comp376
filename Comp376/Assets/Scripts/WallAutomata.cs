@@ -15,7 +15,8 @@ public class WallAutomata
     public enum WallState
     {
         Empty,
-        Plain
+        Plain,
+        Barrier
     }
 
     public enum TurretState
@@ -25,8 +26,8 @@ public class WallAutomata
         CannonTurret,
         PortalTurret,
         BuffTurret,
-        WallTurret,
-        SlowTurret
+        SlowTurret,
+        BarrierTurret
     }
 
     public bool GoToState(WallState newState)
@@ -41,6 +42,9 @@ public class WallAutomata
                 break;
             case WallState.Plain:
                 isValidState = SetPlainWall(_currentState);
+                break;
+            case WallState.Barrier:
+                isValidState = SetBarrierWall(_currentState);
                 break;
         }
 
@@ -62,6 +66,12 @@ public class WallAutomata
             case TurretState.CannonTurret:
                 isValidState = CurrencyManager.Instance.SubtractCurrency(10);
                 break;
+            case TurretState.BuffTurret:
+                isValidState = CurrencyManager.Instance.SubtractCurrency(5);
+                break;
+            case TurretState.SlowTurret:
+                isValidState = CurrencyManager.Instance.SubtractCurrency(5);
+                break;
             case TurretState.EmptyTurret:
                 CurrencyManager.Instance.AddCurrency(10);
                 break;
@@ -82,6 +92,10 @@ public class WallAutomata
             _backFace = newState;
             TurretVisualsChanged.Invoke(false, newState);
         }
+    }
+    private bool SetBarrierWall(WallState previousState)
+    {
+        return CurrencyManager.Instance.SubtractCurrency(20);
     }
 
     private bool SetPlainWall(WallState previousState)
