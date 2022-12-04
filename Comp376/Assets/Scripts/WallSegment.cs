@@ -42,6 +42,7 @@ public class WallSegment : MonoBehaviour
     {
         _automata.StateVisualsChanged += VisualsChanged;
         _automata.TurretVisualsChanged += TurretVisualsChanged;
+        _automata.TurretUpgraded += TurretUpgraded;
         GameStateManager.Instance.onGameStateChanged.AddListener(OnGameStateChanged);
         //_canvas.worldCamera = Camera.main;
         _canvas.enabled = false;
@@ -51,6 +52,7 @@ public class WallSegment : MonoBehaviour
     {
         _automata.StateVisualsChanged -= VisualsChanged;
         _automata.TurretVisualsChanged -= TurretVisualsChanged;
+        _automata.TurretUpgraded -= TurretUpgraded;
         GameStateManager.Instance.onGameStateChanged.RemoveListener(OnGameStateChanged);
     }
 
@@ -85,13 +87,13 @@ public class WallSegment : MonoBehaviour
 
                 if (Vector3.Dot(transform.forward, PlayerTransform.forward) > 0)
                 {
-                    _text.text = Turret.GetTurretText(_automata.FrontFaceState);
+                    _text.text = Turret.GetTurretText(_automata.FrontFaceState, _automata.FrontLevel);
                     _canvas.transform.localScale = new Vector3(1, 1, 10);
                     _canvas.transform.localPosition = new Vector3(0, 0, -0.51f);
                 }
                 else
                 {
-                    _text.text = Turret.GetTurretText(_automata.BackFaceState);
+                    _text.text = Turret.GetTurretText(_automata.BackFaceState, _automata.Backlevel);
                     _canvas.transform.localScale = new Vector3(-1, 1, 10);
                     _canvas.transform.localPosition = new Vector3(0, 0, 0.51f);
                 }
@@ -131,6 +133,7 @@ public class WallSegment : MonoBehaviour
                 else if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 2)
                 {
                     //upgrading
+                    _automata.IncrementTurretLevel(_isFacingFrontFace);
                 }
                 else if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 1)
                 {
@@ -216,5 +219,15 @@ public class WallSegment : MonoBehaviour
             _frontTurret.SetMode(state);
         else
             _backTurret.SetMode(state);
+    }
+
+    private void TurretUpgraded(object sender, int lvl)
+    {
+        bool isFrontFacing = !(bool)sender;
+
+        if (isFrontFacing)
+            _frontTurret.SetLevel(lvl);
+        else
+            _backTurret.SetLevel(lvl);
     }
 }

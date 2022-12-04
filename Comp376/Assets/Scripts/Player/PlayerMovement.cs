@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool grounded;
     [SerializeField] private int buffZones = 0;
-    private float buffModifier = 0f;
+    [SerializeField] private float buffModifier = 0f;
     private bool isRunning;
 
     void Start()
@@ -96,13 +96,15 @@ public class PlayerMovement : MonoBehaviour
         speed = walkSpeed;
     }
 
-    public void ApplyBuff() {
+    public void ApplyBuff(float modifier) {
         buffZones++;
-        buffModifier = 1.5f;
+        buffModifier = modifier;
     }
 
     public void RemoveBuff() {
         buffZones--;
+        if (buffZones == 0)
+            buffModifier = 0;
     }
 
     public void SetPosition(Vector3 newPos) {
