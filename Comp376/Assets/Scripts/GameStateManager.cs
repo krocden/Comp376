@@ -36,6 +36,11 @@ public class GameStateManager : MonoBehaviour
     public bool BlockInput { get { return levelFailed || gamePaused; } }
     public bool gamePaused = false;
 
+    private float tickTime = 0.25f;
+    public delegate void Tick();
+    public Tick tick;
+    private float timeDelta;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -71,6 +76,12 @@ public class GameStateManager : MonoBehaviour
                 timerCancellationTokenSource.Cancel();
             else
                 GoToNextState();
+        }
+
+        timeDelta += Time.deltaTime;
+        if (timeDelta >= tickTime) { 
+            tick.Invoke();
+            timeDelta = timeDelta - tickTime;
         }
     }
 

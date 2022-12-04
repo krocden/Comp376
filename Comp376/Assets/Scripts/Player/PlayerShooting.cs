@@ -17,6 +17,7 @@ public class PlayerShooting : MonoBehaviour
     private Launcher launcher;
     private Raygun raygun;
     private bool holdingWrench;
+    private bool hasRaygun;
 
     [SerializeField] private Text ammoText;
     [SerializeField] GunUpgrade upgrade;
@@ -46,7 +47,9 @@ public class PlayerShooting : MonoBehaviour
 
         currentGun = pistol;
         selectedGun = GunType.Pistol;
+        //selectedGun = GunType.Raygun;
         holdingWrench = true;
+        hasRaygun = false;
 
         updateUI();
     }
@@ -80,7 +83,8 @@ public class PlayerShooting : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Alpha5))
             {
-                changeGun(GunType.Raygun);
+                if (hasRaygun)
+                    changeGun(GunType.Raygun);
             }
 
             if (!this.gameObject.GetComponentInChildren<CameraHandler>().usingMenu)
@@ -114,9 +118,19 @@ public class PlayerShooting : MonoBehaviour
                 wrench.SetActive(false);
                 holdingWrench = false;
                 changeGun(selectedGun);
+                //StartCoroutine(gotRaygun(9999));          // uncomment to test raygun
             }
         }
         
+    }
+
+    public IEnumerator gotRaygun(int raygunTimer)
+    {
+        hasRaygun = true;
+        changeGun(GunType.Raygun);
+        yield return new WaitForSeconds(raygunTimer);
+        changeGun(GunType.Pistol);
+        hasRaygun = false;
     }
 
     void updateUI()
@@ -188,18 +202,15 @@ public class PlayerShooting : MonoBehaviour
         }
         else if (gunType == GunType.Raygun)
         {
-            if (upgrade.upgradeList[99].unlocked)
-            {
-                deactivatePreviousGun();
-                currentGun = raygun;
-                selectedGun = GunType.Raygun;
-                gunHolder.transform.GetChild(4).gameObject.SetActive(true);
+            deactivatePreviousGun();
+            currentGun = raygun;
+            selectedGun = GunType.Raygun;
+            gunHolder.transform.GetChild(4).gameObject.SetActive(true);
 
-                Image img = currentGunUI.transform.GetChild(4).GetComponent<Image>();
-                Color active = Color.white;
-                active.a = 0.75f;
-                img.color = active;
-            }
+            Image img = currentGunUI.transform.GetChild(4).GetComponent<Image>();
+            Color active = Color.white;
+            active.a = 0.75f;
+            img.color = active;
         }
 
         updateUI();

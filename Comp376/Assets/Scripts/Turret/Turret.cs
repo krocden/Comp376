@@ -16,6 +16,7 @@ public class Turret : MonoBehaviour
     public float rateOfFire = 1f;
     public int damage = 2;
     int level = 1;
+    private int ticks;
 
     [SerializeField] Material[] turretMaterials;
     [SerializeField] TurretTriggerArea turretArea;
@@ -31,12 +32,37 @@ public class Turret : MonoBehaviour
     {
         turretArea.TeleportIn.AddListener(TeleportIn);
         turretArea.TeleportOut.AddListener(TeleportOut);
+        GameStateManager.Instance.tick += HandleTick;
     }
 
     private void OnDisable()
     {
         turretArea.TeleportIn.RemoveListener(TeleportIn);
         turretArea.TeleportOut.RemoveListener(TeleportOut);
+        GameStateManager.Instance.tick -= HandleTick;
+    }
+
+    public void HandleTick() {
+        switch (_currentState) {
+            case GunTurret:
+                ticks++;
+                if (ticks == rateOfFire)
+                {
+                    ShootGunTurret();
+                    ticks = 0;
+                }
+                return;
+            case CannonTurret:
+                ticks++;
+                if (ticks == rateOfFire)
+                {
+                    ShootCannonTurret();
+                    ticks = 0;
+                }
+                return;
+            default:
+                return;
+        }
     }
 
     public void SetLevel(int level) {
@@ -45,14 +71,14 @@ public class Turret : MonoBehaviour
         switch (_currentState)
         {
             case GunTurret:
-                if (level == 1) SetStats(2, 1, 1f, 1);
-                if (level == 2) SetStats(4, 1, 0.5f, 2);
-                if (level == 3) SetStats(6, 1, 0.2f, 3);
+                if (level == 1) SetStats(2, 1, 4f, 1);
+                if (level == 2) SetStats(4, 1, 2f, 2);
+                if (level == 3) SetStats(6, 1, 1f, 3);
                 break;
             case CannonTurret:
-                if (level == 1) SetStats(1, 1, 2f, 3);
-                if (level == 2) SetStats(3, 3, 2f, 4);
-                if (level == 3) SetStats(3, 3, 1f, 5);
+                if (level == 1) SetStats(1, 1, 8f, 3);
+                if (level == 2) SetStats(3, 3, 8f, 4);
+                if (level == 3) SetStats(3, 3, 4f, 5);
                 break;
             case BuffTurret:
                 if (level == 1) SetStats(1, 1, 1.5f, 0);
@@ -74,14 +100,12 @@ public class Turret : MonoBehaviour
             case GunTurret:
                 this.rateOfFire = rateOfFire;
                 this.damage = power;
-                CancelInvoke();
-                InvokeRepeating(nameof(ShootGunTurret), 1f, rateOfFire);
+                this.ticks = 0;
                 break;
             case CannonTurret:
                 this.rateOfFire = rateOfFire;
                 this.damage = power;
-                CancelInvoke();
-                InvokeRepeating(nameof(ShootCannonTurret), 1f, rateOfFire);
+                this.ticks = 0;
                 break;
             case BuffTurret:
             case SlowTurret:
@@ -100,7 +124,7 @@ public class Turret : MonoBehaviour
                 activePortals[i] = null;
 
         rend.enabled = true;
-        CancelInvoke();
+        this.ticks = 0;
 
         turretArea.state = _currentState;
 
@@ -111,11 +135,9 @@ public class Turret : MonoBehaviour
                 break;
             case GunTurret:
                 rend.material = turretMaterials[0];
-                InvokeRepeating(nameof(ShootGunTurret), 1f, rateOfFire);
                 break;
             case CannonTurret:
                 rend.material = turretMaterials[0];
-                InvokeRepeating(nameof(ShootCannonTurret), 1f, rateOfFire);
                 break;
             case PortalTurret:
                 if (activePortals[0] && activePortals[1])
@@ -160,7 +182,7 @@ public class Turret : MonoBehaviour
             case BuffTurret:
                 return $"Buff turret \nLevel {level}";
             case BarrierTurret:
-                return $"Wall turret \nLevel {level}";
+                return $"Barrier \nLevel {level}";
             case SlowTurret:
                 return $"Slow turret \nLevel {level}";
             default:

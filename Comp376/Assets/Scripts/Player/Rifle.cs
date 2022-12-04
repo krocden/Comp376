@@ -91,7 +91,7 @@ public class Rifle : Gun
 
     public override bool shoot()
     {
-        RaycastHit bulletHit;
+        //RaycastHit bulletHit;
 
         if (automatic)
         {

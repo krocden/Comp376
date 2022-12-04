@@ -87,8 +87,7 @@ public class Pistol : Gun
 
     public override bool shoot()
     {
-        RaycastHit bulletHit;
-
+        //RaycastHit bulletHit;
         if (Input.GetButtonDown("Fire1") && Time.time > fireCd)
         {
             checkAmmo(1);
