@@ -218,6 +218,7 @@ MonoBehaviour:
   impactDuration: 2
   damageRadius: 3
   gun: {fileID: 774682711083370689, guid: 139f3296312193c49b689e8c858efbd6, type: 3}
+  currencyPerHit: 1
 --- !u!1 &7545012356574478577
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Gun
+public abstract class Gun : MonoBehaviour
 {
-    /*
-    float damage { get; }
-    float magazineSize { get; }
-    float magazineCount { get; }
-    float fireRate { get; } 
-    float range { get; }
-    bool automatic { get; }
-    */
-    bool shoot();
-    void reload();
-    void getAmmo(out int currentAmmo, out int maxAmmo);
+    public const int currencyPerHit = 1;
+    public abstract bool shoot();
+    public abstract void reload();
+    public abstract void getAmmo(out int currentAmmo, out int maxAmmo);
 }
