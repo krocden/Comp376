@@ -24,7 +24,7 @@ public class Upgrade : MonoBehaviour
     {
         bool valid = gunUpgrade.upgradeList[upgradePreRequisite].unlocked;
 
-        if (valid && !unlocked && CurrencyManager.Instance.Currency >= cost)
+        if (valid && !unlocked)
         {
             bool validBuy = CurrencyManager.Instance.SubtractCurrency(cost);
             if (validBuy)

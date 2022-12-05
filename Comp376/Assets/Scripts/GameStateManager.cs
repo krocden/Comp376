@@ -152,7 +152,7 @@ public class GameStateManager : MonoBehaviour
         return currentGameState;
     }
 
-    private void SetInitializeState()
+    private async void SetInitializeState()
     {
         arenaSetup.InitializeArena();
 
@@ -161,7 +161,9 @@ public class GameStateManager : MonoBehaviour
 
         arenaSetup.nexus.OnNexusExploded.AddListener(NexusExploded);
 
-        canSkipPhase = true;
+        await Task.Yield();
+
+        TransitionToState(GameState.Planning);
     }
 
     private async Task SetBuildingPhase()
