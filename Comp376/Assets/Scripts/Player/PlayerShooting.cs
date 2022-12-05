@@ -98,10 +98,8 @@ public class PlayerShooting : MonoBehaviour
 
                 if (!IsHoldingWrench)
                 {
-                    if (currentGun.shoot())
-                    {
-                        updateUI();
-                    }
+                    currentGun.shoot();
+                    updateUI();
                 }
             }
         }

@@ -74,11 +74,15 @@ public class Rifle : Gun
         {
             canShoot = false;
             AudioManager.Instance.PlaySFX(emptyMagSound);
+            reload();
         }
         else
         {
-            canShoot = true;
-            currentAmmo -= ammo;
+            if (!isReloading)
+            {
+                canShoot = true;
+                currentAmmo -= ammo;
+            }
         }
 
     }

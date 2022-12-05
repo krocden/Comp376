@@ -74,11 +74,15 @@ public class Pistol : Gun
         {
             canShoot = false;
             AudioManager.Instance.PlaySFX(emptyMagSound);
+            reload();
         }
         else
         {
-            canShoot = true;
-            currentAmmo -= ammo;
+            if (!isReloading)
+            {
+                canShoot = true;
+                currentAmmo -= ammo;
+            }
         }
     }
 
@@ -106,11 +110,13 @@ public class Pistol : Gun
                                 continue;
 
                         Debug.Log("Hit: " + hits[i].collider.tag);
-                        CurrencyManager.Instance.AddCurrency(currencyPerHit);
+                        
                         if (hits[i].collider.tag == "Enemy")
                         {
                             GameObject hitObject = hits[i].transform.gameObject;
                             Monster enemy = hitObject.GetComponent<Monster>();
+
+                            CurrencyManager.Instance.AddCurrency(currencyPerHit);
 
                             enemy.TakeDamage((i + 1) * damage);
                             Debug.Log("Health: " + enemy.health);
