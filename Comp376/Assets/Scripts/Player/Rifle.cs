@@ -61,7 +61,7 @@ public class Rifle : Gun
                     currentAmmo = magazineSize;
                 }
 
-                //isReloading = true; no Animation yet...
+                isReloading = true; //no Animation yet...
 
                 anim.SetTrigger("reload");
                 AudioManager.Instance.PlaySFX(reloadSound);
@@ -140,13 +140,19 @@ public class Rifle : Gun
                         TrailRenderer trail = Instantiate(bulletTrail, gunSpritePos, Quaternion.identity);
                         StartCoroutine(spawnBulletTrail(trail, actualHit));
 
-                        anim.SetTrigger("shoot");
+                        //anim.SetTrigger("shoot");
+                        anim.SetBool("shooting", true);
 
                         AudioManager.Instance.PlaySFX(shootShound);
 
                         return true;
                     }
                 }
+                
+            }
+            else
+            {
+                anim.SetBool("shooting", false);
             }
         }/*
         else
@@ -193,5 +199,11 @@ public class Rifle : Gun
     {
         currentAmmo = this.currentAmmo;
         maxAmmo = this.maxAmmo;
+    }
+    public override void updateAnim()
+    {
+        isReloading = false;
+        anim.Rebind();
+        anim.Update(0f);
     }
 }

@@ -175,5 +175,10 @@ public class Pistol : Gun
         currentAmmo = this.currentAmmo;
         maxAmmo = this.maxAmmo;
     }
-
+    public override void updateAnim()
+    {
+        isReloading = false;
+        anim.Rebind();
+        anim.Update(0f);
+    }
 }

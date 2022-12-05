@@ -10,7 +10,7 @@ public class Raygun : Gun
 
     public GameObject player;
     Animator anim;
-    AudioSource shootShound;
+    public AudioClip shootShound;
 
     //public GameObject impactParticle;
     public TrailRenderer bulletTrail;
@@ -20,7 +20,7 @@ public class Raygun : Gun
     void Start()
     {
         anim = GetComponent<Animator>();
-        shootShound = GetComponents<AudioSource>()[0];
+        //shootShound = GetComponents<AudioClip>()[0];
     }
 
     public override void reload()
@@ -71,21 +71,24 @@ public class Raygun : Gun
             TrailRenderer trail = Instantiate(bulletTrail, gunSpritePos, Quaternion.identity);
             StartCoroutine(spawnBulletTrail(trail, actualHit));
 
-            //anim.SetTrigger("shoot");
-
+            anim.SetBool("shooting", true);
+            AudioManager.Instance.PlaySFX(shootShound);
+            /*
             if (!shootShound.isPlaying)
             {
                 shootShound.Play();
-            }
+            }*/
 
             return true;
         }
         else
         {
+            anim.SetBool("shooting", false);
+            /*
             if (shootShound.isPlaying)
             {
                 shootShound.Stop();
-            }
+            }*/
         }
         return false;
     }
@@ -110,5 +113,11 @@ public class Raygun : Gun
     {
         currentAmmo = 0;
         maxAmmo = 0;
+    }
+
+    public override void updateAnim()
+    {
+        anim.Rebind();
+        anim.Update(0f);
     }
 }

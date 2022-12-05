@@ -62,7 +62,7 @@ public class Shotgun : Gun
                     currentAmmo = magazineSize;
                 }
 
-                //isReloading = true; no Animation yet...
+                isReloading = true; //no Animation yet...
 
                 anim.SetTrigger("reload");
                 AudioManager.Instance.PlaySFX(reloadSound);
@@ -217,5 +217,12 @@ public class Shotgun : Gun
     {
         currAmmo = currentAmmo;
         maxAmmo = this.maxAmmo;
+    }
+
+    public override void updateAnim()
+    {
+        isReloading = false;
+        anim.Rebind();
+        anim.Update(0f);
     }
 }

@@ -117,6 +117,10 @@ public class PlayerShooting : MonoBehaviour
                 wrench.SetActive(false);
                 holdingWrench = false;
                 changeGun(selectedGun);
+
+                //Fix bugs if animation ongoing while round ends...
+                currentGun.updateAnim();
+
                 //StartCoroutine(gotRaygun(9999));          // uncomment to test raygun
             }
         }
@@ -142,6 +146,9 @@ public class PlayerShooting : MonoBehaviour
 
     void changeGun(GunType gunType)
     {
+        //Fix bugs if animation ongoing while round ends...
+        currentGun.updateAnim();
+
         if (gunType == GunType.Pistol)
         {
             deactivatePreviousGun();
