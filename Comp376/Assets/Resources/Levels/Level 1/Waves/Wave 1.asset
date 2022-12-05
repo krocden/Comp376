@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Wave 1
   m_EditorClassIdentifier: 
   monsters:
-  - monsterPrefab: {fileID: 5578211910298818360, guid: 10e3cff97bc7f024ca19abc0e59fd096, type: 3}
+  - monsterPrefab: {fileID: 5578211910298818360, guid: 0bc5a5a2f9ae91848956713283c6447d, type: 3}
     monsterQuantity: 10
     monsterTier: 1
     monsterSpawnRate: 0.5
-    commandType: 0
+    commandType: 1
     repeatNextXRows: 0
     repeatTimes: 0

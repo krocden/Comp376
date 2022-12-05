@@ -12,4 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b18b1cd842efd464c9f82b1733e840c6, type: 3}
   m_Name: Wave 2
   m_EditorClassIdentifier: 
-  monsters: []
+  monsters:
+  - monsterPrefab: {fileID: 5578211910298818360, guid: 0bc5a5a2f9ae91848956713283c6447d, type: 3}
+    monsterQuantity: 10
+    monsterTier: 1
+    monsterSpawnRate: 0.5
+    commandType: 1
+    repeatNextXRows: 0
+    repeatTimes: 0
+  - monsterPrefab: {fileID: 5578211910298818360, guid: 0bc5a5a2f9ae91848956713283c6447d, type: 3}
+    monsterQuantity: 1
+    monsterTier: 1
+    monsterSpawnRate: 3
+    commandType: 1
+    repeatNextXRows: 0
+    repeatTimes: 0
+  - monsterPrefab: {fileID: 5578211910298818360, guid: 0bc5a5a2f9ae91848956713283c6447d, type: 3}
+    monsterQuantity: 9
+    monsterTier: 1
+    monsterSpawnRate: 0.5
+    commandType: 1
+    repeatNextXRows: 0
+    repeatTimes: 0
