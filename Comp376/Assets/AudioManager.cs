@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -37,6 +38,11 @@ public class AudioManager : MonoBehaviour
         SetMusicVolume(currentMusicVolume);
         SetAnnouncerVolume(currentAnnouncerVolume);
         SetSFXVolume(currentSFXVolume);
+    }
+
+    private void Update()
+    {
+        
     }
 
     public void SetMasterVolume(float vol)
@@ -95,10 +101,27 @@ public class AudioManager : MonoBehaviour
     {
         announcerSource.clip = clip;
         announcerSource.Play();
+        FadeMusic();
     }
 
     public void PlaySFX(AudioClip clip)
     {
         sfxSource.PlayOneShot(clip);
+    }
+
+    private async Task FadeMusic()
+    {
+        float baseVol = currentMusicVolume;
+        while (announcerSource.isPlaying)
+        {
+            musicSource.volume = Mathf.Lerp(musicSource.volume, baseVol / 5, Time.deltaTime * 4f);
+            await Task.Yield();
+        }
+
+        while(musicSource.volume != baseVol)
+        {
+            musicSource.volume = Mathf.Lerp(musicSource.volume, baseVol, Time.deltaTime * 4f);
+            await Task.Yield();
+        }
     }
 }

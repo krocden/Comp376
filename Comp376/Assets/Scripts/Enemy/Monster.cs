@@ -16,6 +16,7 @@ public class Monster : MonoBehaviour
     public int damage;
     public int pushPower;
     private float baseSpeed;
+    private int tier = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +40,7 @@ public class Monster : MonoBehaviour
 
     private void SetTier(int tier)
     {
+        this.tier = tier;
         baseSpeed = speed *= tier;
         health *= tier;
         currencyOnKill *= tier;
@@ -89,7 +91,7 @@ public class Monster : MonoBehaviour
         // attack the nexus
         if (gameObject != null)
         {
-            target.TakeDamage(1f);
+            target.TakeDamage(tier);
             Destroy(gameObject);
         }
     }
