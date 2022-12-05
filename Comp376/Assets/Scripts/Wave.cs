@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Wave #", menuName = "Wave")]
+[CreateAssetMenu(fileName = "Wave 1", menuName = "Wave")]
 public class Wave : ScriptableObject
 {
     [SerializeField] private List<MonsterDetails> monsters = new List<MonsterDetails>();
@@ -28,6 +28,7 @@ public class MonsterDetails
 
 public enum CommandType
 { 
+    Boss,
     Monster,
     RepeatGroup
 }

@@ -43,29 +43,45 @@ public class WaveEditor : Editor
 
 			foreach (var command in (CommandType[])Enum.GetValues(typeof(CommandType)))
 			{
-				if (command == CommandType.Monster)
+				if (command == CommandType.Monster || command == CommandType.Boss)
 					continue;
 				menu.AddItem(new GUIContent(Enum.GetName(typeof(CommandType), command)),
 				false, clickHandler,
 				new MonsterCreationParams() { CommandType = command, Path = "" });
 			}
 
-			var guids = AssetDatabase.FindAssets("", new[] { "Assets/Prefabs/Monsters" });
-			foreach (var guid in guids)
+			var bossesGuids = AssetDatabase.FindAssets("", new[] { "Assets/Prefabs/Monsters/Bosses"});
+			var fastGuids = AssetDatabase.FindAssets("", new[] { "Assets/Prefabs/Monsters/Regular Monsters/Fast Enemies" });
+			var tanksGuids = AssetDatabase.FindAssets("", new[] { "Assets/Prefabs/Monsters/Regular Monsters/Tank Enemies" });
+			var dpsGuids = AssetDatabase.FindAssets("", new[] { "Assets/Prefabs/Monsters/Regular Monsters/DPS Enemies" });
+			foreach (var guid in bossesGuids)
 			{
 				var path = AssetDatabase.GUIDToAssetPath(guid);
-				menu.AddItem(new GUIContent("Monsters/" + Path.GetFileNameWithoutExtension(path)),
+				menu.AddItem(new GUIContent("Bosses/" + Path.GetFileNameWithoutExtension(path)),
+				false, clickHandler,
+				new MonsterCreationParams() { CommandType = CommandType.Boss, Path = path });
+			}
+			foreach (var guid in fastGuids)
+			{
+				var path = AssetDatabase.GUIDToAssetPath(guid);
+				menu.AddItem(new GUIContent("Fast Monsters/" + Path.GetFileNameWithoutExtension(path)),
 				false, clickHandler,
 				new MonsterCreationParams() { CommandType = CommandType.Monster, Path = path });
 			}
-			//guids = AssetDatabase.FindAssets("", new[] { "Assets/Prefabs/Bosses" });
-			//foreach (var guid in guids)
-			//{
-			//	var path = AssetDatabase.GUIDToAssetPath(guid);
-			//	menu.AddItem(new GUIContent("Bosses/" + Path.GetFileNameWithoutExtension(path)),
-			//	false, clickHandler,
-			//	new MonsterCreationParams() { Path = path });
-			//}
+			foreach (var guid in tanksGuids)
+			{
+				var path = AssetDatabase.GUIDToAssetPath(guid);
+				menu.AddItem(new GUIContent("Tank Monsters/" + Path.GetFileNameWithoutExtension(path)),
+				false, clickHandler,
+				new MonsterCreationParams() { CommandType = CommandType.Monster, Path = path });
+			}
+			foreach (var guid in dpsGuids)
+			{
+				var path = AssetDatabase.GUIDToAssetPath(guid);
+				menu.AddItem(new GUIContent("DPS Monsters/" + Path.GetFileNameWithoutExtension(path)),
+				false, clickHandler,
+				new MonsterCreationParams() { CommandType = CommandType.Monster, Path = path });
+			}
 			menu.ShowAsContext();
 		};
 
@@ -85,13 +101,21 @@ public class WaveEditor : Editor
 			element.FindPropertyRelative("repeatTimes").intValue = 1;
 			element.FindPropertyRelative("repeatNextXRows").intValue = 1;
 		}
-		else
+		else if (data.CommandType == CommandType.Monster)
 		{
 			element.FindPropertyRelative("monsterTier").intValue = 1;
 			element.FindPropertyRelative("monsterQuantity").intValue = 10;
 			element.FindPropertyRelative("monsterPrefab").objectReferenceValue =
 				AssetDatabase.LoadAssetAtPath(data.Path, typeof(GameObject)) as GameObject;
 			element.FindPropertyRelative("monsterSpawnRate").floatValue = 0.5f;
+		}
+		else if (data.CommandType == CommandType.Boss)
+		{
+			element.FindPropertyRelative("monsterTier").intValue = 1;
+			element.FindPropertyRelative("monsterQuantity").intValue = 1;
+			element.FindPropertyRelative("monsterPrefab").objectReferenceValue =
+				AssetDatabase.LoadAssetAtPath(data.Path, typeof(GameObject)) as GameObject;
+			element.FindPropertyRelative("monsterSpawnRate").floatValue = 1f;
 		}
 		serializedObject.ApplyModifiedProperties();
 	}
@@ -143,6 +167,30 @@ public class WaveEditor : Editor
 			EditorGUI.PropertyField(
 				new Rect(rect.x + 280, rect.y, 30, EditorGUIUtility.singleLineHeight),
 				element.FindPropertyRelative("repeatTimes"), GUIContent.none);
+		}
+		else if (element.FindPropertyRelative("commandType").enumValueIndex == (int)CommandType.Boss)
+		{
+			EditorGUI.PropertyField(
+				new Rect(rect.x, rect.y, 140, EditorGUIUtility.singleLineHeight),
+				element.FindPropertyRelative("monsterPrefab"), GUIContent.none);
+			EditorGUI.LabelField(
+				new Rect(rect.x + 150, rect.y, 30, EditorGUIUtility.singleLineHeight),
+				"Tier");
+			EditorGUI.PropertyField(
+				new Rect(rect.x + 180, rect.y, 30, EditorGUIUtility.singleLineHeight),
+				element.FindPropertyRelative("monsterTier"), GUIContent.none);
+			EditorGUI.LabelField(
+				new Rect(rect.x + 220, rect.y, 60, EditorGUIUtility.singleLineHeight),
+				"Quantity");
+			EditorGUI.PropertyField(
+				new Rect(rect.x + 280, rect.y, 30, EditorGUIUtility.singleLineHeight),
+				element.FindPropertyRelative("monsterQuantity"), GUIContent.none);
+			EditorGUI.LabelField(
+				new Rect(rect.x + 320, rect.y, 80, EditorGUIUtility.singleLineHeight),
+				"Spawn Rate");
+			EditorGUI.PropertyField(
+				new Rect(rect.x + 400, rect.y, 30, EditorGUIUtility.singleLineHeight),
+				element.FindPropertyRelative("monsterSpawnRate"), GUIContent.none);
 		}
 
 	}

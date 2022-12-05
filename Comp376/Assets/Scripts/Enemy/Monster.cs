@@ -28,12 +28,20 @@ public class Monster : MonoBehaviour
         transform.LookAt(target.transform);
     }
 
-    public void Initialize(List<PathNode> path, Nexus target)
+    public void Initialize(List<PathNode> path, Nexus target, int tier = 1)
     {
         this.path = path;
         this.target = target;
+        SetTier(tier);
 
         MoveAlongPath();
+    }
+
+    private void SetTier(int tier)
+    {
+        baseSpeed = speed *= tier;
+        health *= tier;
+        currencyOnKill *= tier;
     }
 
     public void ApplySlow(float modifier)

@@ -56,22 +56,22 @@ public class FacingAngle : MonoBehaviour
     private int GetIndex(float angle)
     {
         //front
-        if (angle > -60.0f && angle < 60.0f)
+        if (angle > -45.0f && angle < 45.0f)
         {
             return 0;
         }
         //right
-        if (angle >= 60.0f && angle < 120.0f)
+        if (angle >= 45.0f && angle < 135.0f)
         {
             return 1;
         }
         //left
-        if (angle <= -60.0f && angle > -120.0f)
+        if (angle <= -45.0f && angle > -135.0f)
         {
             return 2;
         }
         //back
-        if (angle >= 120.0f || angle <= -120.0f)
+        if (angle >= 135.0f || angle <= -135.0f)
         {
             return 3;
         }

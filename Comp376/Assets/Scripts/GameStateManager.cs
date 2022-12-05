@@ -33,8 +33,9 @@ public class GameStateManager : MonoBehaviour
     private bool canSkipPhase = false;
 
     public bool levelFailed = false;
-    public bool BlockInput { get { return levelFailed || gamePaused; } }
+    public bool BlockInput { get { return levelFailed || gamePaused || gameCompleted; } }
     public bool gamePaused = false;
+    private bool gameCompleted;
 
     private float tickTime = 0.25f;
     public delegate void Tick();
@@ -79,7 +80,8 @@ public class GameStateManager : MonoBehaviour
         }
 
         timeDelta += Time.deltaTime;
-        if (timeDelta >= tickTime) { 
+        if (timeDelta >= tickTime)
+        {
             tick.Invoke();
             timeDelta = timeDelta - tickTime;
         }
@@ -123,6 +125,7 @@ public class GameStateManager : MonoBehaviour
                 SetShootingPhase();
                 break;
             case GameState.Completed:
+                gameCompleted = true;
                 break;
         }
     }
@@ -139,6 +142,7 @@ public class GameStateManager : MonoBehaviour
                 break;
             case GameState.Shooting:
                 currentWave++;
+                coreUIHandler.UpdateCurrentWaveText(GetCurrentWaveString());
                 if (currentWave == waves.Length)
                     GoToState(GameState.Completed);
                 else
@@ -160,6 +164,7 @@ public class GameStateManager : MonoBehaviour
         waves = LoadWaves();
 
         arenaSetup.nexus.OnNexusExploded.AddListener(NexusExploded);
+        coreUIHandler.UpdateCurrentWaveText(GetCurrentWaveString());
 
         await Task.Yield();
 
@@ -181,8 +186,7 @@ public class GameStateManager : MonoBehaviour
                 await arenaSetup.AddPath(false);
             }
 
-            if (currentWave != 0)
-                NotificationManager.Instance.PlayStandardNotification(NotificationType.NewSpawnerAdded, true);
+            NotificationManager.Instance.PlayStandardNotification(NotificationType.NewSpawnerAdded, true);
         }
 
         // Add next wave spawner
@@ -205,9 +209,9 @@ public class GameStateManager : MonoBehaviour
             coreUIHandler.UpdateBuildingSecondsLeft(e);
         };
 
-        float timeLeft = await StartTimer(buildingPhaseTimer, timerCancellationTokenSource.Token, timeTicking);
+        float timeLeft = await StartTimer(buildingPhaseTimer + currentWave, timerCancellationTokenSource.Token, timeTicking);
 
-        if (timeLeft > 0) 
+        if (timeLeft > 0)
         {
             CurrencyManager.Instance.AddCurrency(Mathf.RoundToInt(timeLeft / buildingPhaseTimer * 100));
         }
@@ -227,6 +231,7 @@ public class GameStateManager : MonoBehaviour
         for (int i = 0; i < monsterDetails.Count; i++)
         {
             bool repeatGroup = monsterDetails[i].commandType == CommandType.RepeatGroup;
+            bool isBoss = monsterDetails[i].commandType == CommandType.Boss;
             int repeatNextXRows = repeatGroup ? monsterDetails[i].repeatNextXRows : 1;
             int repeatTimes = repeatGroup ? monsterDetails[i].repeatTimes : 1;
 
@@ -247,21 +252,46 @@ public class GameStateManager : MonoBehaviour
                             await Task.Yield();
                         }
 
-                        foreach (List<PathNode> path in arenaSetup.paths)
+                        if (isBoss)
                         {
-                            if (spawningCancellationTokenSource.IsCancellationRequested)
-                                return;
+                            int numberOfSpawners = arenaSetup.paths.Count;
+                            int[] spawnerIndexes = new int[monsterDetails[i].monsterQuantity];
+                            for (int s = 0; s < monsterDetails[i].monsterQuantity; s++)
+                            {
+                                spawnerIndexes[s] = UnityEngine.Random.Range(0, numberOfSpawners);
+                            }
+                            foreach (int index in spawnerIndexes)
+                            {
+                                if (spawningCancellationTokenSource.IsCancellationRequested)
+                                    return;
 
-                            Vector3 spawnPoint = path[0].position + Vector3.up;
-                            Monster monster = Instantiate(monsterDetails[i + x].monsterPrefab, spawnPoint, Quaternion.identity);
-                            monster.Initialize(path, arenaSetup.nexus);                            
+                                Vector3 spawnPoint = arenaSetup.paths[index][0].position + Vector3.up;
+                                Monster monster = Instantiate(monsterDetails[i].monsterPrefab, spawnPoint, Quaternion.identity);
+                                monster.Initialize(arenaSetup.paths[index], arenaSetup.nexus, monsterDetails[i].monsterTier);
+
+                                NotificationManager.Instance.PlayPositionnalNotification(NotificationType.BossSpawned, spawnPoint, true);
+                            }
+                        }
+                        else
+                        {
+
+                            foreach (List<PathNode> path in arenaSetup.paths)
+                            {
+                                if (spawningCancellationTokenSource.IsCancellationRequested)
+                                    return;
+
+                                Vector3 spawnPoint = path[0].position + Vector3.up;
+                                Monster monster = Instantiate(monsterDetails[i + x].monsterPrefab, spawnPoint, Quaternion.identity);
+                                monster.Initialize(path, arenaSetup.nexus, monsterDetails[i + x].monsterTier);
+                            }
                         }
                     }
                 }
             }
 
+
             if (repeatGroup)
-                i += repeatNextXRows - 1;            
+                i += repeatNextXRows - 1;
         }
 
         int enemiesLeft = FindObjectsOfType<Monster>().Length;
@@ -317,6 +347,11 @@ public class GameStateManager : MonoBehaviour
         NotificationManager.Instance.PlayNotificationSFX(NotificationType.GameOver);
 
         GoToState(GameState.Completed);
+    }
+
+    public string GetCurrentWaveString()
+    {
+        return $"{currentWave + 1} / {waves.Length}";
     }
 
 

@@ -119,17 +119,15 @@ public class ArenaSetup : MonoBehaviour
         Vector3 pingPos = pathfinding.FindPath(newPath, ignoreWalls: true)[0].position;
 
         if (!isSpawnerAddedNextWave) 
-        { 
-            if (pathStartEndCoordinatesList.Count > 0)
-                NotificationManager.Instance.PingOnMap(pingPos);
-            pathStartEndCoordinatesList.Add(newPath);
+        {            
+            pathStartEndCoordinatesList.Add(newPath);            
         }
         else
         {
             nextWavePathStartEndCoordinatesList.Add(newPath);
-            NotificationManager.Instance.PingOnMap(pingPos);
         }
 
+        NotificationManager.Instance.PingOnMap(pingPos);
         UpdatePaths();
     }
 

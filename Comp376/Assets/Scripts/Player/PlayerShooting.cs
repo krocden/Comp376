@@ -146,6 +146,7 @@ public class PlayerShooting : MonoBehaviour
         {
             deactivatePreviousGun();
             currentGun = pistol;
+            pistol.reloadFinish();
             selectedGun = GunType.Pistol;
             gunHolder.transform.GetChild(0).gameObject.SetActive(true);
 
@@ -160,6 +161,7 @@ public class PlayerShooting : MonoBehaviour
             {
                 deactivatePreviousGun();
                 currentGun = rifle;
+                rifle.reloadFinish();
                 selectedGun = GunType.Rifle;
                 gunHolder.transform.GetChild(1).gameObject.SetActive(true);
 
@@ -175,6 +177,7 @@ public class PlayerShooting : MonoBehaviour
             {
                 deactivatePreviousGun();
                 currentGun = shotgun;
+                shotgun.reloadFinish();
                 selectedGun = GunType.Shotgun;
                 gunHolder.transform.GetChild(2).gameObject.SetActive(true);
 
@@ -190,6 +193,7 @@ public class PlayerShooting : MonoBehaviour
             {
                 deactivatePreviousGun();
                 currentGun = launcher;
+                launcher.reloadFinish();
                 selectedGun = GunType.Launcher;
                 gunHolder.transform.GetChild(3).gameObject.SetActive(true);
 
