@@ -2676,6 +2676,8 @@ MonoBehaviour:
   musicVolumeSlider: {fileID: 6679244023095770969}
   announcerVolumeSlider: {fileID: 5674261107042150809}
   sfxVolumeSlider: {fileID: 2035872488120163185}
+  buttonClickSound: {fileID: 8300000, guid: ea86b95eef9081a499f6ae25290a2f4b, type: 3}
+  sliderChangeSound: {fileID: 8300000, guid: c1d8005edc8160e41a7c033ef3af8827, type: 3}
 --- !u!1 &8575496647315382810
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,6 +8,8 @@ public class CurrencyManager : MonoBehaviour
     public const int STARTING_CASH = 100;
     public int totalCurrencyEarned = STARTING_CASH;
 
+    [SerializeField] private AudioClip purchaseSound;
+
     public static CurrencyManager Instance { get; private set; }
     private void Awake()
     {
@@ -47,11 +49,16 @@ public class CurrencyManager : MonoBehaviour
             NotificationManager.Instance.PlayStandardNotification(NotificationType.NotEnoughCurrency);
             return false;
         }
+        else
+        {
+            AudioManager.Instance.PlaySFX(purchaseSound);
+        }
 
         _currency -= toRemove;
 
         if (_currency < 0)
             _currency = 0;
+
 
         OnCurrencyChanged.Invoke(_currency);
         return true;

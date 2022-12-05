@@ -903,6 +903,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioPanel: {fileID: 8080260719974910691}
   helpPanel: {fileID: 0}
+  buttonClickSound: {fileID: 8300000, guid: ea86b95eef9081a499f6ae25290a2f4b, type: 3}
 --- !u!1001 &496392259503105900
 PrefabInstance:
   m_ObjectHideFlags: 0

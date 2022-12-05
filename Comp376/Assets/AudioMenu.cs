@@ -11,9 +11,12 @@ public class AudioMenu : MonoBehaviour
     [SerializeField] private Slider announcerVolumeSlider;
     [SerializeField] private Slider sfxVolumeSlider;
 
+    [SerializeField] private AudioClip buttonClickSound;
+    [SerializeField] private AudioClip sliderChangeSound;
+
     private void Awake()
     {
-        Close();
+        gameObject.SetActive(false);
     }
 
     private void OnEnable()
@@ -27,25 +30,30 @@ public class AudioMenu : MonoBehaviour
     public void UpdateMasterVolume(float vol)
     {
         AudioManager.Instance.SetMasterVolume(vol);
+        AudioManager.Instance.PlaySFX(sliderChangeSound);
     }
 
     public void UpdateMusicVolume(float vol)
     {
         AudioManager.Instance.SetMusicVolume(vol);
+        AudioManager.Instance.PlaySFX(sliderChangeSound);
     }
 
     public void UpdateAnnouncerVolume(float vol)
     {
         AudioManager.Instance.SetAnnouncerVolume(vol);
+        AudioManager.Instance.PlaySFX(sliderChangeSound);
     }
 
     public void UpdateSFXVolume(float vol)
     {
         AudioManager.Instance.SetSFXVolume(vol);
+        AudioManager.Instance.PlaySFX(sliderChangeSound);
     }
 
     public void Close()
     {
+        AudioManager.Instance.PlaySFX(buttonClickSound);
         gameObject.SetActive(false);
     }
 }

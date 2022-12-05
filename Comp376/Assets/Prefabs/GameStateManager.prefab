@@ -95,6 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   totalCurrencyEarned: 100
+  purchaseSound: {fileID: 8300000, guid: 927f4b66c72a21542a48a48de209ca72, type: 3}
   OnCurrencyChanged:
     m_PersistentCalls:
       m_Calls: []

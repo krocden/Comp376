@@ -51,6 +51,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   container: {fileID: 8782986419888427950}
   optionsMenu: {fileID: 7115569481638098256}
+  buttonClickSound: {fileID: 8300000, guid: ea86b95eef9081a499f6ae25290a2f4b, type: 3}
+  openMenuSound: {fileID: 8300000, guid: c1d8005edc8160e41a7c033ef3af8827, type: 3}
 --- !u!1 &1390134502714501419
 GameObject:
   m_ObjectHideFlags: 0
