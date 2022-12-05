@@ -23,6 +23,11 @@ public class Monster : MonoBehaviour
         baseSpeed = speed;
     }
 
+    private void Update()
+    {
+        transform.LookAt(target.transform);
+    }
+
     public void Initialize(List<PathNode> path, Nexus target)
     {
         this.path = path;
