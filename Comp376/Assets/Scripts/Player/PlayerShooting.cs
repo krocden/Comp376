@@ -111,6 +111,7 @@ public class PlayerShooting : MonoBehaviour
         {
             holdingWrench = true;
             wrench.SetActive(true);
+            currentGun.updateAnim();
             deactivatePreviousGun();
         }
         else
@@ -122,7 +123,7 @@ public class PlayerShooting : MonoBehaviour
                 changeGun(selectedGun);
 
                 //Fix bugs if animation ongoing while round ends...
-                currentGun.updateAnim();
+                //currentGun.updateAnim();
 
                 //StartCoroutine(gotRaygun(9999));          // uncomment to test raygun
             }
