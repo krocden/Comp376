@@ -13,17 +13,24 @@ MonoBehaviour:
   m_Name: Wave 4
   m_EditorClassIdentifier: 
   monsters:
-  - monsterPrefab: {fileID: 5578211910298818360, guid: 270e649df3f26e24bba65f60bb7c40be, type: 3}
-    monsterQuantity: 1
+  - monsterPrefab: {fileID: 5578211910298818360, guid: 0bc5a5a2f9ae91848956713283c6447d, type: 3}
+    monsterQuantity: 5
     monsterTier: 1
-    monsterSpawnRate: 1
-    commandType: 0
+    monsterSpawnRate: 0.5
+    commandType: 1
     repeatNextXRows: 0
     repeatTimes: 0
-  - monsterPrefab: {fileID: 5578211910298818360, guid: 208bdcc3c5c7a5d4d92cd0bc52616e42, type: 3}
-    monsterQuantity: 1
+  - monsterPrefab: {fileID: 1275620735232441013, guid: 8f0d459f1138f26419a7559fcce34c93, type: 3}
+    monsterQuantity: 2
     monsterTier: 1
-    monsterSpawnRate: 1
-    commandType: 0
+    monsterSpawnRate: 0.5
+    commandType: 1
+    repeatNextXRows: 0
+    repeatTimes: 0
+  - monsterPrefab: {fileID: 5578211910298818360, guid: a36bfbc5359d14d41a5862b89f022a2f, type: 3}
+    monsterQuantity: 2
+    monsterTier: 1
+    monsterSpawnRate: 0.5
+    commandType: 1
     repeatNextXRows: 0
     repeatTimes: 0
