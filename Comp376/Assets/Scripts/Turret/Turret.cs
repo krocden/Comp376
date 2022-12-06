@@ -252,7 +252,7 @@ public class Turret : MonoBehaviour
                 turretArea.monstersInArea.RemoveAt(i);
             else
             {
-                if (HasVisibility(spawnPoint, turretArea.monstersInArea[i]?.transform))
+                if (HasVisibility(spawnPoint, turretArea.monstersInArea[i]))
                 {
                     if (!hasPlayedParticles)
                     {
@@ -300,25 +300,33 @@ public class Turret : MonoBehaviour
     {
         if (turretArea.monstersInArea.Count == 0) return;
 
-        AudioManager.Instance.PlaySFXAtPosition(gunTurretSFX, transform.position);
-
         Monster monster = turretArea.monstersInArea[0];
         Vector3 spawnPoint = Vector3.Lerp(transform.position, cannonGunExplosion.transform.position, 0.5f);
-        bool isVisible = HasVisibility(spawnPoint, monster?.transform);
+
+        bool isVisible = HasVisibility(spawnPoint, monster);
 
         while (monster == null && turretArea.monstersInArea.Count > 1 && !isVisible)
         {
             turretArea.monstersInArea.RemoveAt(0);
 
             monster = turretArea.monstersInArea[0];
-            isVisible = HasVisibility(spawnPoint, monster?.transform);
+            isVisible = HasVisibility(spawnPoint, monster);
         }
-        if (monster == null || !HasVisibility(spawnPoint, monster?.transform)) return;
+
+        if (monster == null)
+        {
+            turretArea.monstersInArea.RemoveAt(0);
+            return;
+        }
+
+        if (!HasVisibility(spawnPoint, monster)) return;
 
         GunTurretBullet bullet = Instantiate(turretGunBulletPrefab, spawnPoint, Quaternion.identity).GetComponent<GunTurretBullet>();
         bullet.target = monster;
         bullet.damage = damage;
         bullet.turret = this;
+
+        AudioManager.Instance.PlaySFXAtPosition(gunTurretSFX, transform.position);
     }
 
     public void GunTurretMonsterHit(Monster monster, int damage)
@@ -329,16 +337,14 @@ public class Turret : MonoBehaviour
             turretArea.monstersInArea.Remove(monster);
     }
 
-    public bool HasVisibility(Vector3 origin, Transform monster)
+    public bool HasVisibility(Vector3 origin, Monster monster)
     {
         if (monster == null) return false;
 
+        Debug.DrawRay(origin, origin - transform.position, Color.green, 10, false);
         RaycastHit hit;
         if (Physics.Raycast(origin, monster.transform.position - origin, out hit))
-            if (hit.transform.gameObject.tag != "Wall" && hit.transform != transform)
-                return true;
-
-        Debug.DrawRay(origin, origin - transform.position, Color.green, 1, false);
+            return hit.transform.gameObject.tag != "Wall";
 
         return false;
     }
