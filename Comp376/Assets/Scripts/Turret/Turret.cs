@@ -23,6 +23,10 @@ public class Turret : MonoBehaviour
     [SerializeField] GameObject turretGunBulletPrefab;
     [SerializeField] ParticleSystem cannonGunExplosion;
 
+    [SerializeField] private AudioClip gunTurretSFX;
+    [SerializeField] private AudioClip cannonTurretSFX;
+    [SerializeField] private AudioClip portalTurretSFX;
+
     void Start()
     {
         rend = GetComponent<MeshRenderer>();
@@ -195,6 +199,8 @@ public class Turret : MonoBehaviour
         if (turretArea.monstersInArea.Count == 0) return;
 
         cannonGunExplosion.Play();
+        AudioManager.Instance.PlaySFX(cannonTurretSFX);
+
         int maxCount = turretArea.monstersInArea.Count;
 
         for (int i = 0; i < maxCount; i++)
@@ -226,6 +232,8 @@ public class Turret : MonoBehaviour
         else
             player.SetPosition(activePortals[0].turretArea.transform.position);
 
+        AudioManager.Instance.PlaySFX(portalTurretSFX);
+
         Debug.Log($"New Position: {player.transform.position}");
     }
 
@@ -238,6 +246,8 @@ public class Turret : MonoBehaviour
     private void ShootGunTurret()
     {
         if (turretArea.monstersInArea.Count == 0) return;
+
+        AudioManager.Instance.PlaySFX(gunTurretSFX);
 
         Monster monster = turretArea.monstersInArea[0];
         while (monster == null && turretArea.monstersInArea.Count > 1)
