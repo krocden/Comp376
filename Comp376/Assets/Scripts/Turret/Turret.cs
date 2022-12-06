@@ -204,7 +204,7 @@ public class Turret : MonoBehaviour
         if (turretArea.monstersInArea.Count == 0) return;
 
         cannonGunExplosion.Play();
-        AudioManager.Instance.PlaySFX(cannonTurretSFX);
+        AudioManager.Instance.PlaySFXAtPosition(cannonTurretSFX, transform.position);
 
         bool hasPlayedParticles = false;
         int maxCount = turretArea.monstersInArea.Count;
@@ -262,7 +262,7 @@ public class Turret : MonoBehaviour
     {
         if (turretArea.monstersInArea.Count == 0) return;
 
-        AudioManager.Instance.PlaySFX(gunTurretSFX);
+        AudioManager.Instance.PlaySFXAtPosition(gunTurretSFX, transform.position);
 
         Monster monster = turretArea.monstersInArea[0];
         Vector3 spawnPoint = Vector3.Lerp(transform.position, cannonGunExplosion.transform.position, 0.5f);

@@ -106,6 +106,19 @@ public class AudioManager : MonoBehaviour
         sfxSource.PlayOneShot(clip);
     }
 
+    public void PlaySFXAtPosition(AudioClip clip, Vector3 position)
+    {
+        GameObject go = new GameObject();
+        AudioSource source = go.AddComponent<AudioSource>();
+        source.rolloffMode = AudioRolloffMode.Linear;
+        source.volume = currentSFXVolume;
+        source.maxDistance = 50;
+        source.spatialBlend = 1;
+        go.transform.position = position;
+        source.PlayOneShot(clip);
+        Destroy(go, clip.length + 1);
+    }
+
     private async Task FadeMusic()
     {
         float baseVol = currentMusicVolume;

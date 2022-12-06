@@ -3,7 +3,13 @@ guid: 9ff1e1629fa966741a02a2610cb883df
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - turretArea: {instanceID: 0}
+  - turretGunBulletPrefab: {instanceID: 0}
+  - cannonGunExplosion: {instanceID: 0}
+  - gunTurretSFX: {fileID: 8300000, guid: 7f9d2e89fa09b3f42a36cc605e4e48ad, type: 3}
+  - cannonTurretSFX: {fileID: 8300000, guid: 1af4cf59e6bb35d4a89462e0992e9fc1, type: 3}
+  - portalTurretSFX: {fileID: 8300000, guid: 2517a03c51cf7e54a8df31710d34b8c4, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

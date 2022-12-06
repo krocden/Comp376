@@ -218,6 +218,9 @@ MonoBehaviour:
   turretArea: {fileID: 9049723483069431706}
   turretGunBulletPrefab: {fileID: 6008000480893494911, guid: abc5ee368ec5e6249b672909ad633953, type: 3}
   cannonGunExplosion: {fileID: 1527090838306426769}
+  gunTurretSFX: {fileID: 8300000, guid: 7f9d2e89fa09b3f42a36cc605e4e48ad, type: 3}
+  cannonTurretSFX: {fileID: 8300000, guid: 1af4cf59e6bb35d4a89462e0992e9fc1, type: 3}
+  portalTurretSFX: {fileID: 8300000, guid: 2517a03c51cf7e54a8df31710d34b8c4, type: 3}
 --- !u!1 &3877181766270271039
 GameObject:
   m_ObjectHideFlags: 0
@@ -656,6 +659,9 @@ MonoBehaviour:
   turretArea: {fileID: 7465020307714501898}
   turretGunBulletPrefab: {fileID: 6008000480893494911, guid: abc5ee368ec5e6249b672909ad633953, type: 3}
   cannonGunExplosion: {fileID: 6349030219754875243}
+  gunTurretSFX: {fileID: 8300000, guid: 7f9d2e89fa09b3f42a36cc605e4e48ad, type: 3}
+  cannonTurretSFX: {fileID: 8300000, guid: 1af4cf59e6bb35d4a89462e0992e9fc1, type: 3}
+  portalTurretSFX: {fileID: 8300000, guid: 2517a03c51cf7e54a8df31710d34b8c4, type: 3}
 --- !u!1 &7912568823029714077
 GameObject:
   m_ObjectHideFlags: 0
