@@ -14,7 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsters:
   - monsterPrefab: {fileID: 5578211910298818360, guid: 0bc5a5a2f9ae91848956713283c6447d, type: 3}
-    monsterQuantity: 20
+    monsterQuantity: 5
+    monsterTier: 1
+    monsterSpawnRate: 0.5
+    commandType: 1
+    repeatNextXRows: 0
+    repeatTimes: 0
+  - monsterPrefab: {fileID: 5578211910298818360, guid: a36bfbc5359d14d41a5862b89f022a2f, type: 3}
+    monsterQuantity: 1
     monsterTier: 1
     monsterSpawnRate: 0.5
     commandType: 1
