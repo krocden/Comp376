@@ -1564,7 +1564,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: wall  turret
+  m_text: slow turret
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7007131c06da75849841da970ca71fdf, type: 2}
   m_sharedMaterial: {fileID: 573309116245487214, guid: 7007131c06da75849841da970ca71fdf, type: 2}
@@ -1943,6 +1943,8 @@ GameObject:
   - component: {fileID: 110495995}
   - component: {fileID: 110495994}
   - component: {fileID: 110495997}
+  - component: {fileID: 110495999}
+  - component: {fileID: 110495998}
   m_Layer: 5
   m_Name: WrenchMenu
   m_TagString: Untagged
@@ -2056,6 +2058,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 0
+--- !u!114 &110495998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110495992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.6666667}
+  m_EffectDistance: {x: 10, y: -10}
+  m_UseGraphicAlpha: 1
+--- !u!114 &110495999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110495992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 0.39607844}
+  m_EffectDistance: {x: 10, y: 10}
+  m_UseGraphicAlpha: 1
 --- !u!224 &118110674 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5424892446593575147, guid: f752ecca83dcdc748b2a080687b165e0, type: 3}
@@ -14971,7 +15003,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4743281820775439944, guid: 7684935d04d9be049a7c5eacd876987f, type: 3}
       propertyPath: m_Volume
-      value: 0.6223924
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7684935d04d9be049a7c5eacd876987f, type: 3}
