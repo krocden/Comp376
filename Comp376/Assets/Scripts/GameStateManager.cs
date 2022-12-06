@@ -178,8 +178,19 @@ public class GameStateManager : MonoBehaviour
         canSkipPhase = false;
         coreUIHandler.UpdateBuildingSecondsLeft(buildingPhaseTimer);
 
+
+        if (currentWave == 0)
+        {
+            for (int i = 0; i < level.numberOfSpawnersToAdd; i++)
+            {
+                await arenaSetup.AddPath(false);
+            }
+
+            NotificationManager.Instance.PlayStandardNotification(NotificationType.NewSpawnerAdded, true);
+        }
+
         // add spawner
-        if (currentWave % level.addSpawnerWaveInterval == 0 && level.maximumSpawners > arenaSetup.pathStartEndCoordinatesList.Count)
+        if ((currentWave + level.addSpawnerOffset + 1) % level.addSpawnerWaveInterval == 0 && level.maximumSpawners > arenaSetup.pathStartEndCoordinatesList.Count)
         {
             for (int i = 0; i < level.numberOfSpawnersToAdd; i++)
             {
@@ -190,7 +201,7 @@ public class GameStateManager : MonoBehaviour
         }
 
         // Add next wave spawner
-        if ((currentWave + 1) % level.addSpawnerWaveInterval == 0 && level.maximumSpawners > arenaSetup.pathStartEndCoordinatesList.Count + arenaSetup.nextWavePathStartEndCoordinatesList.Count)
+        if ((currentWave + level.addSpawnerOffset + 2) % level.addSpawnerWaveInterval == 0 && level.maximumSpawners > arenaSetup.pathStartEndCoordinatesList.Count + arenaSetup.nextWavePathStartEndCoordinatesList.Count)
         {
             for (int i = 0; i < level.numberOfSpawnersToAdd; i++)
             {
