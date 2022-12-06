@@ -219,9 +219,10 @@ public class PlayerMovement : MonoBehaviour
             buffModifier = 0;
     }
 
-    public void SetPosition(Vector3 newPos) {
+    public void SetPositionAndRotation(Vector3 newPos, Quaternion rotation) {
         controller.enabled = false;
         this.transform.position = newPos;
+        this.transform.rotation = rotation;
         controller.enabled = true;
     }
 

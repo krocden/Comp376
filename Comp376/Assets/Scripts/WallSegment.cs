@@ -69,7 +69,8 @@ public class WallSegment : MonoBehaviour
         _canvas.enabled = false;
     }
 
-    private void OnGameStateChanged(GameState state) {
+    private void OnGameStateChanged(GameState state)
+    {
         bool isShootingAndEmpty = (state == GameState.Shooting && _automata.CurrentState == WallAutomata.WallState.Empty);
 
         col.enabled = !isShootingAndEmpty;
@@ -89,14 +90,22 @@ public class WallSegment : MonoBehaviour
                 if (Vector3.Dot(transform.forward, PlayerTransform.forward) > 0)
                 {
                     _text.text = Turret.GetTurretText(_automata.FrontFaceState, _automata.FrontLevel);
+
+                    if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 2)
+                        _text.text += "\n<color=\"green\">" + Turret.GetUpgradeText(_automata.FrontFaceState, _automata.FrontLevel);
+
                     _canvas.transform.localScale = new Vector3(1, 1, 10);
-                    _canvas.transform.localPosition = new Vector3(0, 0, -0.51f);
+                    _canvas.transform.localPosition = new Vector3(0, -0.2f, -0.51f);
                 }
                 else
                 {
                     _text.text = Turret.GetTurretText(_automata.BackFaceState, _automata.Backlevel);
+
+                    if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 2)
+                        _text.text += "\n<color=\"green\">" + Turret.GetUpgradeText(_automata.BackFaceState, _automata.Backlevel);
+
                     _canvas.transform.localScale = new Vector3(-1, 1, 10);
-                    _canvas.transform.localPosition = new Vector3(0, 0, 0.51f);
+                    _canvas.transform.localPosition = new Vector3(0, -0.2f, 0.51f);
                 }
             }
 
@@ -146,12 +155,14 @@ public class WallSegment : MonoBehaviour
                 }
             }
         }
-        else {
+        else
+        {
             _renderer.sharedMaterial.color = GetWallState() == WallAutomata.WallState.Barrier ? new Color(1, 1, 1, 0.5f) : Color.white;
         }
     }
 
-    private void VerifyAfterWallBuilt(WallAutomata.WallState previousState) {
+    private void VerifyAfterWallBuilt(WallAutomata.WallState previousState)
+    {
         if (previousState == WallAutomata.WallState.Empty)
         {
             if (tryCalculatePaths.Invoke())
@@ -210,6 +221,14 @@ public class WallSegment : MonoBehaviour
         _automata.GoToState(WallAutomata.WallState.Empty);
         _automata.GoToTurretState(true, WallAutomata.TurretState.EmptyTurret);
         _automata.GoToTurretState(false, WallAutomata.TurretState.EmptyTurret);
+    }
+
+    public void RemoveAnyPortals()
+    {
+        if (_automata.FrontFaceState == WallAutomata.TurretState.PortalTurret)
+            _automata.GoToTurretState(true, WallAutomata.TurretState.EmptyTurret);
+        else if (_automata.BackFaceState == WallAutomata.TurretState.PortalTurret)
+            _automata.GoToTurretState(false, WallAutomata.TurretState.EmptyTurret);
     }
 
     private void TurretVisualsChanged(object sender, WallAutomata.TurretState state)
