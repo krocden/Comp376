@@ -50,7 +50,7 @@ public class CurrencyManager : MonoBehaviour
             return false;
         }
 
-        if (checkEnoughCurrency)
+        if (checkEnoughCurrency && toRemove > 0)
         {
             AudioManager.Instance.PlaySFX(purchaseSound);
         }

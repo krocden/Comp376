@@ -18,6 +18,18 @@ public class WallSegment : MonoBehaviour
     [SerializeField] private GameObject _minimapVisual;
     [SerializeField] private Material[] _wallMaterials;
 
+    [Header("Turret Costs")]
+    [SerializeField] private int plainWallCost = 20;
+    [SerializeField] private int gunTurretCost = 30;
+    [SerializeField] private int cannonTurretCost = 40;
+    [SerializeField] private int portalTurretCost = 180;
+    [SerializeField] private int buffTurretCost = 20;
+    [SerializeField] private int slowTurretCost = 40;
+    [SerializeField] private int barrierWallCost = 80;
+    [SerializeField] private float upgradeCostMultiplier = 1.25f;
+    [SerializeField] private float refundCostMultiplier = 0.5f;
+
+
     private Transform _player;
 
     private bool _isBeingHovered = false;
@@ -37,6 +49,17 @@ public class WallSegment : MonoBehaviour
         _player = GameObject.FindWithTag("Player").transform;
         col = GetComponent<BoxCollider>();
         transform.localScale = new Vector3(10, 0.2f, 0.1f);
+        
+        _automata.SetCosts(
+        plainWallCost,
+        gunTurretCost,
+        cannonTurretCost,
+        portalTurretCost,
+        buffTurretCost,
+        slowTurretCost,
+        barrierWallCost,
+        upgradeCostMultiplier,
+        refundCostMultiplier);
     }
 
     private void OnEnable()
@@ -114,31 +137,38 @@ public class WallSegment : MonoBehaviour
                 if (WrenchMenu.Instance.Selected < WrenchMenu.Instance.PanelNumber - 3)
                 {
                     WallAutomata.WallState previousWallState = GetWallState();
+                    WallAutomata.TurretState previousTurretState = GetTurretState(_isFacingFrontFace);
                     if (previousWallState == WallAutomata.WallState.Barrier) return;
 
                     //create tower
                     bool validWall = _automata.GoToState(WallAutomata.WallState.Plain);
 
-                    bool isTurretAlreadyPlaced = _isFacingFrontFace ? _automata.FrontFaceState != WallAutomata.TurretState.EmptyTurret : _automata.BackFaceState != WallAutomata.TurretState.EmptyTurret;
-                    if (WrenchMenu.Instance.Selected > 0 && !isTurretAlreadyPlaced && validWall)
+                    bool isTurretAlreadyPlaced = _isFacingFrontFace
+                        ? _automata.FrontFaceState != WallAutomata.TurretState.EmptyTurret
+                        : _automata.BackFaceState != WallAutomata.TurretState.EmptyTurret;
+
+                    if (WrenchMenu.Instance.Selected > 0 && !isTurretAlreadyPlaced && validWall)                    
                         _automata.GoToTurretState(_isFacingFrontFace, (WallAutomata.TurretState)(WrenchMenu.Instance.Selected));
 
-                    // position the wall in place so the pathfinder algo can look with this new wall
-                    // if all the paths are valid we can place the wall
-                    // otherwise reset the wall to the empty state
-
-                    VerifyAfterWallBuilt(previousWallState);
+                    VerifyAfterWallBuilt(previousWallState, previousTurretState);
                 }
                 else if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 3)
                 {
                     //barrier turret
                     WallAutomata.WallState previousWallState = GetWallState();
+                    WallAutomata.TurretState previousTurretState = GetTurretState(_isFacingFrontFace);
+
+                    bool isTurretAlreadyPlaced = _isFacingFrontFace
+                        ? _automata.FrontFaceState != WallAutomata.TurretState.EmptyTurret
+                        : _automata.BackFaceState != WallAutomata.TurretState.EmptyTurret;
+
+                    if (isTurretAlreadyPlaced) return;
 
                     _automata.GoToState(WallAutomata.WallState.Barrier);
                     _automata.GoToTurretState(true, WallAutomata.TurretState.BarrierTurret);
                     _automata.GoToTurretState(false, WallAutomata.TurretState.BarrierTurret);
 
-                    VerifyAfterWallBuilt(previousWallState);
+                    VerifyAfterWallBuilt(previousWallState, previousTurretState);
                 }
                 else if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 2)
                 {
@@ -161,7 +191,7 @@ public class WallSegment : MonoBehaviour
         }
     }
 
-    private void VerifyAfterWallBuilt(WallAutomata.WallState previousState)
+    private void VerifyAfterWallBuilt(WallAutomata.WallState previousState, WallAutomata.TurretState previousTurretState)
     {
         if (previousState == WallAutomata.WallState.Empty)
         {
@@ -171,10 +201,10 @@ public class WallSegment : MonoBehaviour
             }
             else
             {
-                _automata.GoToState(WallAutomata.WallState.Empty);
-                _automata.GoToTurretState(_isFacingFrontFace, WallAutomata.TurretState.EmptyTurret);
+                _automata.GoToState(previousState);
+                _automata.GoToTurretState(_isFacingFrontFace, previousTurretState);
             }
-        }
+        }        
     }
 
     private void VisualsChanged(object sender, WallAutomata.WallState state)
@@ -216,6 +246,12 @@ public class WallSegment : MonoBehaviour
     {
         return _automata.CurrentState;
     }
+
+    public WallAutomata.TurretState GetTurretState(bool isFrontFacing)
+    {
+        return isFrontFacing ? _automata.FrontFaceState : _automata.BackFaceState;
+    }
+
     public void SetEmptyWall()
     {
         _automata.GoToState(WallAutomata.WallState.Empty);

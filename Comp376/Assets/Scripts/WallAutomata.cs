@@ -1,7 +1,41 @@
 using System;
+using UnityEngine;
 
 public class WallAutomata
 {
+    private int _plainWallCost;
+    private int _gunTurretCost;
+    private int _cannonTurretCost;
+    private int _portalTurretCost;
+    private int _buffTurretCost;
+    private int _slowTurretCost;
+    private int _barrierWallCost;
+    private float _upgradeCostMultiplier;
+    private float _refundCostMultiplier;
+
+    public void SetCosts(
+        int plainCost,
+        int gunCost,
+        int cannonCost,
+        int portalCost,
+        int buffCost,
+        int slowCost,
+        int barrierCost,
+        float upgradeMulti,
+        float refundMulti)
+    {
+        _plainWallCost = plainCost;
+        _gunTurretCost = gunCost;
+        _cannonTurretCost = cannonCost;
+        _portalTurretCost = portalCost;
+        _buffTurretCost = buffCost;
+        _slowTurretCost = slowCost;
+        _barrierWallCost = barrierCost;
+        _upgradeCostMultiplier = upgradeMulti;
+        _refundCostMultiplier = refundMulti;
+    }
+
+
     public WallState CurrentState => _currentState;
     public TurretState FrontFaceState => _frontFace;
     public TurretState BackFaceState => _backFace;
@@ -37,7 +71,7 @@ public class WallAutomata
 
     public bool GoToState(WallState newState)
     {
-        if (_currentState == newState) return false;
+        if (_currentState == newState) return true;
 
         bool isValidState = true;
         switch (newState)
@@ -78,8 +112,8 @@ public class WallAutomata
 
         if (currentLevel >= maxLevel)
             return false;
-
-        if (!CurrencyManager.Instance.SubtractCurrency(5))
+        int price = Mathf.RoundToInt(GetTurretPrice(turret) * Mathf.Pow(_upgradeCostMultiplier, currentLevel));
+        if (!CurrencyManager.Instance.SubtractCurrency(price))
             return false;
 
         if (isFrontFace)
@@ -94,23 +128,23 @@ public class WallAutomata
     public void GoToTurretState(bool isFrontFace, TurretState newState)
     {
         bool isValidState = true;
+        int cost = GetTurretPrice(newState);
         switch (newState)
         {
-            case TurretState.GunTurret:
-                isValidState = CurrencyManager.Instance.SubtractCurrency(5);
-                break;
-            case TurretState.CannonTurret:
-                isValidState = CurrencyManager.Instance.SubtractCurrency(10);
-                break;
-            case TurretState.BuffTurret:
-                isValidState = CurrencyManager.Instance.SubtractCurrency(5);
-                break;
-            case TurretState.SlowTurret:
-                isValidState = CurrencyManager.Instance.SubtractCurrency(5);
-                break;
             case TurretState.EmptyTurret:
-                CurrencyManager.Instance.AddCurrency(10);
+                int level = isFrontFace ? _frontTurretLevel : _backTurretLevel;
+                int baseCost = isFrontFace ? GetTurretPrice(_frontFace) : GetTurretPrice(_backFace);
+                int costRefunded = Mathf.RoundToInt(baseCost * Mathf.RoundToInt(Mathf.Pow(_upgradeCostMultiplier, level)) * _refundCostMultiplier);
+                if (isFrontFace)
+                    _frontTurretLevel = 1;
+                else
+                    _backTurretLevel = 1;
+                CurrencyManager.Instance.AddCurrency(costRefunded);
                 break;
+            default:
+                isValidState = CurrencyManager.Instance.SubtractCurrency(cost);
+                break;
+
         }
 
         if (!isValidState) return;
@@ -131,19 +165,65 @@ public class WallAutomata
     }
     private bool SetBarrierWall(WallState previousState)
     {
-        return CurrencyManager.Instance.SubtractCurrency(20);
+        int amountToRefund = 0;
+        if (_currentState == WallState.Plain)
+        {
+            amountToRefund = Mathf.RoundToInt(GetWallPrice(_currentState) * _refundCostMultiplier);
+        }
+        int cost = GetWallPrice(WallState.Barrier);
+        return CurrencyManager.Instance.SubtractCurrency(cost - amountToRefund);
     }
 
     private bool SetPlainWall(WallState previousState)
     {
         //handle any non-visual elements (money down, etc.)
-        return CurrencyManager.Instance.SubtractCurrency(20);
+        int cost = GetWallPrice(WallState.Plain);
+        return CurrencyManager.Instance.SubtractCurrency(cost);
     }
 
     private bool SetEmptyWall(WallState previousState)
     {
-        CurrencyManager.Instance.AddCurrency(10);
+        int costRefunded = Mathf.RoundToInt(GetWallPrice(previousState) * _refundCostMultiplier);
+        CurrencyManager.Instance.AddCurrency(costRefunded);
         return true;
         //handle any non-visual elements (money down, etc.)
+    }
+
+    private int GetWallPrice(WallState wallState)
+    {
+        switch (wallState)
+        {
+            case WallState.Empty:
+                return 0;
+            case WallState.Plain:
+                return _plainWallCost;
+            case WallState.Barrier:
+                return _barrierWallCost;
+        }
+        // not going to happen
+        return -99999;
+    }
+
+    private int GetTurretPrice(TurretState turretState)
+    {
+        switch (turretState)
+        {
+            case TurretState.EmptyTurret:
+                return 0;
+            case TurretState.GunTurret:
+                return _gunTurretCost;
+            case TurretState.CannonTurret:
+                return _cannonTurretCost;
+            case TurretState.PortalTurret:
+                return _portalTurretCost;
+            case TurretState.BuffTurret:
+                return _buffTurretCost;
+            case TurretState.SlowTurret:
+                return _slowTurretCost;
+            case TurretState.BarrierTurret:
+                return 0;
+        }
+        // not going to happen
+        return -99999;
     }
 }

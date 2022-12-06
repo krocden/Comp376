@@ -5043,6 +5043,10 @@ PrefabInstance:
       propertyPath: coreUIHandler
       value: 
       objectReference: {fileID: 592488167}
+    - target: {fileID: 759267470959597923, guid: 051af21b30b188f4194175300d7f310f, type: 3}
+      propertyPath: buildingPhaseTimer
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 759267470959597948, guid: 051af21b30b188f4194175300d7f310f, type: 3}
       propertyPath: m_RootOrder
       value: 3
