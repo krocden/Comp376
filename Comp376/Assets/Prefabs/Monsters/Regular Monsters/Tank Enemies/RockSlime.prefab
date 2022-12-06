@@ -82,7 +82,7 @@ MonoBehaviour:
   currencyOnKill: 5
   damage: 3
   pushPower: 3
-  tierMultiplier: 1.4
+  tierMultiplier: 1.5
 --- !u!1 &5683381433106304589
 GameObject:
   m_ObjectHideFlags: 0

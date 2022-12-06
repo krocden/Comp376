@@ -788,9 +788,9 @@ MonoBehaviour:
   cannonTurretCost: 20
   portalTurretCost: 95
   buffTurretCost: 20
-  slowTurretCost: 25
+  slowTurretCost: 45
   barrierWallCost: 45
-  upgradeCostMultiplier: 1.5
+  upgradeCostMultiplier: 3
   refundCostMultiplier: 0.5
 --- !u!1 &8903135871162108159
 GameObject:
