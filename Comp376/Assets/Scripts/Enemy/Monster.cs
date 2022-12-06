@@ -17,6 +17,7 @@ public class Monster : MonoBehaviour
     public int pushPower;
     private float baseSpeed;
     private int tier = 1;
+    [SerializeField] private float tierMultiplier = 1.4f;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +27,7 @@ public class Monster : MonoBehaviour
 
     private void Update()
     {
-        transform.LookAt(target.transform);
+        
     }
 
     public void Initialize(List<PathNode> path, Nexus target, int tier = 1)
@@ -41,9 +42,10 @@ public class Monster : MonoBehaviour
     private void SetTier(int tier)
     {
         this.tier = tier;
-        baseSpeed = speed *= tier;
-        health *= tier;
-        currencyOnKill *= tier;
+        float multi = Mathf.Pow(tierMultiplier, tier - 1);
+        baseSpeed = speed = Mathf.RoundToInt(speed * multi);
+        health = Mathf.RoundToInt(health * multi);
+        currencyOnKill = Mathf.RoundToInt(currencyOnKill * multi);
     }
 
     public void ApplySlow(float modifier)
@@ -65,6 +67,8 @@ public class Monster : MonoBehaviour
         while ((this != null && currentNodeIndex + 1 != path.Count) && Vector3.Distance(transform.position, target.nexusBase.position) > target.nexusBase.localScale.x / 2 + attackRange)
         {
             transform.position = Vector3.MoveTowards(transform.position, path[currentNodeIndex + 1].position + Vector3.up + randomPathOffset, Time.deltaTime * speed);
+            transform.LookAt(path[currentNodeIndex + 1].position + Vector3.up + randomPathOffset);
+
 
             if (Vector3.Distance(transform.position, path[currentNodeIndex + 1].position + Vector3.up + randomPathOffset) < 0.5f)
             {

@@ -783,14 +783,14 @@ MonoBehaviour:
   _wallMaterials:
   - {fileID: 2100000, guid: fb615bcd3c4d42744b5a8b4a809cbdcd, type: 2}
   - {fileID: 2100000, guid: b29b127f50168df42bc2c9d2913eeb22, type: 2}
-  plainWallCost: 20
-  gunTurretCost: 30
-  cannonTurretCost: 40
-  portalTurretCost: 180
+  plainWallCost: 5
+  gunTurretCost: 10
+  cannonTurretCost: 20
+  portalTurretCost: 95
   buffTurretCost: 20
-  slowTurretCost: 40
-  barrierWallCost: 80
-  upgradeCostMultiplier: 1.25
+  slowTurretCost: 25
+  barrierWallCost: 45
+  upgradeCostMultiplier: 1.5
   refundCostMultiplier: 0.5
 --- !u!1 &8903135871162108159
 GameObject:

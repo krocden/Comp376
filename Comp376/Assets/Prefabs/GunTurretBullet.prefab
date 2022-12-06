@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  speed: 20
+  speed: 50
   turret: {fileID: 0}
   damage: 0
 --- !u!54 &57815226151263964

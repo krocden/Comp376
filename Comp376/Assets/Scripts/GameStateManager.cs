@@ -213,7 +213,7 @@ public class GameStateManager : MonoBehaviour
 
         if (timeLeft > 0)
         {
-            CurrencyManager.Instance.AddCurrency(Mathf.RoundToInt(timeLeft / buildingPhaseTimer * 100));
+            CurrencyManager.Instance.AddCurrency(Mathf.RoundToInt(timeLeft / buildingPhaseTimer * 20));
         }
 
         GoToNextState();

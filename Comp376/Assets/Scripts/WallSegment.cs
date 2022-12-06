@@ -158,9 +158,7 @@ public class WallSegment : MonoBehaviour
                     WallAutomata.WallState previousWallState = GetWallState();
                     WallAutomata.TurretState previousTurretState = GetTurretState(_isFacingFrontFace);
 
-                    bool isTurretAlreadyPlaced = _isFacingFrontFace
-                        ? _automata.FrontFaceState != WallAutomata.TurretState.EmptyTurret
-                        : _automata.BackFaceState != WallAutomata.TurretState.EmptyTurret;
+                    bool isTurretAlreadyPlaced = _automata.FrontFaceState != WallAutomata.TurretState.EmptyTurret || _automata.BackFaceState != WallAutomata.TurretState.EmptyTurret;
 
                     if (isTurretAlreadyPlaced) return;
 
