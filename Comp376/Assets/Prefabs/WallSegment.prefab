@@ -215,12 +215,12 @@ MonoBehaviour:
   damage: 25
   turretMaterials:
   - {fileID: 2100000, guid: 59c257b8530e6f44590cf2e1f6b4ad39, type: 2}
-  turretArea: {fileID: 9049723483069431706}
+  turretArea: {fileID: 7465020307714501898}
   turretGunBulletPrefab: {fileID: 6008000480893494911, guid: abc5ee368ec5e6249b672909ad633953, type: 3}
-  cannonGunExplosion: {fileID: 1527090838306426769}
-  gunTurretSFX: {fileID: 0}
-  cannonTurretSFX: {fileID: 0}
-  portalTurretSFX: {fileID: 0}
+  cannonGunExplosion: {fileID: 6349030219754875243}
+  gunTurretSFX: {fileID: 8300000, guid: 7f9d2e89fa09b3f42a36cc605e4e48ad, type: 3}
+  cannonTurretSFX: {fileID: 8300000, guid: 1af4cf59e6bb35d4a89462e0992e9fc1, type: 3}
+  portalTurretSFX: {fileID: 8300000, guid: 2517a03c51cf7e54a8df31710d34b8c4, type: 3}
 --- !u!1 &3877181766270271039
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,9 +659,9 @@ MonoBehaviour:
   turretArea: {fileID: 7465020307714501898}
   turretGunBulletPrefab: {fileID: 6008000480893494911, guid: abc5ee368ec5e6249b672909ad633953, type: 3}
   cannonGunExplosion: {fileID: 6349030219754875243}
-  gunTurretSFX: {fileID: 0}
-  cannonTurretSFX: {fileID: 0}
-  portalTurretSFX: {fileID: 0}
+  gunTurretSFX: {fileID: 8300000, guid: 7f9d2e89fa09b3f42a36cc605e4e48ad, type: 3}
+  cannonTurretSFX: {fileID: 8300000, guid: 1af4cf59e6bb35d4a89462e0992e9fc1, type: 3}
+  portalTurretSFX: {fileID: 8300000, guid: 2517a03c51cf7e54a8df31710d34b8c4, type: 3}
 --- !u!1 &7912568823029714077
 GameObject:
   m_ObjectHideFlags: 0
@@ -976,11 +976,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13b5b539dc9a72d4dbe05d17a118fea0, type: 3}
---- !u!198 &1527090838306426769 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 3273013420433870651, guid: 13b5b539dc9a72d4dbe05d17a118fea0, type: 3}
-  m_PrefabInstance: {fileID: 4061478698569564330}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8218895184518235583 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5355383333216765205, guid: 13b5b539dc9a72d4dbe05d17a118fea0, type: 3}
