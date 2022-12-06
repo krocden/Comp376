@@ -23,6 +23,10 @@ public class Turret : MonoBehaviour
     [SerializeField] GameObject turretGunBulletPrefab;
     [SerializeField] ParticleSystem cannonGunExplosion;
 
+    [SerializeField] private AudioClip gunTurretSFX;
+    [SerializeField] private AudioClip cannonTurretSFX;
+    [SerializeField] private AudioClip portalTurretSFX;
+
     void Start()
     {
         rend = GetComponent<MeshRenderer>();
@@ -42,8 +46,10 @@ public class Turret : MonoBehaviour
         GameStateManager.Instance.tick -= HandleTick;
     }
 
-    public void HandleTick() {
-        switch (_currentState) {
+    public void HandleTick()
+    {
+        switch (_currentState)
+        {
             case GunTurret:
                 ticks++;
                 if (ticks == rateOfFire)
@@ -65,7 +71,8 @@ public class Turret : MonoBehaviour
         }
     }
 
-    public void SetLevel(int level) {
+    public void SetLevel(int level)
+    {
         this.level = level;
 
         switch (_currentState)
@@ -90,13 +97,18 @@ public class Turret : MonoBehaviour
                 if (level == 2) SetStats(3, 3, 0.33f, 0);
                 if (level == 3) SetStats(5, 5, 0.25f, 0);
                 break;
+            case PortalTurret:
+                SetStats(0.1f, 1, 0, 0);
+                break;
             default:
                 break;
         }
     }
 
-    private void SetStats(int rangeZ, int rangeX, float rateOfFire, int power) {
-        switch (_currentState) {
+    private void SetStats(float rangeZ, int rangeX, float rateOfFire, int power)
+    {
+        switch (_currentState)
+        {
             case GunTurret:
                 this.rateOfFire = rateOfFire;
                 this.damage = power;
@@ -143,6 +155,7 @@ public class Turret : MonoBehaviour
                 if (activePortals[0] && activePortals[1])
                 {
                     SetMode(EmptyTurret);
+                    transform.parent.GetComponent<WallSegment>().RemoveAnyPortals();
                     break;
                 }
                 else if (!activePortals[0])
@@ -167,12 +180,43 @@ public class Turret : MonoBehaviour
         }
     }
 
+    public static string GetUpgradeText(WallAutomata.TurretState state, int level)
+    {
+        switch (state)
+        {
+            case GunTurret:
+                if (level == 1) return "Next upgrade:\nRange +2,Speed x2,Power +1";
+                if (level == 2) return "Next upgrade:\nRange +2,Speed x2,Power +1";
+                if (level == 3) return "Max Level";
+                break;
+            case CannonTurret:
+                if (level == 1) return "Next upgrade:\nRange +1,Power +1";
+                if (level == 2) return "Next upgrade:\nSpeed x2,Power +1";
+                if (level == 3) return "Max Level";
+                break;
+            case BuffTurret:
+                if (level == 1) return "Next upgrade: +75% speed boost";
+                if (level == 2) return "Next upgrade: +100% speed boost";
+                if (level == 3) return "Max Level";
+                break;
+            case SlowTurret:
+                if (level == 1) return "Next upgrade: -66% slow";
+                if (level == 2) return "Next upgrade: -75% slow";
+                if (level == 3) return "Max Level";
+                break;
+            case EmptyTurret:
+            case BarrierTurret:
+                return string.Empty;
+            default:
+                return "Max Level";
+        }
+        return "sugma nuts :D";
+    }
+
     public static string GetTurretText(WallAutomata.TurretState state, int level)
     {
         switch (state)
         {
-            case EmptyTurret:
-                return $"Empty turret \nLevel {level}";
             case GunTurret:
                 return $"Gun turret \nLevel {level}";
             case CannonTurret:
@@ -195,8 +239,11 @@ public class Turret : MonoBehaviour
         if (turretArea.monstersInArea.Count == 0) return;
 
         cannonGunExplosion.Play();
-        int maxCount = turretArea.monstersInArea.Count;
+        AudioManager.Instance.PlaySFXAtPosition(cannonTurretSFX, transform.position);
 
+        bool hasPlayedParticles = false;
+        int maxCount = turretArea.monstersInArea.Count;
+        Vector3 spawnPoint = Vector3.Lerp(transform.position, cannonGunExplosion.transform.position, 0.5f);
         for (int i = 0; i < maxCount; i++)
         {
             if (i > turretArea.monstersInArea.Count - 1) return;
@@ -204,8 +251,18 @@ public class Turret : MonoBehaviour
             if (turretArea.monstersInArea[i] == null)
                 turretArea.monstersInArea.RemoveAt(i);
             else
-            if (turretArea.monstersInArea[i].TakeDamage(damage))
-                turretArea.monstersInArea.RemoveAt(i);
+            {
+                if (HasVisibility(spawnPoint, turretArea.monstersInArea[i]?.transform))
+                {
+                    if (!hasPlayedParticles)
+                    {
+                        cannonGunExplosion.Play();
+                        hasPlayedParticles = true;
+                    }
+                    if (turretArea.monstersInArea[i].TakeDamage(damage))
+                        turretArea.monstersInArea.RemoveAt(i);
+                }
+            }
         }
     }
 
@@ -220,11 +277,15 @@ public class Turret : MonoBehaviour
 
         Debug.Log($"Last Position: {player.transform.position}");
 
-
+        Vector3 pos;
         if (this == activePortals[0])
-            player.SetPosition(activePortals[1].turretArea.transform.position);
+            pos = activePortals[1].turretArea.transform.position;
         else
-            player.SetPosition(activePortals[0].turretArea.transform.position);
+            pos = activePortals[1].turretArea.transform.position;
+
+        player.SetPositionAndRotation(pos, Quaternion.LookRotation(pos - transform.position, Vector3.up));
+
+        AudioManager.Instance.PlaySFX(portalTurretSFX);
 
         Debug.Log($"New Position: {player.transform.position}");
     }
@@ -239,15 +300,22 @@ public class Turret : MonoBehaviour
     {
         if (turretArea.monstersInArea.Count == 0) return;
 
+        AudioManager.Instance.PlaySFXAtPosition(gunTurretSFX, transform.position);
+
         Monster monster = turretArea.monstersInArea[0];
-        while (monster == null && turretArea.monstersInArea.Count > 1)
+        Vector3 spawnPoint = Vector3.Lerp(transform.position, cannonGunExplosion.transform.position, 0.5f);
+        bool isVisible = HasVisibility(spawnPoint, monster?.transform);
+
+        while (monster == null && turretArea.monstersInArea.Count > 1 && !isVisible)
         {
             turretArea.monstersInArea.RemoveAt(0);
-            monster = turretArea.monstersInArea[0];
-        }
-        if (monster == null) return;
 
-        GunTurretBullet bullet = Instantiate(turretGunBulletPrefab, transform.position, Quaternion.identity).GetComponent<GunTurretBullet>();
+            monster = turretArea.monstersInArea[0];
+            isVisible = HasVisibility(spawnPoint, monster?.transform);
+        }
+        if (monster == null || !HasVisibility(spawnPoint, monster?.transform)) return;
+
+        GunTurretBullet bullet = Instantiate(turretGunBulletPrefab, spawnPoint, Quaternion.identity).GetComponent<GunTurretBullet>();
         bullet.target = monster;
         bullet.damage = damage;
         bullet.turret = this;
@@ -259,5 +327,19 @@ public class Turret : MonoBehaviour
 
         if (monster.TakeDamage(damage))
             turretArea.monstersInArea.Remove(monster);
+    }
+
+    public bool HasVisibility(Vector3 origin, Transform monster)
+    {
+        if (monster == null) return false;
+
+        RaycastHit hit;
+        if (Physics.Raycast(origin, monster.transform.position - origin, out hit))
+            if (hit.transform.gameObject.tag != "Wall" && hit.transform != transform)
+                return true;
+
+        Debug.DrawRay(origin, origin - transform.position, Color.green, 1, false);
+
+        return false;
     }
 }

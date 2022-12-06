@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class PlayerShooting : MonoBehaviour
 {
     [SerializeField] private GunType selectedGun;
-    [SerializeField] private GameObject gunHolder;
-    [SerializeField] private GameObject wrench;
-    [SerializeField] private GameObject currentGunUI;
+    public GameObject gunHolder;
+    public GameObject wrench;
+    public GameObject currentGunUI;
     private enum GunType { Pistol, Rifle, Shotgun, Launcher, Wrench, Raygun }
     private Gun currentGun;
     private Pistol pistol;
@@ -62,7 +62,10 @@ public class PlayerShooting : MonoBehaviour
             return;
 
         if (gameObject.GetComponent<PlayerMovement>().isDead)
+        {
+            deactivatePreviousGun();
             return;
+        }
 
         if (GameStateManager.Instance.GetCurrentGameState() == GameState.Shooting || GameStateManager.Instance.GetCurrentGameState() == GameState.Transition)
         {
@@ -123,6 +126,10 @@ public class PlayerShooting : MonoBehaviour
 
                 //StartCoroutine(gotRaygun(9999));          // uncomment to test raygun
             }
+            else if (currentGun == null)
+            {
+                changeGun(selectedGun);
+            }
         }
         
     }
@@ -153,6 +160,7 @@ public class PlayerShooting : MonoBehaviour
         {
             deactivatePreviousGun();
             currentGun = pistol;
+            pistol.reloadFinish();
             selectedGun = GunType.Pistol;
             gunHolder.transform.GetChild(0).gameObject.SetActive(true);
 
@@ -167,6 +175,7 @@ public class PlayerShooting : MonoBehaviour
             {
                 deactivatePreviousGun();
                 currentGun = rifle;
+                rifle.reloadFinish();
                 selectedGun = GunType.Rifle;
                 gunHolder.transform.GetChild(1).gameObject.SetActive(true);
 
@@ -182,6 +191,7 @@ public class PlayerShooting : MonoBehaviour
             {
                 deactivatePreviousGun();
                 currentGun = shotgun;
+                shotgun.reloadFinish();
                 selectedGun = GunType.Shotgun;
                 gunHolder.transform.GetChild(2).gameObject.SetActive(true);
 
@@ -197,6 +207,7 @@ public class PlayerShooting : MonoBehaviour
             {
                 deactivatePreviousGun();
                 currentGun = launcher;
+                launcher.reloadFinish();
                 selectedGun = GunType.Launcher;
                 gunHolder.transform.GetChild(3).gameObject.SetActive(true);
 

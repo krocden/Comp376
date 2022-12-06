@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -24,10 +25,7 @@ public class AudioManager : MonoBehaviour
         {
             Instance = this;
         }
-    }
 
-    private void Start()
-    {
         currentMasterVolume = PlayerPrefs.HasKey("master_volume") ? PlayerPrefs.GetFloat("master_volume") : 1f;
         currentMusicVolume = PlayerPrefs.HasKey("music_volume") ? PlayerPrefs.GetFloat("music_volume") : 1f;
         currentAnnouncerVolume = PlayerPrefs.HasKey("announcer_volume") ? PlayerPrefs.GetFloat("announcer_volume") : 1f;
@@ -37,6 +35,11 @@ public class AudioManager : MonoBehaviour
         SetMusicVolume(currentMusicVolume);
         SetAnnouncerVolume(currentAnnouncerVolume);
         SetSFXVolume(currentSFXVolume);
+    }
+
+    private void Start()
+    {
+        
     }
 
     public void SetMasterVolume(float vol)
@@ -95,10 +98,40 @@ public class AudioManager : MonoBehaviour
     {
         announcerSource.clip = clip;
         announcerSource.Play();
+        FadeMusic();
     }
 
     public void PlaySFX(AudioClip clip)
     {
         sfxSource.PlayOneShot(clip);
+    }
+
+    public void PlaySFXAtPosition(AudioClip clip, Vector3 position)
+    {
+        GameObject go = new GameObject();
+        AudioSource source = go.AddComponent<AudioSource>();
+        source.rolloffMode = AudioRolloffMode.Linear;
+        source.volume = currentSFXVolume;
+        source.maxDistance = 50;
+        source.spatialBlend = 1;
+        go.transform.position = position;
+        source.PlayOneShot(clip);
+        Destroy(go, clip.length + 1);
+    }
+
+    private async Task FadeMusic()
+    {
+        float baseVol = currentMusicVolume;
+        while (announcerSource.isPlaying)
+        {
+            musicSource.volume = Mathf.Lerp(musicSource.volume, baseVol / 5, Time.deltaTime * 4f);
+            await Task.Yield();
+        }
+
+        while(musicSource.volume != baseVol)
+        {
+            musicSource.volume = Mathf.Lerp(musicSource.volume, baseVol, Time.deltaTime * 4f);
+            await Task.Yield();
+        }
     }
 }

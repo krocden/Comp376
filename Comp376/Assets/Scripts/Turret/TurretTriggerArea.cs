@@ -62,7 +62,7 @@ public class TurretTriggerArea : MonoBehaviour
         }
     }
 
-    public void SetArea(int rangeZ, int rangeX)
+    public void SetArea(float rangeZ, int rangeX)
     {
         //Set forward (starting from turret)
         transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, rangeZ * baseScale.z);

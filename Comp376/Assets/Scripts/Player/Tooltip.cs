@@ -9,7 +9,7 @@ public class Tooltip : MonoBehaviour
     void Start()
     {
         rectTransform = GetComponent<RectTransform>();
-        offset = new Vector3(rectTransform.rect.width * 0.51f, rectTransform.rect.height * 0.51f, 0);
+        offset = new Vector3(0, rectTransform.rect.height * 1.50f, 0);
     }
 
     // Update is called once per frame

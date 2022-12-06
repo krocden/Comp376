@@ -33,7 +33,7 @@ public class Shotgun : Gun
     {
         anim = GetComponent<Animator>();
     }
-    void reloadFinish()
+    public void reloadFinish()
     {
         isReloading = false;
     }

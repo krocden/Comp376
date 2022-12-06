@@ -13,12 +13,14 @@ public class CoreUIHandler : MonoBehaviour
     [SerializeField] private GameObject shootingPhaseUIGroup;
     [SerializeField] private GameObject transitionUIGroup;
     [SerializeField] private GameObject additionalInfoUIGroup;
+    [SerializeField] private GameObject currentWaveInfoUIGroup;
 
     [SerializeField] private TextMeshProUGUI buildingPhaseSecondsLeftUI;
     [SerializeField] private TextMeshProUGUI monstersLeftCountUI;
     [SerializeField] private TextMeshProUGUI monstersLeftTextUI;
     [SerializeField] private TextMeshProUGUI transitionTimeLeftTextUI;
     [SerializeField] private TextMeshProUGUI additionalInfoTextUI;
+    [SerializeField] private TextMeshProUGUI currentWaveInfoTextUI;
 
     [SerializeField] private Slider nexusHealthSlider;
     [SerializeField] private TextMeshProUGUI nexusHealthText;
@@ -44,16 +46,20 @@ public class CoreUIHandler : MonoBehaviour
         if (state == GameState.Transition) return;
         buildingPhaseUIGroup.SetActive(state == GameState.Planning);
         shootingPhaseUIGroup.SetActive(state == GameState.Shooting);
+        currentWaveInfoUIGroup.SetActive(state == GameState.Planning);
         transitionUIGroup.SetActive(false);
 
         StringBuilder currentPhaseText = new StringBuilder(Enum.GetName(typeof(GameState), state));
-        currentPhaseText.Append(state == GameState.Planning || state == GameState.Shooting ? " Phase" : " Game");
+        currentPhaseText.Append(state == GameState.Planning ? " Phase" : " Game");
 
-        if (GameStateManager.Instance.GetCurrentGameState() == GameState.Completed && GameStateManager.Instance.levelFailed)
+        if (state == GameState.Shooting)
+        {
+            currentPhaseText = new StringBuilder($"Wave {GameStateManager.Instance.GetCurrentWaveString()}");
+        }
+
+        if (state == GameState.Completed && GameStateManager.Instance.levelFailed)
         {
             currentPhaseText.AppendLine("\n GAME OVER \n");
-            additionalInfoUIGroup.SetActive(true);
-            additionalInfoTextUI.text = "The enemies have crossed the dimensional portal and have destroyed the mortal realm.";
         }
 
         currentPhaseUI.text = currentPhaseText.ToString();
@@ -113,5 +119,10 @@ public class CoreUIHandler : MonoBehaviour
 
     public void UpdateCurrencyText(int currency) {
         currencyText.text = $"Current Wallet: {currency}$";
+    }
+
+    public void UpdateCurrentWaveText(string wave)
+    {
+        currentWaveInfoTextUI.text = $"Wave {wave}";
     }
 }

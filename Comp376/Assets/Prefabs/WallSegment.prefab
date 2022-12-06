@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.2}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &3259510038508669294
@@ -128,7 +128,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3182505708018423843}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -2}
+  m_LocalPosition: {x: 0, y: 0.3, z: -2}
   m_LocalScale: {x: 0.2, y: 0.2, z: -3}
   m_Children:
   - {fileID: 8218895184518235583}
@@ -215,9 +215,12 @@ MonoBehaviour:
   damage: 25
   turretMaterials:
   - {fileID: 2100000, guid: 59c257b8530e6f44590cf2e1f6b4ad39, type: 2}
-  turretArea: {fileID: 9049723483069431706}
+  turretArea: {fileID: 7465020307714501898}
   turretGunBulletPrefab: {fileID: 6008000480893494911, guid: abc5ee368ec5e6249b672909ad633953, type: 3}
-  cannonGunExplosion: {fileID: 1527090838306426769}
+  cannonGunExplosion: {fileID: 6349030219754875243}
+  gunTurretSFX: {fileID: 8300000, guid: 7f9d2e89fa09b3f42a36cc605e4e48ad, type: 3}
+  cannonTurretSFX: {fileID: 8300000, guid: 1af4cf59e6bb35d4a89462e0992e9fc1, type: 3}
+  portalTurretSFX: {fileID: 8300000, guid: 2517a03c51cf7e54a8df31710d34b8c4, type: 3}
 --- !u!1 &3877181766270271039
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,7 +249,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3877181766270271039}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0021, y: 0.0218, z: 16.5}
+  m_LocalPosition: {x: -0.0021, y: -1, z: 16.5}
   m_LocalScale: {x: 5, y: 5, z: 33.3}
   m_Children: []
   m_Father: {fileID: 1325339355177673315}
@@ -365,7 +368,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4795133259727377694}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0021, y: 0.0218, z: 16.5}
+  m_LocalPosition: {x: -0.0021, y: -1, z: 16.5}
   m_LocalScale: {x: 5, y: 5, z: 33.3}
   m_Children: []
   m_Father: {fileID: 1840080261367348693}
@@ -566,7 +569,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7367895034886558752}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2}
+  m_LocalPosition: {x: 0, y: 0.3, z: 2}
   m_LocalScale: {x: 0.2, y: 0.2, z: 3}
   m_Children:
   - {fileID: 4549332445695533893}
@@ -656,6 +659,9 @@ MonoBehaviour:
   turretArea: {fileID: 7465020307714501898}
   turretGunBulletPrefab: {fileID: 6008000480893494911, guid: abc5ee368ec5e6249b672909ad633953, type: 3}
   cannonGunExplosion: {fileID: 6349030219754875243}
+  gunTurretSFX: {fileID: 8300000, guid: 7f9d2e89fa09b3f42a36cc605e4e48ad, type: 3}
+  cannonTurretSFX: {fileID: 8300000, guid: 1af4cf59e6bb35d4a89462e0992e9fc1, type: 3}
+  portalTurretSFX: {fileID: 8300000, guid: 2517a03c51cf7e54a8df31710d34b8c4, type: 3}
 --- !u!1 &7912568823029714077
 GameObject:
   m_ObjectHideFlags: 0
@@ -685,7 +691,7 @@ Transform:
   m_GameObject: {fileID: 7912568823029714077}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 0.2, z: 0.1}
+  m_LocalScale: {x: 10, y: 10, z: 0.1}
   m_Children:
   - {fileID: 8354299971542469117}
   - {fileID: 1840080261367348693}
@@ -934,7 +940,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5355383333216765205, guid: 13b5b539dc9a72d4dbe05d17a118fea0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0218
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5355383333216765205, guid: 13b5b539dc9a72d4dbe05d17a118fea0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -970,11 +976,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13b5b539dc9a72d4dbe05d17a118fea0, type: 3}
---- !u!198 &1527090838306426769 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 3273013420433870651, guid: 13b5b539dc9a72d4dbe05d17a118fea0, type: 3}
-  m_PrefabInstance: {fileID: 4061478698569564330}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8218895184518235583 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5355383333216765205, guid: 13b5b539dc9a72d4dbe05d17a118fea0, type: 3}
@@ -1013,7 +1014,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5355383333216765205, guid: 13b5b539dc9a72d4dbe05d17a118fea0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0218
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5355383333216765205, guid: 13b5b539dc9a72d4dbe05d17a118fea0, type: 3}
       propertyPath: m_LocalPosition.z
