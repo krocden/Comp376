@@ -216,9 +216,15 @@ public class WallSegment : MonoBehaviour
         bool isFrontFacing = !(bool)sender;
 
         if (isFrontFacing)
+        {
             _frontTurret.SetMode(state);
+            _frontTurret.SetLevel(1);
+        }
         else
+        {
             _backTurret.SetMode(state);
+            _backTurret.SetLevel(1);
+        }
     }
 
     private void TurretUpgraded(object sender, int lvl)
