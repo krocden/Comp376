@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class PlayerShooting : MonoBehaviour
 {
     [SerializeField] private GunType selectedGun;
-    [SerializeField] private GameObject gunHolder;
-    [SerializeField] private GameObject wrench;
-    [SerializeField] private GameObject currentGunUI;
+    public GameObject gunHolder;
+    public GameObject wrench;
+    public GameObject currentGunUI;
     private enum GunType { Pistol, Rifle, Shotgun, Launcher, Wrench, Raygun }
     private Gun currentGun;
     private Pistol pistol;
@@ -62,7 +62,10 @@ public class PlayerShooting : MonoBehaviour
             return;
 
         if (gameObject.GetComponent<PlayerMovement>().isDead)
+        {
+            deactivatePreviousGun();
             return;
+        }
 
         if (GameStateManager.Instance.GetCurrentGameState() == GameState.Shooting || GameStateManager.Instance.GetCurrentGameState() == GameState.Transition)
         {
@@ -118,6 +121,10 @@ public class PlayerShooting : MonoBehaviour
                 holdingWrench = false;
                 changeGun(selectedGun);
                 //StartCoroutine(gotRaygun(9999));          // uncomment to test raygun
+            }
+            else if (currentGun == null)
+            {
+                changeGun(selectedGun);
             }
         }
         

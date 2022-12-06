@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
@@ -15,7 +16,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 movement;
     
     private CharacterController controller;
-    private Camera firstPersonCamera;
+    [SerializeField] private Camera firstPersonCamera;
+    [SerializeField] private Camera deathCamera;
 
     public bool grounded;
     [SerializeField] private int buffZones = 0;
@@ -37,7 +39,6 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        firstPersonCamera = Camera.main;
         speed = walkSpeed;
         currentHealth = maxHealth;
     }
@@ -143,14 +144,20 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator die()
     {
         isDead = true;
-
-        CurrencyManager.Instance.SubtractCurrency(deadPenalty);
-
-        transform.position = new Vector3(0, 3, 0);
+        firstPersonCamera.enabled = false;
+        deathCamera.enabled = true;
+        GetComponent<PlayerShooting>().gunHolder.SetActive(false);
+        CurrencyManager.Instance.SubtractCurrency(deadPenalty, checkEnoughCurrency: false);
+        NotificationManager.Instance.PlayStandardNotification(NotificationType.PlayerDied, true);
 
         yield return new WaitForSeconds(respawnTime);
 
+        transform.position = new Vector3(0, 3, 0);
+
         isDead = false;
+        GetComponent<PlayerShooting>().gunHolder.SetActive(true);
+        firstPersonCamera.enabled = true;
+        deathCamera.enabled = false;
         currentHealth = 100;
         updateHealthSlider();
     }

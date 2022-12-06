@@ -49,7 +49,8 @@ public class CurrencyManager : MonoBehaviour
             NotificationManager.Instance.PlayStandardNotification(NotificationType.NotEnoughCurrency);
             return false;
         }
-        else
+
+        if (checkEnoughCurrency)
         {
             AudioManager.Instance.PlaySFX(purchaseSound);
         }

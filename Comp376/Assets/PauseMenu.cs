@@ -11,11 +11,6 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private AudioClip buttonClickSound;
     [SerializeField] private AudioClip openMenuSound;
 
-    private void Awake()
-    {
-        container.SetActive(false);
-    }
-
     private void Update()
     {
         if (GameStateManager.Instance.BlockInput && !GameStateManager.Instance.gamePaused) return;
@@ -51,6 +46,6 @@ public class PauseMenu : MonoBehaviour
         GameStateManager.Instance.gamePaused = container.activeSelf;
 
         if (!container.activeSelf)
-            optionsMenu.Close(false);
+            optionsMenu.gameObject.SetActive(false);
     }
 }

@@ -25,10 +25,7 @@ public class AudioManager : MonoBehaviour
         {
             Instance = this;
         }
-    }
 
-    private void Start()
-    {
         currentMasterVolume = PlayerPrefs.HasKey("master_volume") ? PlayerPrefs.GetFloat("master_volume") : 1f;
         currentMusicVolume = PlayerPrefs.HasKey("music_volume") ? PlayerPrefs.GetFloat("music_volume") : 1f;
         currentAnnouncerVolume = PlayerPrefs.HasKey("announcer_volume") ? PlayerPrefs.GetFloat("announcer_volume") : 1f;
@@ -40,7 +37,7 @@ public class AudioManager : MonoBehaviour
         SetSFXVolume(currentSFXVolume);
     }
 
-    private void Update()
+    private void Start()
     {
         
     }
