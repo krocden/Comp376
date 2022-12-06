@@ -335,7 +335,7 @@ public class Turret : MonoBehaviour
 
         RaycastHit hit;
         if (Physics.Raycast(origin, monster.transform.position - origin, out hit))
-            if (hit.transform.gameObject.tag != "Wall")
+            if (hit.transform.gameObject.tag != "Wall" && hit.transform != transform)
                 return true;
 
         Debug.DrawRay(origin, origin - transform.position, Color.green, 1, false);
