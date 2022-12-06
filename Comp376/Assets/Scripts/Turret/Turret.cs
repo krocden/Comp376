@@ -46,8 +46,10 @@ public class Turret : MonoBehaviour
         GameStateManager.Instance.tick -= HandleTick;
     }
 
-    public void HandleTick() {
-        switch (_currentState) {
+    public void HandleTick()
+    {
+        switch (_currentState)
+        {
             case GunTurret:
                 ticks++;
                 if (ticks == rateOfFire)
@@ -69,7 +71,8 @@ public class Turret : MonoBehaviour
         }
     }
 
-    public void SetLevel(int level) {
+    public void SetLevel(int level)
+    {
         this.level = level;
 
         switch (_currentState)
@@ -99,8 +102,10 @@ public class Turret : MonoBehaviour
         }
     }
 
-    private void SetStats(int rangeZ, int rangeX, float rateOfFire, int power) {
-        switch (_currentState) {
+    private void SetStats(int rangeZ, int rangeX, float rateOfFire, int power)
+    {
+        switch (_currentState)
+        {
             case GunTurret:
                 this.rateOfFire = rateOfFire;
                 this.damage = power;
@@ -201,8 +206,9 @@ public class Turret : MonoBehaviour
         cannonGunExplosion.Play();
         AudioManager.Instance.PlaySFX(cannonTurretSFX);
 
+        bool hasPlayedParticles = false;
         int maxCount = turretArea.monstersInArea.Count;
-
+        Vector3 spawnPoint = Vector3.Lerp(transform.position, cannonGunExplosion.transform.position, 0.5f);
         for (int i = 0; i < maxCount; i++)
         {
             if (i > turretArea.monstersInArea.Count - 1) return;
@@ -210,8 +216,17 @@ public class Turret : MonoBehaviour
             if (turretArea.monstersInArea[i] == null)
                 turretArea.monstersInArea.RemoveAt(i);
             else
-            if (turretArea.monstersInArea[i].TakeDamage(damage))
-                turretArea.monstersInArea.RemoveAt(i);
+            {
+                if (HasVisibility(spawnPoint, turretArea.monstersInArea[i]?.transform))
+                {
+                    if (!hasPlayedParticles) {
+                        cannonGunExplosion.Play(); 
+                        hasPlayedParticles = true; 
+                    }
+                    if (turretArea.monstersInArea[i].TakeDamage(damage))
+                        turretArea.monstersInArea.RemoveAt(i);
+                }
+            }
         }
     }
 
@@ -250,14 +265,19 @@ public class Turret : MonoBehaviour
         AudioManager.Instance.PlaySFX(gunTurretSFX);
 
         Monster monster = turretArea.monstersInArea[0];
-        while (monster == null && turretArea.monstersInArea.Count > 1)
+        Vector3 spawnPoint = Vector3.Lerp(transform.position, cannonGunExplosion.transform.position, 0.5f);
+        bool isVisible = HasVisibility(spawnPoint, monster?.transform);
+
+        while (monster == null && turretArea.monstersInArea.Count > 1 && !isVisible)
         {
             turretArea.monstersInArea.RemoveAt(0);
-            monster = turretArea.monstersInArea[0];
-        }
-        if (monster == null) return;
 
-        GunTurretBullet bullet = Instantiate(turretGunBulletPrefab, transform.position, Quaternion.identity).GetComponent<GunTurretBullet>();
+            monster = turretArea.monstersInArea[0];
+            isVisible = HasVisibility(spawnPoint, monster?.transform);
+        }
+        if (monster == null || !HasVisibility(spawnPoint, monster?.transform)) return;
+
+        GunTurretBullet bullet = Instantiate(turretGunBulletPrefab, spawnPoint, Quaternion.identity).GetComponent<GunTurretBullet>();
         bullet.target = monster;
         bullet.damage = damage;
         bullet.turret = this;
@@ -269,5 +289,19 @@ public class Turret : MonoBehaviour
 
         if (monster.TakeDamage(damage))
             turretArea.monstersInArea.Remove(monster);
+    }
+
+    public bool HasVisibility(Vector3 origin, Transform monster)
+    {
+        if (monster == null) return false;
+
+        RaycastHit hit;
+        if (Physics.Raycast(origin, monster.transform.position - origin, out hit))
+            if (hit.transform.gameObject.tag != "Wall")
+                return true;
+
+        Debug.DrawRay(origin, origin - transform.position, Color.green, 1, false);
+
+        return false;
     }
 }

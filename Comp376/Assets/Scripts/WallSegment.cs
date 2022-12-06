@@ -36,6 +36,7 @@ public class WallSegment : MonoBehaviour
     {
         _player = GameObject.FindWithTag("Player").transform;
         col = GetComponent<BoxCollider>();
+        transform.localScale = new Vector3(10, 0.2f, 0.1f);
     }
 
     private void OnEnable()
@@ -107,10 +108,10 @@ public class WallSegment : MonoBehaviour
                     if (previousWallState == WallAutomata.WallState.Barrier) return;
 
                     //create tower
-                    _automata.GoToState(WallAutomata.WallState.Plain);
+                    bool validWall = _automata.GoToState(WallAutomata.WallState.Plain);
 
                     bool isTurretAlreadyPlaced = _isFacingFrontFace ? _automata.FrontFaceState != WallAutomata.TurretState.EmptyTurret : _automata.BackFaceState != WallAutomata.TurretState.EmptyTurret;
-                    if (WrenchMenu.Instance.Selected > 0 && !isTurretAlreadyPlaced)
+                    if (WrenchMenu.Instance.Selected > 0 && !isTurretAlreadyPlaced && validWall)
                         _automata.GoToTurretState(_isFacingFrontFace, (WallAutomata.TurretState)(WrenchMenu.Instance.Selected));
 
                     // position the wall in place so the pathfinder algo can look with this new wall
