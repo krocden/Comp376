@@ -50,6 +50,11 @@ public class Monster : MonoBehaviour
         nexusDamage *= tier;
     }
 
+    public int GetTier()
+    {
+        return tier;
+    }
+
     public void ApplySlow(float modifier)
     {
         speed = modifier * baseSpeed;

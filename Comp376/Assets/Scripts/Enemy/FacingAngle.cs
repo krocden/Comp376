@@ -10,6 +10,7 @@ public class FacingAngle : MonoBehaviour
     private Transform player;
     private SpriteRenderer mSpriteRenderer;
     private Animator mAnimator;
+    private Monster mMonster;
 
     private float angle;
 
@@ -24,6 +25,11 @@ public class FacingAngle : MonoBehaviour
         player = GameObject.Find("Player").transform;
         mSpriteRenderer = GetComponent<SpriteRenderer>();
         mAnimator = GetComponent<Animator>();
+        mMonster = GetComponentInParent<Monster>();
+
+        //mSpriteRenderer;
+
+        SetTierColour(mMonster.GetTier());
     }
 
     // Update is called once per frame
@@ -77,5 +83,29 @@ public class FacingAngle : MonoBehaviour
         }
 
         return lastIndex;
+    }
+
+    private void SetTierColour(int a)
+    {
+        if(a == 1)
+        {
+            mSpriteRenderer.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);  //default/uncoloured
+        }
+        if(a == 2)
+        {
+            mSpriteRenderer.color = new Color(0.0f, 1.0f, 0.35f, 1.0f); //green
+        }
+        if(a == 3)
+        {
+            mSpriteRenderer.color = new Color(1.0f, 0.87f, 0.0f, 1.0f); //yellow
+        }
+        if(a == 4)
+        {
+            mSpriteRenderer.color = new Color(1.0f, 0.26f, 0.0f, 1.0f); //orange-red
+        }
+        if(a == 5)
+        {
+            mSpriteRenderer.color = new Color(1.0f, 0.0f, 0.73f, 1.0f); //purple
+        }
     }
 }
