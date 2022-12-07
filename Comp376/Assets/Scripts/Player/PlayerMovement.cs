@@ -12,9 +12,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float gravity;
     [SerializeField] private float jumpHeight;
     [SerializeField] private float verticalVelocity;
-    
+
     private Vector3 movement;
-    
+
     private CharacterController controller;
     [SerializeField] private Camera firstPersonCamera;
     [SerializeField] private Camera deathCamera;
@@ -65,14 +65,14 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift) && grounded)
         {
             isRunning = true;
-        } 
-        if (Input.GetKeyUp(KeyCode.LeftShift)) 
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             if (grounded)
             {
                 isRunning = false;
-            } 
-            else 
+            }
+            else
             {
                 StartCoroutine(landing());
             }
@@ -107,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
         right.Normalize();
 
         movement = forward * z + right * x;
-        
+
         movement.y = verticalVelocity;
 
         if (knockback.magnitude >= 0.5)
@@ -208,22 +208,24 @@ public class PlayerMovement : MonoBehaviour
         speed = walkSpeed;
     }
 
-    public void ApplyBuff(float modifier) {
+    public void ApplyBuff(float modifier)
+    {
         buffZones++;
         buffModifier = modifier;
     }
 
-    public void RemoveBuff() {
+    public void RemoveBuff()
+    {
         buffZones--;
         if (buffZones == 0)
             buffModifier = 0;
     }
 
-    public void SetPositionAndRotation(Vector3 newPos, Quaternion rotation) {
+    public void SetPositionAndRotation(Vector3 newPos, Vector3 dir)
+    {
         controller.enabled = false;
         this.transform.position = newPos;
-        this.transform.rotation = rotation;
+        this.transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
         controller.enabled = true;
     }
-
 }
