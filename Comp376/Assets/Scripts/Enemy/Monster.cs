@@ -48,6 +48,11 @@ public class Monster : MonoBehaviour
         currencyOnKill = Mathf.RoundToInt(currencyOnKill * multi);
     }
 
+    public int GetTier()
+    {
+        return tier;
+    }
+
     public void ApplySlow(float modifier)
     {
         speed = modifier * baseSpeed;
