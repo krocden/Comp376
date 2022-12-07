@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class CurrencyManager : MonoBehaviour
 {
-    public const int STARTING_CASH = 100;
+    public const int STARTING_CASH = 200;
     public int totalCurrencyEarned = STARTING_CASH;
 
     [SerializeField] private AudioClip purchaseSound;

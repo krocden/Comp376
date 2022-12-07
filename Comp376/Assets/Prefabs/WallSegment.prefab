@@ -214,7 +214,10 @@ MonoBehaviour:
   rateOfFire: 1
   damage: 25
   turretMaterials:
-  - {fileID: 2100000, guid: 59c257b8530e6f44590cf2e1f6b4ad39, type: 2}
+  - {fileID: 2100000, guid: abdce68802c90884aa493f042017f285, type: 2}
+  - {fileID: 2100000, guid: e8899e32378880043a2110687795210e, type: 2}
+  - {fileID: 2100000, guid: 27871c64a47545c48a9adad4a56495db, type: 2}
+  - {fileID: 2100000, guid: 2808a8b2d4f3ac847ab5cc98172b651b, type: 2}
   turretArea: {fileID: 9049723483069431706}
   turretGunBulletPrefab: {fileID: 6008000480893494911, guid: abc5ee368ec5e6249b672909ad633953, type: 3}
   cannonGunExplosion: {fileID: 1527090838306426769}
@@ -249,7 +252,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3877181766270271039}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0021, y: -1, z: 16.5}
+  m_LocalPosition: {x: -0.0021, y: -1.5, z: 16.5}
   m_LocalScale: {x: 5, y: 5, z: 33.3}
   m_Children: []
   m_Father: {fileID: 1325339355177673315}
@@ -282,7 +285,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: b29b127f50168df42bc2c9d2913eeb22, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -368,7 +371,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4795133259727377694}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0021, y: -1, z: 16.5}
+  m_LocalPosition: {x: -0.0021, y: -1.5, z: 16.5}
   m_LocalScale: {x: 5, y: 5, z: 33.3}
   m_Children: []
   m_Father: {fileID: 1840080261367348693}
@@ -401,7 +404,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: b29b127f50168df42bc2c9d2913eeb22, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -655,7 +658,10 @@ MonoBehaviour:
   rateOfFire: 1
   damage: 25
   turretMaterials:
-  - {fileID: 2100000, guid: 59c257b8530e6f44590cf2e1f6b4ad39, type: 2}
+  - {fileID: 2100000, guid: abdce68802c90884aa493f042017f285, type: 2}
+  - {fileID: 2100000, guid: e8899e32378880043a2110687795210e, type: 2}
+  - {fileID: 2100000, guid: 27871c64a47545c48a9adad4a56495db, type: 2}
+  - {fileID: 2100000, guid: 2808a8b2d4f3ac847ab5cc98172b651b, type: 2}
   turretArea: {fileID: 7465020307714501898}
   turretGunBulletPrefab: {fileID: 6008000480893494911, guid: abc5ee368ec5e6249b672909ad633953, type: 3}
   cannonGunExplosion: {fileID: 6349030219754875243}

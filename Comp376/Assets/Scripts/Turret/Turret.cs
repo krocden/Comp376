@@ -139,6 +139,14 @@ public class Turret : MonoBehaviour
         this.ticks = 0;
 
         turretArea.state = _currentState;
+        if (!activePortals[0] || !activePortals[1])
+        {
+            if (activePortals[0])
+                activePortals[0].turretArea.GetComponent<MeshRenderer>().enabled = false;
+            if (activePortals[1])
+                activePortals[1].turretArea.GetComponent<MeshRenderer>().enabled = false;
+        }
+        turretArea.GetComponent<MeshRenderer>().enabled = false;
 
         switch (state)
         {
@@ -149,7 +157,7 @@ public class Turret : MonoBehaviour
                 rend.material = turretMaterials[0];
                 break;
             case CannonTurret:
-                rend.material = turretMaterials[0];
+                rend.material = turretMaterials[1];
                 break;
             case PortalTurret:
                 if (activePortals[0] && activePortals[1])
@@ -162,15 +170,20 @@ public class Turret : MonoBehaviour
                     activePortals[0] = this;
                 else
                     activePortals[1] = this;
-                rend.material = turretMaterials[0];
+                if (activePortals[0] && activePortals[1])
+                {
+                    activePortals[0].turretArea.GetComponent<MeshRenderer>().enabled = true;
+                    activePortals[1].turretArea.GetComponent<MeshRenderer>().enabled = true;
+                }
+                rend.enabled = false;
                 break;
             case BuffTurret:
                 //Logic in turret trigger area (onenter), modifier controls strength (replaces damage)
-                rend.material = turretMaterials[0];
+                rend.material = turretMaterials[2];
                 break;
             case SlowTurret:
                 //Logic in turret trigger area (onenter), modifier controls strength (replaces damage)
-                rend.material = turretMaterials[0];
+                rend.material = turretMaterials[3];
                 break;
             case BarrierTurret:
                 rend.enabled = false;
