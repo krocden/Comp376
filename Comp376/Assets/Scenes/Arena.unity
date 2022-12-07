@@ -2282,6 +2282,7 @@ MonoBehaviour:
   currencyOnKill: 0
   damage: 0
   pushPower: 0
+  tierMultiplier: 1.4
 --- !u!1 &131960474
 GameObject:
   m_ObjectHideFlags: 0
@@ -4946,6 +4947,7 @@ MonoBehaviour:
   currencyOnKill: 0
   damage: 0
   pushPower: 0
+  tierMultiplier: 1.4
 --- !u!1 &278105446
 GameObject:
   m_ObjectHideFlags: 0
@@ -7518,6 +7520,7 @@ MonoBehaviour:
   currencyOnKill: 0
   damage: 0
   pushPower: 0
+  tierMultiplier: 1.4
 --- !u!1 &449603260
 GameObject:
   m_ObjectHideFlags: 0
@@ -14815,7 +14818,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4743281820775439944, guid: 7684935d04d9be049a7c5eacd876987f, type: 3}
       propertyPath: m_Volume
-      value: 0.11314596
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7684935d04d9be049a7c5eacd876987f, type: 3}
@@ -18964,10 +18967,9 @@ MonoBehaviour:
   magazineSize: 6
   fireRate: 0.5
   fireCd: 0
-  range: 80
   automatic: 0
   canShoot: 1
-  explosionRadius: 0
+  explosionRadius: 3
   player: {fileID: 0}
   shootShound: {fileID: 8300000, guid: cc6334fefa87574438df20acecc544d6, type: 3}
   reloadSound: {fileID: 8300000, guid: 87d82e3e6afb0fb498d2ecd86b1b05ad, type: 3}
