@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -66,7 +67,7 @@ public class GameStateManager : MonoBehaviour
 
     private Wave[] LoadWaves()
     {
-        return Resources.LoadAll<Wave>($"Levels\\Level {currentLevel}\\Waves");
+        return Resources.LoadAll<Wave>($"Levels\\Level {currentLevel}\\Waves").OrderBy(x => int.Parse(x.name.Replace("Wave ", string.Empty))).ToArray();
     }
 
     private void Update()
