@@ -175,10 +175,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c80e1b3336540c44283eccbcd768ad37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 200
-  speed: 6
+  health: 350
+  speed: 3
   attackRange: 2.5
-  currencyOnKill: 5
+  currencyOnKill: 25
+  nexusDamage: 50
   damage: 40
   pushPower: 40
   tierMultiplier: 1.4

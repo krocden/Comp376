@@ -93,9 +93,9 @@ public class Turret : MonoBehaviour
                 if (level == 3) SetStats(5, 5, 2f, 0);
                 break;
             case SlowTurret:
-                if (level == 1) SetStats(1, 1, 0.5f, 0);
-                if (level == 2) SetStats(3, 3, 0.33f, 0);
-                if (level == 3) SetStats(5, 5, 0.25f, 0);
+                if (level == 1) SetStats(1, 1, 0.80f, 0);
+                if (level == 2) SetStats(3, 3, 0.70f, 0);
+                if (level == 3) SetStats(5, 5, 0.60f, 0);
                 break;
             case PortalTurret:
                 SetStats(0.1f, 1, 0, 0);
@@ -200,8 +200,8 @@ public class Turret : MonoBehaviour
                 if (level == 3) return "Max Level";
                 break;
             case SlowTurret:
-                if (level == 1) return "Next upgrade: -66% slow";
-                if (level == 2) return "Next upgrade: -75% slow";
+                if (level == 1) return "Next upgrade: -30% slow";
+                if (level == 2) return "Next upgrade: -40% slow";
                 if (level == 3) return "Max Level";
                 break;
             case EmptyTurret:

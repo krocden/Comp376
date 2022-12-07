@@ -9,6 +9,7 @@ public class Monster : MonoBehaviour
     [SerializeField] protected float speed;
     [SerializeField] protected float attackRange;
     [SerializeField] protected int currencyOnKill;
+    [SerializeField] protected int nexusDamage = 1;
 
     protected List<PathNode> path;
     protected Nexus target;
@@ -44,8 +45,9 @@ public class Monster : MonoBehaviour
         this.tier = tier;
         float multi = Mathf.Pow(tierMultiplier, tier - 1);
         baseSpeed = speed = Mathf.RoundToInt(speed * multi);
-        health = Mathf.RoundToInt(health * multi);
-        currencyOnKill = Mathf.RoundToInt(currencyOnKill * multi);
+        health *= tier;
+        currencyOnKill *= tier;
+        nexusDamage *= tier;
     }
 
     public void ApplySlow(float modifier)
@@ -95,7 +97,7 @@ public class Monster : MonoBehaviour
         // attack the nexus
         if (gameObject != null)
         {
-            target.TakeDamage(tier);
+            target.TakeDamage(nexusDamage);
             Destroy(gameObject);
         }
     }

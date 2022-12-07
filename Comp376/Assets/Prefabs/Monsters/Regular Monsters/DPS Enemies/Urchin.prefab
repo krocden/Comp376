@@ -176,10 +176,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 5
-  speed: 10
+  speed: 6
   attackRange: 2.5
-  currencyOnKill: 3
-  damage: 40
+  currencyOnKill: 1
+  nexusDamage: 1
+  damage: 60
   pushPower: 40
   tierMultiplier: 1.5
 --- !u!54 &2049065101080523895
