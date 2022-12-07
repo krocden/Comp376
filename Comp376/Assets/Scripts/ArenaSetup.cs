@@ -102,7 +102,7 @@ public class ArenaSetup : MonoBehaviour
             nextWavePathStartEndCoordinatesList.RemoveAt(0);
         }
 
-        if (!isSpawnerAddedNextWave && pathStartEndCoordinatesList.Count > 0)
+        if (!isSpawnerAddedNextWave && GameStateManager.Instance.currentWave > 0)
         {
             List<PathNode> pathToDestroy = pathfinding.FindPath(newPath, ignoreWalls: true);
             Vector3 spawnPoint = pathToDestroy[0].position + Vector3.up;

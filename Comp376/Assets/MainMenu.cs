@@ -7,10 +7,19 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] private GameObject optionsMenu;
     [SerializeField] private AudioClip buttonClickSound;
+    [SerializeField] private GameObject difficultyMenu;
 
-    public void StartGame()
+    public void OpenDifficultySelection()
     {
         AudioManager.Instance.PlaySFX(buttonClickSound);
+        difficultyMenu.SetActive(true);
+    }
+
+    public void StartGame(int difficulty)
+    {
+        AudioManager.Instance.PlaySFX(buttonClickSound);
+        PlayerPrefs.SetInt("level", difficulty);
+        PlayerPrefs.Save();
         SceneManager.LoadScene("Arena");
     }
 
@@ -18,6 +27,7 @@ public class MainMenu : MonoBehaviour
     {
         AudioManager.Instance.PlaySFX(buttonClickSound);
         optionsMenu.SetActive(true);
+        difficultyMenu.SetActive(false);
     }
 
     public void ExitGame()

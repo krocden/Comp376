@@ -62,6 +62,7 @@ public class GameStateManager : MonoBehaviour
 
     private Level LoadLevel()
     {
+        currentLevel = PlayerPrefs.HasKey("level") ? PlayerPrefs.GetInt("level") : 1;
         return Resources.Load<Level>($"Levels\\Level {currentLevel}\\Level {currentLevel}");
     }
 
