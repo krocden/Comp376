@@ -116,8 +116,15 @@ public class WallSegment : MonoBehaviour
 
                     if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 2)
                     {
-                        _text.text += "\n<color=\"green\">" + Turret.GetUpgradeText(_automata.FrontFaceState, _automata.FrontLevel);
-                        _text.text += "\n<color=\"red\">Cost: " + WallAutomata.GetTurretPrice(_automata.FrontFaceState, _automata.FrontLevel);
+                        string upgradeText = Turret.GetUpgradeText(_automata.FrontFaceState, _automata.FrontLevel);
+                        string turretPrice = WallAutomata.GetTurretPrice(_automata.FrontFaceState, _automata.FrontLevel).ToString();
+
+                        _text.text += "\n<color=\"green\">" + upgradeText;
+                        _text.text += (upgradeText != "Max Level") ? "\n<color=\"red\">Cost: " + turretPrice + "$" : string.Empty;
+                    }
+                    else if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 1)
+                    {
+                        _text.text += $"\n<color=\"red\">Refund: {WallAutomata.CostRefunded(_automata.FrontFaceState, _automata.FrontLevel)}$";
                     }
                     _canvas.transform.localScale = new Vector3(1, 1, 10);
                     _canvas.transform.localPosition = new Vector3(0, -0.2f, -0.51f);
@@ -129,7 +136,11 @@ public class WallSegment : MonoBehaviour
                     if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 2)
                     {
                         _text.text += "\n<color=\"green\">" + Turret.GetUpgradeText(_automata.BackFaceState, _automata.Backlevel);
-                        _text.text += "\n<color=\"red\">Cost: " + WallAutomata.GetTurretPrice(_automata.BackFaceState, _automata.Backlevel);
+                        _text.text += "\n<color=\"red\">Cost: " + WallAutomata.GetTurretPrice(_automata.BackFaceState, _automata.Backlevel) + "$";
+                    }
+                    else if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 1)
+                    {
+                        _text.text += $"\n<color=\"red\">Refund: {WallAutomata.CostRefunded(_automata.BackFaceState, _automata.Backlevel)}$";
                     }
                     _canvas.transform.localScale = new Vector3(-1, 1, 10);
                     _canvas.transform.localPosition = new Vector3(0, -0.2f, 0.51f);

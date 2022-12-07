@@ -22,6 +22,7 @@ public class Turret : MonoBehaviour
     [SerializeField] TurretTriggerArea turretArea;
     [SerializeField] GameObject turretGunBulletPrefab;
     [SerializeField] ParticleSystem cannonGunExplosion;
+    [SerializeField] private SpriteRenderer PortalVisual;
 
     [SerializeField] private AudioClip gunTurretSFX;
     [SerializeField] private AudioClip cannonTurretSFX;
@@ -136,6 +137,7 @@ public class Turret : MonoBehaviour
                 activePortals[i] = null;
 
         rend.enabled = true;
+        PortalVisual.enabled = false;
         this.ticks = 0;
 
         turretArea.state = _currentState;
@@ -176,6 +178,7 @@ public class Turret : MonoBehaviour
                     activePortals[1].turretArea.GetComponent<MeshRenderer>().enabled = true;
                 }
                 rend.enabled = false;
+                PortalVisual.enabled = true;
                 break;
             case BuffTurret:
                 //Logic in turret trigger area (onenter), modifier controls strength (replaces damage)

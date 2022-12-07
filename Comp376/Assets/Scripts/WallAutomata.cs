@@ -127,18 +127,21 @@ public class WallAutomata
         return true;
     }
 
+    public static int CostRefunded(TurretState state, int level, bool isFullRefund = false) {
+        int baseCost = GetTurretPrice(state);
+        float totalCost = 0;
+        for (int i = 0; i < level; i++)
+            totalCost += baseCost * Mathf.Pow(_upgradeCostMultiplier, i);
+        return Mathf.RoundToInt(totalCost * (isFullRefund ? 1 : _refundCostMultiplier));
+    }
+
     public void GoToTurretState(bool isFrontFace, TurretState newState, bool isFullRefund = false)
     {
         bool isValidState = true;
         switch (newState)
         {
             case TurretState.EmptyTurret:
-                int level = isFrontFace ? _frontTurretLevel : _backTurretLevel;
-                int baseCost = isFrontFace ? GetTurretPrice(_frontFace) : GetTurretPrice(_backFace);
-                float totalCost = 0;
-                for (int i = 0; i < level; i++)
-                    totalCost += baseCost * Mathf.Pow(_upgradeCostMultiplier, i);
-                int costRefunded = Mathf.RoundToInt(totalCost * (isFullRefund ? 1 : _refundCostMultiplier));
+                int costRefunded = isFrontFace ? CostRefunded(_frontFace, _frontTurretLevel, isFullRefund) : CostRefunded(_backFace, _backTurretLevel, isFullRefund);
                 if (isFrontFace)
                     _frontTurretLevel = 1;
                 else
