@@ -20,7 +20,7 @@ MonoBehaviour:
     commandType: 1
     repeatNextXRows: 0
     repeatTimes: 0
-  - monsterPrefab: {fileID: 1275620735232441013, guid: 8f0d459f1138f26419a7559fcce34c93, type: 3}
+  - monsterPrefab: {fileID: 1803621357302915460, guid: 8f0d459f1138f26419a7559fcce34c93, type: 3}
     monsterQuantity: 1
     monsterTier: 1
     monsterSpawnRate: 0.5

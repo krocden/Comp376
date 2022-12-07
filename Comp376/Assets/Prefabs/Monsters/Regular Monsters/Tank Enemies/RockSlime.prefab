@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5578211910298818367}
   - component: {fileID: 5578211910298818361}
   - component: {fileID: 2049065101080523895}
-  - component: {fileID: 1275620735232441013}
+  - component: {fileID: 1803621357302915460}
   m_Layer: 0
   m_Name: RockSlime
   m_TagString: Enemy
@@ -64,7 +64,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1275620735232441013
+--- !u!114 &1803621357302915460
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5578211910298818366}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 315f2921620ee09459497150339173cc, type: 3}
+  m_Script: {fileID: 11500000, guid: c80e1b3336540c44283eccbcd768ad37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   health: 20

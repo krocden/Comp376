@@ -7,5 +7,6 @@ public class Level : ScriptableObject
 {
     public int maximumSpawners;
     public int addSpawnerWaveInterval;
+    public int addSpawnerOffset;
     public int numberOfSpawnersToAdd;
 }
