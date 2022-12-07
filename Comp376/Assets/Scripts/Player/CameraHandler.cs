@@ -54,4 +54,15 @@ public class CameraHandler : MonoBehaviour
             transform.parent.rotation = Quaternion.Euler(eulerRotation);
         }
     }
+
+    public void SetRotation(Vector3 rot)
+    {
+        rotation.x = rot.y;
+        Quaternion localRotation = Quaternion.AngleAxis(rotation.x, Vector3.up) * Quaternion.AngleAxis(rotation.y, Vector3.right);
+        transform.rotation = localRotation;
+
+        Vector3 eulerRotation = localRotation.eulerAngles;
+        eulerRotation.x = 0;
+        transform.parent.rotation = Quaternion.Euler(eulerRotation);
+    }
 }

@@ -225,7 +225,8 @@ public class PlayerMovement : MonoBehaviour
     {
         controller.enabled = false;
         this.transform.position = newPos;
-        this.transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+        firstPersonCamera.GetComponent<CameraHandler>().SetRotation(dir);
         controller.enabled = true;
+
     }
 }

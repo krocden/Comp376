@@ -203,8 +203,8 @@ public class WallSegment : MonoBehaviour
             }
             else
             {
-                _automata.GoToState(previousState);
-                _automata.GoToTurretState(_isFacingFrontFace, previousTurretState);
+                _automata.GoToState(previousState, isFullRefund: true);
+                _automata.GoToTurretState(_isFacingFrontFace, previousTurretState, isFullRefund: true);
             }
         }        
     }

@@ -277,10 +277,12 @@ public class Turret : MonoBehaviour
 
         Debug.Log($"Last Position: {player.transform.position}");
 
-        int portal = this == activePortals[0] ? 1 : 0;
+        int otherPortal = this == activePortals[0] ? 1 : 0;
 
-        Vector3 pos = activePortals[portal].turretArea.transform.position;
-        Vector3 dir = (activePortals[portal].turretArea.transform.position - transform.position).normalized;
+        Vector3 pos = activePortals[otherPortal].turretArea.transform.position;
+        Vector3 dir = activePortals[otherPortal].turretArea.transform.eulerAngles;
+
+        Debug.DrawRay(pos, dir, Color.red, 10f);
 
         player.SetPositionAndRotation(pos,dir);
 

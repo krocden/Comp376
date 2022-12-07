@@ -71,7 +71,7 @@ public class WallAutomata
         BarrierTurret
     }
 
-    public bool GoToState(WallState newState)
+    public bool GoToState(WallState newState, bool isFullRefund = false)
     {
         if (_currentState == newState) return true;
 
@@ -79,7 +79,7 @@ public class WallAutomata
         switch (newState)
         {
             case WallState.Empty:
-                isValidState = SetEmptyWall(_currentState);
+                isValidState = SetEmptyWall(_currentState, isFullRefund);
                 break;
             case WallState.Plain:
                 isValidState = SetPlainWall(_currentState);
@@ -127,10 +127,9 @@ public class WallAutomata
         return true;
     }
 
-    public void GoToTurretState(bool isFrontFace, TurretState newState)
+    public void GoToTurretState(bool isFrontFace, TurretState newState, bool isFullRefund = false)
     {
         bool isValidState = true;
-        int cost = GetTurretPrice(newState);
         switch (newState)
         {
             case TurretState.EmptyTurret:
@@ -139,7 +138,7 @@ public class WallAutomata
                 float totalCost = 0;
                 for (int i = 0; i < level; i++)
                     totalCost += baseCost * Mathf.Pow(_upgradeCostMultiplier, i);
-                int costRefunded = Mathf.RoundToInt(totalCost * _refundCostMultiplier);
+                int costRefunded = Mathf.RoundToInt(totalCost * (isFullRefund ? 1 : _refundCostMultiplier));
                 if (isFrontFace)
                     _frontTurretLevel = 1;
                 else
@@ -147,7 +146,7 @@ public class WallAutomata
                 CurrencyManager.Instance.AddCurrency(costRefunded);
                 break;
             default:
-                isValidState = CurrencyManager.Instance.SubtractCurrency(cost);
+                isValidState = CurrencyManager.Instance.SubtractCurrency(GetTurretPrice(newState));
                 break;
 
         }
@@ -186,9 +185,9 @@ public class WallAutomata
         return CurrencyManager.Instance.SubtractCurrency(cost);
     }
 
-    private bool SetEmptyWall(WallState previousState)
+    private bool SetEmptyWall(WallState previousState, bool isFullRefund = false)
     {
-        int costRefunded = Mathf.RoundToInt(GetWallPrice(previousState) * _refundCostMultiplier);
+        int costRefunded = Mathf.RoundToInt(GetWallPrice(previousState) * (isFullRefund ? 1 : _refundCostMultiplier));
         CurrencyManager.Instance.AddCurrency(costRefunded);
         return true;
         //handle any non-visual elements (money down, etc.)
