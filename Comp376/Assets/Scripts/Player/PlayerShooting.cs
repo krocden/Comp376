@@ -88,7 +88,8 @@ public class PlayerShooting : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha5))
             {
                 if (hasRaygun)
-                    changeGun(GunType.Raygun);
+                    StartCoroutine(gotRaygun(30));
+                    //changeGun(GunType.Raygun);
             }
 
             if (!this.gameObject.GetComponentInChildren<CameraHandler>().usingMenu)

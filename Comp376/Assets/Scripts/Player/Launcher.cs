@@ -5,9 +5,9 @@ using UnityEngine;
 public class Launcher : Gun
 {
     public float damage;
-    public int currentAmmo;
-    public int maxAmmo;
-    public int magazineSize;
+    //public int currentAmmo;
+    //public int currentMaxAmmo;
+    //public int magazineSize;
     public float fireRate;
     public float fireCd;
     //public float range;
@@ -39,24 +39,24 @@ public class Launcher : Gun
 
     public override void reload()
     {
-        if (maxAmmo > 0)
+        if (currentMaxAmmo > 0)
         {
             if (currentAmmo != magazineSize)
             {
-                if (maxAmmo < magazineSize)
+                if (currentMaxAmmo < magazineSize)
                 {
-                    currentAmmo = maxAmmo;
-                    maxAmmo = 0;
+                    currentAmmo = currentMaxAmmo;
+                    currentMaxAmmo = 0;
                 }
                 else
                 {
                     if (currentAmmo > 0)
                     {
-                        maxAmmo -= (magazineSize - currentAmmo);
+                        currentMaxAmmo -= (magazineSize - currentAmmo);
                     }
                     else
                     {
-                        maxAmmo -= magazineSize;
+                        currentMaxAmmo -= magazineSize;
                     }
                     currentAmmo = magazineSize;
                 }
@@ -151,10 +151,10 @@ public class Launcher : Gun
         Physics.IgnoreCollision(bullet.GetComponent<Collider>(), player.GetComponent<Collider>());
     }
 
-    public override void getAmmo(out int currAmmo, out int maxAmmo)
+    public override void getAmmo(out int currAmmo, out int currentMaxAmmo)
     {
         currAmmo = currentAmmo;
-        maxAmmo = this.maxAmmo;
+        currentMaxAmmo = this.currentMaxAmmo;
     }
 
     public override void updateAnim()

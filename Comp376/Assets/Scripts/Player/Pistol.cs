@@ -6,9 +6,9 @@ using UnityEngine;
 public class Pistol : Gun
 {
     public float damage;
-    public int currentAmmo;
-    public int maxAmmo;
-    public int magazineSize;
+    //public int currentAmmo;
+    //public int currentMaxAmmo;
+    //public int magazineSize;
     public float fireRate;
     public float fireCd;
     //public float range;
@@ -38,24 +38,24 @@ public class Pistol : Gun
 
     public override void reload()
     {
-        if (maxAmmo > 0)
+        if (currentMaxAmmo > 0)
         {
             if (currentAmmo != magazineSize)
             {
-                if (maxAmmo < magazineSize)
+                if (currentMaxAmmo < magazineSize)
                 {
-                    currentAmmo = maxAmmo;
-                    maxAmmo = 0;
+                    currentAmmo = currentMaxAmmo;
+                    currentMaxAmmo = 0;
                 } 
                 else
                 {
                     if (currentAmmo > 0)
                     {
-                        maxAmmo -= (magazineSize - currentAmmo);
+                        currentMaxAmmo -= (magazineSize - currentAmmo);
                     } 
                     else
                     {
-                        maxAmmo -= magazineSize;
+                        currentMaxAmmo -= magazineSize;
                     }
                     currentAmmo = magazineSize;
                 }
@@ -170,10 +170,10 @@ public class Pistol : Gun
         Destroy(trail.gameObject, trail.time);
     }
 
-    public override void getAmmo(out int currentAmmo, out int maxAmmo)
+    public override void getAmmo(out int currentAmmo, out int currentMaxAmmo)
     {
         currentAmmo = this.currentAmmo;
-        maxAmmo = this.maxAmmo;
+        currentMaxAmmo = this.currentMaxAmmo;
     }
     public override void updateAnim()
     {
