@@ -11,7 +11,7 @@ public class OptionsMenu : MonoBehaviour
     private void OnEnable()
     {
         audioPanel.SetActive(false);
-        //helpPanel.SetActive(false);
+        helpPanel.SetActive(false);
     }
 
     public void OpenAudioPanel()
@@ -22,7 +22,7 @@ public class OptionsMenu : MonoBehaviour
 
     public void OpenHelpPanel()
     {
-        //helpPanel.SetActive(true);
+        helpPanel.SetActive(true);
         AudioManager.Instance.PlaySFX(buttonClickSound);
     }
 

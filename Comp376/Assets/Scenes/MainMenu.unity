@@ -1884,6 +1884,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 250
       objectReference: {fileID: 0}
+    - target: {fileID: 5632112180688698494, guid: 797d0b30e57036c43b47ae93525de655, type: 3}
+      propertyPath: buttonClickSound
+      value: 
+      objectReference: {fileID: 8300000, guid: ea86b95eef9081a499f6ae25290a2f4b, type: 3}
+    - target: {fileID: 5632112181578619259, guid: 797d0b30e57036c43b47ae93525de655, type: 3}
+      propertyPath: m_text
+      value: Enemies
+      objectReference: {fileID: 0}
     - target: {fileID: 6011020120293647796, guid: 797d0b30e57036c43b47ae93525de655, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
