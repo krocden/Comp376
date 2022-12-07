@@ -179,7 +179,7 @@ MonoBehaviour:
   speed: 3
   attackRange: 2.5
   currencyOnKill: 25
-  nexusDamage: 50
+  nexusDamage: 25
   damage: 40
   pushPower: 40
   tierMultiplier: 1.4
