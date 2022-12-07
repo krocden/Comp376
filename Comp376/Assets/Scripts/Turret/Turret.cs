@@ -277,13 +277,12 @@ public class Turret : MonoBehaviour
 
         Debug.Log($"Last Position: {player.transform.position}");
 
-        Vector3 pos;
-        if (this == activePortals[0])
-            pos = activePortals[1].turretArea.transform.position;
-        else
-            pos = activePortals[1].turretArea.transform.position;
+        int portal = this == activePortals[0] ? 1 : 0;
 
-        player.SetPositionAndRotation(pos, Quaternion.LookRotation(pos - transform.position, Vector3.up));
+        Vector3 pos = activePortals[portal].turretArea.transform.position;
+        Vector3 dir = (activePortals[portal].turretArea.transform.position - transform.position).normalized;
+
+        player.SetPositionAndRotation(pos,dir);
 
         AudioManager.Instance.PlaySFX(portalTurretSFX);
 
@@ -292,7 +291,6 @@ public class Turret : MonoBehaviour
 
     private void TeleportOut()
     {
-        if (lastUsedPortal == this) return;
         isTeleportDisabled = false;
     }
 

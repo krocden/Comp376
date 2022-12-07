@@ -115,8 +115,10 @@ public class WallSegment : MonoBehaviour
                     _text.text = Turret.GetTurretText(_automata.FrontFaceState, _automata.FrontLevel);
 
                     if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 2)
+                    {
                         _text.text += "\n<color=\"green\">" + Turret.GetUpgradeText(_automata.FrontFaceState, _automata.FrontLevel);
-
+                        _text.text += "\n<color=\"red\">Cost: " + WallAutomata.GetTurretPrice(_automata.FrontFaceState, _automata.FrontLevel);
+                    }
                     _canvas.transform.localScale = new Vector3(1, 1, 10);
                     _canvas.transform.localPosition = new Vector3(0, -0.2f, -0.51f);
                 }
@@ -125,8 +127,10 @@ public class WallSegment : MonoBehaviour
                     _text.text = Turret.GetTurretText(_automata.BackFaceState, _automata.Backlevel);
 
                     if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 2)
+                    {
                         _text.text += "\n<color=\"green\">" + Turret.GetUpgradeText(_automata.BackFaceState, _automata.Backlevel);
-
+                        _text.text += "\n<color=\"red\">Cost: " + WallAutomata.GetTurretPrice(_automata.BackFaceState, _automata.Backlevel);
+                    }
                     _canvas.transform.localScale = new Vector3(-1, 1, 10);
                     _canvas.transform.localPosition = new Vector3(0, -0.2f, 0.51f);
                 }

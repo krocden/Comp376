@@ -11,7 +11,7 @@ public class Rifle : Gun
     public int magazineSize;
     public float fireRate;
     public float fireCd;
-    public float range;
+    //public float range;
     public bool automatic;
     public bool canShoot;
     public float headshotMultiplier;

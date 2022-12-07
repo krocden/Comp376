@@ -3,15 +3,17 @@ using UnityEngine;
 
 public class WallAutomata
 {
-    private int _plainWallCost;
-    private int _gunTurretCost;
-    private int _cannonTurretCost;
-    private int _portalTurretCost;
-    private int _buffTurretCost;
-    private int _slowTurretCost;
-    private int _barrierWallCost;
-    private float _upgradeCostMultiplier;
-    private float _refundCostMultiplier;
+    public static int PlainWallCost => _plainWallCost;
+
+    private static int _plainWallCost;
+    private static int _gunTurretCost;
+    private static int _cannonTurretCost;
+    private static int _portalTurretCost;
+    private static int _buffTurretCost;
+    private static int _slowTurretCost;
+    private static int _barrierWallCost;
+    private static float _upgradeCostMultiplier;
+    private static float _refundCostMultiplier;
 
     public void SetCosts(
         int plainCost,
@@ -112,7 +114,7 @@ public class WallAutomata
 
         if (currentLevel >= maxLevel)
             return false;
-        int price = Mathf.RoundToInt(GetTurretPrice(turret) * Mathf.Pow(_upgradeCostMultiplier, currentLevel));
+        int price = GetTurretPrice(turret, currentLevel);
         if (!CurrencyManager.Instance.SubtractCurrency(price))
             return false;
 
@@ -192,7 +194,7 @@ public class WallAutomata
         //handle any non-visual elements (money down, etc.)
     }
 
-    private int GetWallPrice(WallState wallState)
+    public static int GetWallPrice(WallState wallState)
     {
         switch (wallState)
         {
@@ -207,26 +209,31 @@ public class WallAutomata
         return -99999;
     }
 
-    private int GetTurretPrice(TurretState turretState)
+    public static int GetTurretPrice(TurretState turretState, int currentLevel = 0)
     {
+        float price = 0;
+
         switch (turretState)
         {
             case TurretState.EmptyTurret:
-                return 0;
+                price = 0; break;
             case TurretState.GunTurret:
-                return _gunTurretCost;
+                price = _gunTurretCost; break;
             case TurretState.CannonTurret:
-                return _cannonTurretCost;
+                price = _cannonTurretCost; break;
             case TurretState.PortalTurret:
-                return _portalTurretCost;
+                price = _portalTurretCost; break;
             case TurretState.BuffTurret:
-                return _buffTurretCost;
+                price = _buffTurretCost; break;
             case TurretState.SlowTurret:
-                return _slowTurretCost;
+                price = _slowTurretCost; break;
             case TurretState.BarrierTurret:
-                return 0;
+                price = 0; break;
         }
-        // not going to happen
-        return -99999;
+
+        if (currentLevel > 0)
+            price *= Mathf.Pow(_upgradeCostMultiplier, currentLevel);
+
+        return Mathf.RoundToInt(price);
     }
 }

@@ -60,12 +60,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c80e1b3336540c44283eccbcd768ad37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 8
+  health: 200
   speed: 10
   attackRange: 2.5
   currencyOnKill: 5
   damage: 40
   pushPower: 40
+  tierMultiplier: 1.4
 --- !u!54 &2049065101080523895
 Rigidbody:
   m_ObjectHideFlags: 0
