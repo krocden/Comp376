@@ -20,6 +20,7 @@ public class WrenchMenu : MonoBehaviour
 
     [SerializeField] private GameObject wrenchPanel;
     [SerializeField] private Image[] panels;
+    [SerializeField] private TMPro.TMP_Text costText;
     [SerializeField] private int selected = 0;
 
     public int Selected => selected;
@@ -38,6 +39,7 @@ public class WrenchMenu : MonoBehaviour
     private void OnGameStateChanged(GameState state)
     {
         wrenchPanel.SetActive(state == GameState.Planning);
+        costText.gameObject.SetActive(state == GameState.Planning);
     }
 
     void Update()
@@ -60,10 +62,24 @@ public class WrenchMenu : MonoBehaviour
         {
             selected++;
             if (selected > panels.Length - 1) selected = 0;
+
+            costText.text = (Selected < PanelNumber - 3) ? "Cost: " + (WallAutomata.GetTurretPrice((WallAutomata.TurretState)(WrenchMenu.Instance.Selected)) + WallAutomata.PlainWallCost).ToString() : string.Empty;
         }
         else {
             selected--;
             if (selected < 0) selected = panels.Length - 1;
+
+            costText.text = (Selected < PanelNumber - 3) ? "Cost: " + (WallAutomata.GetTurretPrice((WallAutomata.TurretState)(WrenchMenu.Instance.Selected)) + WallAutomata.PlainWallCost).ToString() : string.Empty;
         }
+
+
+        if (Selected < PanelNumber - 3)
+        {
+            costText.text = $"Cost: {WallAutomata.GetTurretPrice((WallAutomata.TurretState)(Selected)) + WallAutomata.PlainWallCost}$";
+        }
+        else if (Selected == PanelNumber - 3)
+            costText.text = $"Cost: {WallAutomata.GetWallPrice(WallAutomata.WallState.Barrier)}$";
+        else
+            costText.text = string.Empty;
     }
 }
