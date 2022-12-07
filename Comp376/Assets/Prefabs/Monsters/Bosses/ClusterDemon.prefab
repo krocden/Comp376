@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 200
-  speed: 10
+  speed: 6
   attackRange: 2.5
   currencyOnKill: 5
   damage: 40
