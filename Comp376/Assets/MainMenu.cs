@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private GameObject optionsMenu;
+    [SerializeField] private GameObject creditsMenu;
     [SerializeField] private AudioClip buttonClickSound;
     [SerializeField] private GameObject difficultyMenu;
 
@@ -13,6 +14,8 @@ public class MainMenu : MonoBehaviour
     {
         AudioManager.Instance.PlaySFX(buttonClickSound);
         difficultyMenu.SetActive(true);
+        optionsMenu.SetActive(false);
+        creditsMenu.SetActive(false);
     }
 
     public void StartGame(int difficulty)
@@ -28,6 +31,15 @@ public class MainMenu : MonoBehaviour
         AudioManager.Instance.PlaySFX(buttonClickSound);
         optionsMenu.SetActive(true);
         difficultyMenu.SetActive(false);
+        creditsMenu.SetActive(false);
+    }
+
+    public void OpenCreditsMenu()
+    {
+        AudioManager.Instance.PlaySFX(buttonClickSound);
+        creditsMenu.SetActive(true);
+        difficultyMenu.SetActive(false);
+        optionsMenu.SetActive(false);
     }
 
     public void ExitGame()
