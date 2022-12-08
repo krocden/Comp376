@@ -28,7 +28,8 @@ public class Monster : MonoBehaviour
     {
         baseSpeed = speed;
         mSlowEffect = GetComponentInChildren<SlowEffect>();
-        mSlowEffect.DisableSlow();
+        if (mSlowEffect)
+            mSlowEffect.DisableSlow();
     }
 
     private void Update()
@@ -63,12 +64,14 @@ public class Monster : MonoBehaviour
     public void ApplySlow(float modifier)
     {
         speed = modifier * baseSpeed;
-        mSlowEffect.EnableSlow();
+        if (mSlowEffect)
+            mSlowEffect.EnableSlow();
     }
 
     public void RemoveSlow() {
         speed = baseSpeed;
-        mSlowEffect.DisableSlow();
+        if (mSlowEffect)
+            mSlowEffect.DisableSlow();
     }
 
     protected virtual async Task MoveAlongPath()
