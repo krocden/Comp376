@@ -124,7 +124,7 @@ public class WallSegment : MonoBehaviour
                     }
                     else if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 1)
                     {
-                        _text.text += $"\n<color=\"red\">Refund: {WallAutomata.CostRefunded(_automata.FrontFaceState, _automata.FrontLevel)}$";
+                        _text.text += $"\n<color=\"red\">Refund: {WallAutomata.CostRefunded(_automata.FrontFaceState, _automata.FrontLevel, accountForWall: true)}$";
                     }
                     _canvas.transform.localScale = new Vector3(1, 1, 10);
                     _canvas.transform.localPosition = new Vector3(0, -0.2f, -0.51f);
@@ -140,7 +140,7 @@ public class WallSegment : MonoBehaviour
                     }
                     else if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 1)
                     {
-                        _text.text += $"\n<color=\"red\">Refund: {WallAutomata.CostRefunded(_automata.BackFaceState, _automata.Backlevel)}$";
+                        _text.text += $"\n<color=\"red\">Refund: {WallAutomata.CostRefunded(_automata.BackFaceState, _automata.Backlevel, accountForWall: true)}$";
                     }
                     _canvas.transform.localScale = new Vector3(-1, 1, 10);
                     _canvas.transform.localPosition = new Vector3(0, -0.2f, 0.51f);
