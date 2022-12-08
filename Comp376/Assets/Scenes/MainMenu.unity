@@ -569,6 +569,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 489873086525184620, guid: 55490a09b9bfb2044ae2abec8add78d7, type: 3}
+      propertyPath: m_text
+      value: Ryan Rokni
+      objectReference: {fileID: 0}
     - target: {fileID: 3345380227600333080, guid: 55490a09b9bfb2044ae2abec8add78d7, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
