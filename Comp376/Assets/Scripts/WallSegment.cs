@@ -135,8 +135,8 @@ public class WallSegment : MonoBehaviour
 
                     if (WrenchMenu.Instance.Selected == WrenchMenu.Instance.PanelNumber - 2)
                     {
-                        string upgradeText = Turret.GetUpgradeText(_automata.FrontFaceState, _automata.FrontLevel);
-                        string turretPrice = WallAutomata.GetTurretPrice(_automata.FrontFaceState, _automata.FrontLevel).ToString();
+                        string upgradeText = Turret.GetUpgradeText(_automata.BackFaceState, _automata.Backlevel);
+                        string turretPrice = WallAutomata.GetTurretPrice(_automata.BackFaceState, _automata.Backlevel).ToString();
 
                         _text.text += "\n<color=\"green\">" + upgradeText;
                         _text.text += (upgradeText != "Max Level") ? "\n<color=\"red\">Cost: " + turretPrice + "$" : string.Empty;
