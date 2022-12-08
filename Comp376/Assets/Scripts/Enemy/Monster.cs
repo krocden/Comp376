@@ -20,10 +20,15 @@ public class Monster : MonoBehaviour
     private int tier = 1;
     [SerializeField] private float tierMultiplier = 1.4f;
 
+    //private bool slowed = false;
+    private SlowEffect mSlowEffect;
+
     // Start is called before the first frame update
     void Start()
     {
         baseSpeed = speed;
+        mSlowEffect = GetComponentInChildren<SlowEffect>();
+        mSlowEffect.DisableSlow();
     }
 
     private void Update()
@@ -58,10 +63,12 @@ public class Monster : MonoBehaviour
     public void ApplySlow(float modifier)
     {
         speed = modifier * baseSpeed;
+        mSlowEffect.EnableSlow();
     }
 
     public void RemoveSlow() {
         speed = baseSpeed;
+        mSlowEffect.DisableSlow();
     }
 
     protected virtual async Task MoveAlongPath()
@@ -123,4 +130,11 @@ public class Monster : MonoBehaviour
         CurrencyManager.Instance.AddCurrency(currencyOnKill);
         Destroy(gameObject);
     }
+
+    /*
+    public bool GetSlow()
+    {
+        return slowed;
+    }
+    */
 }
