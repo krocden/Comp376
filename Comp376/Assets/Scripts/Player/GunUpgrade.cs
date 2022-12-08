@@ -47,10 +47,10 @@ public class GunUpgrade : MonoBehaviour
             case 3: rifle.damage *= 1.20f; break;
             case 4: rifle.damage *= 1.25f; break;
             case 5: rifle.damage *= 1.30f; break;
-            case 6: rifle.headshotMultiplier = 1.3f; break;
-            case 7: rifle.headshotMultiplier = 1.4f; break;
-            case 8: rifle.headshotMultiplier = 1.5f; break;
-            case 9: rifle.headshotMultiplier = 1.6f; break;
+            case 6: rifle.criticalChance = 0.025f; break;
+            case 7: rifle.criticalChance = 0.05f; break;
+            case 8: rifle.criticalChance = 0.075f; break;
+            case 9: rifle.criticalChance = 0.10f; break;
             case 10: case 11: case 12: case 13: rifle.magazineSize += 4; rifle.maxAmmo += 40; break;
             case 15: shotgun.damage *= 1.15f; break;    // Shotgun id 15-26
             case 16: shotgun.damage *= 1.20f; break;

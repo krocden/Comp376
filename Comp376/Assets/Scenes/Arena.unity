@@ -736,7 +736,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Increase Headshot Damage
+  m_text: Increase Critical Chance
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7007131c06da75849841da970ca71fdf, type: 2}
   m_sharedMaterial: {fileID: 573309116245487214, guid: 7007131c06da75849841da970ca71fdf, type: 2}
@@ -1391,7 +1391,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 19
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 14
   tooltip: {fileID: 1459327484}
 --- !u!114 &67766118
@@ -4176,7 +4176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 11
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 10
   tooltip: {fileID: 722716276}
 --- !u!114 &235756852
@@ -4526,7 +4526,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 2
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 1
   tooltip: {fileID: 324168709}
 --- !u!114 &237292275
@@ -5762,7 +5762,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 8
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 7
   tooltip: {fileID: 1531400387}
 --- !u!114 &326205539
@@ -7955,7 +7955,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Increase Headshot Damage
+  m_text: Increase Critical Chance
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7007131c06da75849841da970ca71fdf, type: 2}
   m_sharedMaterial: {fileID: 573309116245487214, guid: 7007131c06da75849841da970ca71fdf, type: 2}
@@ -8472,7 +8472,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Increase Headshot Damage
+  m_text: Increase Critical Chance
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7007131c06da75849841da970ca71fdf, type: 2}
   m_sharedMaterial: {fileID: 573309116245487214, guid: 7007131c06da75849841da970ca71fdf, type: 2}
@@ -9262,7 +9262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 15
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 14
   tooltip: {fileID: 1187144891}
 --- !u!114 &500972918
@@ -10697,7 +10697,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 31
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 30
   tooltip: {fileID: 1850442356}
 --- !u!114 &547774258
@@ -10973,7 +10973,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 27
   unlocked: 0
-  cost: 100
+  cost: 150
   upgradePreRequisite: 0
   tooltip: {fileID: 805459048}
 --- !u!114 &549701355
@@ -11455,7 +11455,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 4
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 3
   tooltip: {fileID: 646714357}
 --- !u!114 &572534268
@@ -13139,7 +13139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 6
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 1
   tooltip: {fileID: 10113696}
 --- !u!114 &619018821
@@ -13632,7 +13632,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 25
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 24
   tooltip: {fileID: 1551233940}
 --- !u!114 &666644515
@@ -13968,7 +13968,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 20
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 19
   tooltip: {fileID: 543953624}
 --- !u!114 &670056439
@@ -14835,7 +14835,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 7
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 6
   tooltip: {fileID: 565296094}
 --- !u!114 &708240110
@@ -15324,7 +15324,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Increase Headshot Damage
+  m_text: Increase Critical Chance
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7007131c06da75849841da970ca71fdf, type: 2}
   m_sharedMaterial: {fileID: 573309116245487214, guid: 7007131c06da75849841da970ca71fdf, type: 2}
@@ -15770,7 +15770,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 23
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 14
   tooltip: {fileID: 1946468972}
 --- !u!114 &747564558
@@ -16407,7 +16407,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 39
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 38
   tooltip: {fileID: 212969791}
 --- !u!114 &785882039
@@ -16968,7 +16968,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 14
   unlocked: 0
-  cost: 100
+  cost: 150
   upgradePreRequisite: 0
   tooltip: {fileID: 513050349}
 --- !u!114 &805244229
@@ -17970,7 +17970,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 22
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 21
   tooltip: {fileID: 1459109249}
 --- !u!114 &854028604
@@ -18379,7 +18379,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 37
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 36
   tooltip: {fileID: 2051744732}
 --- !u!114 &872154921
@@ -20208,7 +20208,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 24
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 23
   tooltip: {fileID: 1362082397}
 --- !u!114 &944561342
@@ -20392,6 +20392,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2082479007}
     m_Modifications:
+    - target: {fileID: 2853365369479660812, guid: 321b74e8365d3554f8f40f56a51a8b4d, type: 3}
+      propertyPath: damage
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 2853365369479660812, guid: 321b74e8365d3554f8f40f56a51a8b4d, type: 3}
       propertyPath: maxAmmo
       value: 80
@@ -21653,7 +21657,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 38
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 37
   tooltip: {fileID: 2001836254}
 --- !u!114 &1020814968
@@ -24437,7 +24441,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 5
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 4
   tooltip: {fileID: 5007262}
 --- !u!114 &1181864471
@@ -26749,7 +26753,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 33
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 32
   tooltip: {fileID: 232004143}
 --- !u!114 &1304392989
@@ -27235,7 +27239,7 @@ MonoBehaviour:
   maxAmmo: 64
   magazineSize: 8
   damage: 2
-  fireRate: 0.6
+  fireRate: 0.72
   fireCd: 0
   range: 40
   spread: 0.08
@@ -27655,7 +27659,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 29
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 28
   tooltip: {fileID: 373030325}
 --- !u!114 &1344542053
@@ -27855,7 +27859,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 34
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 33
   tooltip: {fileID: 46545414}
 --- !u!114 &1346618154
@@ -29297,7 +29301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   unlocked: 0
-  cost: 100
+  cost: 150
   upgradePreRequisite: 0
   tooltip: {fileID: 2105237303}
 --- !u!114 &1432816153
@@ -29990,7 +29994,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 26
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 25
   tooltip: {fileID: 582677432}
 --- !u!114 &1450987238
@@ -30190,7 +30194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 35
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 34
   tooltip: {fileID: 306000831}
 --- !u!114 &1455284758
@@ -30896,7 +30900,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedGun: {fileID: 636730895}
   text: {fileID: 135016824}
-  cost: 40
+  cost: 50
   player: {fileID: 787140825}
   buyDistance: 5
 --- !u!65 &1482061588
@@ -31071,7 +31075,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 30
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 29
   tooltip: {fileID: 794455917}
 --- !u!114 &1484000578
@@ -31673,7 +31677,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 32
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 27
   tooltip: {fileID: 413892494}
 --- !u!114 &1517889640
@@ -32023,7 +32027,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 18
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 17
   tooltip: {fileID: 1814633588}
 --- !u!114 &1527686294
@@ -32848,7 +32852,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 16
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 15
   tooltip: {fileID: 104241236}
 --- !u!114 &1565870878
@@ -33049,7 +33053,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 28
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 27
   tooltip: {fileID: 1314699078}
 --- !u!114 &1567088261
@@ -33893,7 +33897,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 21
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 20
   tooltip: {fileID: 1041653072}
 --- !u!114 &1582562242
@@ -34365,7 +34369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 12
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 11
   tooltip: {fileID: 836632494}
 --- !u!114 &1595892866
@@ -37487,7 +37491,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 13
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 12
   tooltip: {fileID: 590576692}
 --- !u!114 &1776974161
@@ -37687,7 +37691,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 9
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 8
   tooltip: {fileID: 1972691929}
 --- !u!114 &1784871948
@@ -38498,7 +38502,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedGun: {fileID: 8425277121093338019}
   text: {fileID: 1177626564}
-  cost: 150
+  cost: 200
   player: {fileID: 787140825}
   buyDistance: 5
 --- !u!212 &1822912165
@@ -38701,7 +38705,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedGun: {fileID: 1331224281}
   text: {fileID: 517551323}
-  cost: 125
+  cost: 200
   player: {fileID: 787140825}
   buyDistance: 5
 --- !u!212 &1839758688
@@ -39784,7 +39788,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 17
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 16
   tooltip: {fileID: 1261281030}
 --- !u!114 &1889111860
@@ -40430,7 +40434,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 3
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 2
   tooltip: {fileID: 1043095242}
 --- !u!114 &1926912473
@@ -42044,7 +42048,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 10
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 1
   tooltip: {fileID: 1427436662}
 --- !u!114 &1994300214
@@ -42287,7 +42291,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedGun: {fileID: 912072908}
   text: {fileID: 679511362}
-  cost: 150
+  cost: 200
   player: {fileID: 787140825}
   buyDistance: 5
 --- !u!212 &1998006378
@@ -43308,7 +43312,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 36
   unlocked: 0
-  cost: 20
+  cost: 50
   upgradePreRequisite: 27
   tooltip: {fileID: 1579688487}
 --- !u!114 &2064200475
@@ -44944,7 +44948,7 @@ MonoBehaviour:
   fireCd: 0
   automatic: 1
   canShoot: 1
-  headshotMultiplier: 1.2
+  criticalChance: 0
   player: {fileID: 0}
   shootShound: {fileID: 8300000, guid: 25675eecf5deb644394bf720b9045f9f, type: 3}
   reloadSound: {fileID: 8300000, guid: 15c65be560fb04547858eef842f6e264, type: 3}

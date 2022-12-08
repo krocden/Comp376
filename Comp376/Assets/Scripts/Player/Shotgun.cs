@@ -136,6 +136,9 @@ public class Shotgun : Gun
                 {
                     fireCd = Time.time + fireRate;
 
+                    anim.SetTrigger("shoot");
+                    AudioManager.Instance.PlaySFX(shootShound);
+
                     for (int i = 1; i <= pelletPerRound; i++)
                     {
                         Vector3 bulletDirection = Camera.main.transform.forward +
@@ -166,8 +169,10 @@ public class Shotgun : Gun
                                         float rangeDiff = hits[j].distance - range;
                                         finalDamage *= Mathf.Clamp((1 - (rangeDiff * 0.02f)), 0.001f, 1);
                                     }
-                                    enemy.TakeDamage(finalDamage);
                                     CurrencyManager.Instance.AddCurrency(currencyPerHit);
+                                    if (enemy.TakeDamage(finalDamage))
+                                        return true;
+                                        
                                     Debug.Log("Health: " + enemy.health);
                                     Debug.Log("Damage: " + damage + ", Boost: " + (j + 1) + "x");
                                     actualHit = hits[j];
@@ -187,8 +192,7 @@ public class Shotgun : Gun
 
                     }
 
-                    anim.SetTrigger("shoot");
-                    AudioManager.Instance.PlaySFX(shootShound);
+                    
 
                     return true;
                 }

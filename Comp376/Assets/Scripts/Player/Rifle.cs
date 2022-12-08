@@ -14,7 +14,7 @@ public class Rifle : Gun
     //public float range;
     public bool automatic;
     public bool canShoot;
-    public float headshotMultiplier;
+    public float criticalChance;
     bool isReloading = false;
 
     public GameObject player;
@@ -121,7 +121,11 @@ public class Rifle : Gun
                                     GameObject hitObject = hits[i].transform.gameObject;
                                     Monster enemy = hitObject.GetComponent<Monster>();
 
-                                    enemy.TakeDamage((i + 1) * damage);
+                                    if (Random.value < criticalChance)
+                                        enemy.TakeDamage((i + 1) * damage * 2);
+                                    else
+                                        enemy.TakeDamage((i + 1) * damage);
+
                                     CurrencyManager.Instance.AddCurrency(currencyPerHit);
                                     Debug.Log("Health: " + enemy.health);
                                     Debug.Log("Damage: " + damage + ", Boost: " + (i + 1) + "x");
