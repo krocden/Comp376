@@ -8,7 +8,7 @@ public class SlowEffect : MonoBehaviour
     private SpriteRenderer mSpriteRenderer;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         //mAnimator = GetComponent<Animator>();
         mSpriteRenderer = GetComponent<SpriteRenderer>();
