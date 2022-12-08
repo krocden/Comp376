@@ -127,11 +127,12 @@ public class WallAutomata
         return true;
     }
 
-    public static int CostRefunded(TurretState state, int level, bool isFullRefund = false) {
+    public static int CostRefunded(TurretState state, int level, bool isFullRefund = false, bool accountForWall = false) {        
         int baseCost = GetTurretPrice(state);
         float totalCost = 0;
         for (int i = 0; i < level; i++)
             totalCost += baseCost * Mathf.Pow(_upgradeCostMultiplier, i);
+        totalCost += accountForWall ? GetWallPrice(WallState.Plain): 0;
         return Mathf.RoundToInt(totalCost * (isFullRefund ? 1 : _refundCostMultiplier));
     }
 
