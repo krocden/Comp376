@@ -15263,7 +15263,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4743281820775439944, guid: 7684935d04d9be049a7c5eacd876987f, type: 3}
       propertyPath: m_Volume
-      value: 1
+      value: 0.14633045
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7684935d04d9be049a7c5eacd876987f, type: 3}
@@ -20394,7 +20394,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2853365369479660812, guid: 321b74e8365d3554f8f40f56a51a8b4d, type: 3}
       propertyPath: damage
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2853365369479660812, guid: 321b74e8365d3554f8f40f56a51a8b4d, type: 3}
       propertyPath: maxAmmo
@@ -30900,7 +30900,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedGun: {fileID: 636730895}
   text: {fileID: 135016824}
-  cost: 50
+  cost: 25
   player: {fileID: 787140825}
   buyDistance: 5
 --- !u!65 &1482061588
@@ -38502,7 +38502,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedGun: {fileID: 8425277121093338019}
   text: {fileID: 1177626564}
-  cost: 200
+  cost: 75
   player: {fileID: 787140825}
   buyDistance: 5
 --- !u!212 &1822912165
@@ -38705,7 +38705,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedGun: {fileID: 1331224281}
   text: {fileID: 517551323}
-  cost: 200
+  cost: 100
   player: {fileID: 787140825}
   buyDistance: 5
 --- !u!212 &1839758688
@@ -42291,7 +42291,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedGun: {fileID: 912072908}
   text: {fileID: 679511362}
-  cost: 200
+  cost: 150
   player: {fileID: 787140825}
   buyDistance: 5
 --- !u!212 &1998006378

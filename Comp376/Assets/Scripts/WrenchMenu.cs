@@ -47,7 +47,7 @@ public class WrenchMenu : MonoBehaviour
 
     void Update()
     {
-        if (disableInput) return;
+        if (disableInput || GameStateManager.Instance.BlockInput) return;
 
         if (Input.mouseScrollDelta.y > 0)
             UpdateSelected(true);

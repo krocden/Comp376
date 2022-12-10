@@ -281,7 +281,7 @@ MonoBehaviour:
   health: 5
   speed: 6
   attackRange: 2.5
-  currencyOnKill: 1
+  currencyOnKill: 2
   nexusDamage: 1
   damage: 60
   pushPower: 40

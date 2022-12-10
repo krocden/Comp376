@@ -24,9 +24,20 @@ public class Turret : MonoBehaviour
     [SerializeField] ParticleSystem cannonGunExplosion;
     [SerializeField] private SpriteRenderer PortalVisual;
 
+    [SerializeField] private SpriteRenderer minimapTurretVisual;
+
     [SerializeField] private AudioClip gunTurretSFX;
     [SerializeField] private AudioClip cannonTurretSFX;
     [SerializeField] private AudioClip portalTurretSFX;
+
+    private List<Color> turretColors = new List<Color>()
+    {
+        Color.red,
+        Color.yellow,
+        Color.magenta,
+        Color.green,
+        Color.blue,
+    };
 
     void Start()
     {
@@ -79,14 +90,14 @@ public class Turret : MonoBehaviour
         switch (_currentState)
         {
             case GunTurret:
-                if (level == 1) SetStats(2, 1, 4f, 1);
-                if (level == 2) SetStats(4, 1, 2f, 2);
-                if (level == 3) SetStats(6, 1, 1f, 3);
+                if (level == 1) SetStats(2, 1, 4f, 4);
+                if (level == 2) SetStats(4, 1, 2f, 4);
+                if (level == 3) SetStats(6, 1, 1f, 4);
                 break;
             case CannonTurret:
-                if (level == 1) SetStats(1, 1, 8f, 3);
-                if (level == 2) SetStats(3, 3, 8f, 4);
-                if (level == 3) SetStats(3, 3, 4f, 5);
+                if (level == 1) SetStats(1, 1, 8f, 4);
+                if (level == 2) SetStats(3, 3, 8f, 5);
+                if (level == 3) SetStats(3, 3, 4f, 6);
                 break;
             case BuffTurret:
                 if (level == 1) SetStats(1, 1, 1.5f, 0);
@@ -95,8 +106,8 @@ public class Turret : MonoBehaviour
                 break;
             case SlowTurret:
                 if (level == 1) SetStats(1, 1, 0.80f, 0);
-                if (level == 2) SetStats(3, 3, 0.70f, 0);
-                if (level == 3) SetStats(5, 5, 0.60f, 0);
+                if (level == 2) SetStats(3, 3, 0.65f, 0);
+                if (level == 3) SetStats(5, 5, 0.50f, 0);
                 break;
             case PortalTurret:
                 SetStats(0.1f, 1, 0, 0);
@@ -150,16 +161,20 @@ public class Turret : MonoBehaviour
         }
         turretArea.GetComponent<MeshRenderer>().enabled = false;
 
+        minimapTurretVisual.gameObject.SetActive(true);
         switch (state)
         {
             case EmptyTurret:
+                minimapTurretVisual.gameObject.SetActive(false);
                 rend.enabled = false;
                 break;
             case GunTurret:
                 rend.material = turretMaterials[0];
+                minimapTurretVisual.color = turretColors[(int)state - 1];
                 break;
             case CannonTurret:
                 rend.material = turretMaterials[1];
+                minimapTurretVisual.color = turretColors[(int)state - 1];
                 break;
             case PortalTurret:
                 if (activePortals[0] && activePortals[1])
@@ -177,18 +192,22 @@ public class Turret : MonoBehaviour
                     activePortals[0].turretArea.GetComponent<MeshRenderer>().enabled = true;
                     activePortals[1].turretArea.GetComponent<MeshRenderer>().enabled = true;
                 }
+                minimapTurretVisual.color = turretColors[(int)state - 1];
                 rend.enabled = false;
                 PortalVisual.enabled = true;
                 break;
             case BuffTurret:
                 //Logic in turret trigger area (onenter), modifier controls strength (replaces damage)
                 rend.material = turretMaterials[2];
+                minimapTurretVisual.color = turretColors[(int)state - 1];
                 break;
             case SlowTurret:
                 //Logic in turret trigger area (onenter), modifier controls strength (replaces damage)
                 rend.material = turretMaterials[3];
+                minimapTurretVisual.color = turretColors[(int)state - 1];
                 break;
             case BarrierTurret:
+                minimapTurretVisual.gameObject.SetActive(false);
                 rend.enabled = false;
                 break;
             default:
@@ -216,8 +235,8 @@ public class Turret : MonoBehaviour
                 if (level == 3) return "Max Level";
                 break;
             case SlowTurret:
-                if (level == 1) return "Next upgrade: -30% slow";
-                if (level == 2) return "Next upgrade: -40% slow";
+                if (level == 1) return "Next upgrade: -35% slow";
+                if (level == 2) return "Next upgrade: -50% slow";
                 if (level == 3) return "Max Level";
                 break;
             case EmptyTurret:
