@@ -15,7 +15,7 @@ public class WallSegment : MonoBehaviour
     [SerializeField] private Turret _frontTurret;
     [SerializeField] private Turret _backTurret;
 
-    [SerializeField] private GameObject _minimapVisual;
+    [SerializeField] private SpriteRenderer _minimapVisual;
     [SerializeField] private Material[] _wallMaterials;
 
     [Header("Turret Costs")]
@@ -102,6 +102,8 @@ public class WallSegment : MonoBehaviour
 
     private void Update()
     {
+        if (GameStateManager.Instance.BlockInput) return;
+
         if (_isInteractable)
         {
             _renderer.sharedMaterial.color = GetWallState() == WallAutomata.WallState.Barrier ? new Color(0, 1, 0, 0.5f) : Color.green;
@@ -236,7 +238,7 @@ public class WallSegment : MonoBehaviour
                 _renderer.sharedMaterial = _wallMaterials[0];
                 _renderer.sharedMaterial.color = new Color(1, 1, 1, 1);
                 GetComponent<Collider>().isTrigger = false;
-                _minimapVisual.SetActive(false);
+                _minimapVisual.gameObject.SetActive(false);
                 break;
             case WallAutomata.WallState.Barrier:
                 _canvas.enabled = false;
@@ -245,7 +247,8 @@ public class WallSegment : MonoBehaviour
                 _renderer.sharedMaterial = _wallMaterials[1];
                 _renderer.sharedMaterial.color = new Color(1, 1, 1, 0.5f);
                 GetComponent<Collider>().isTrigger = true;
-                _minimapVisual.SetActive(true);
+                _minimapVisual.color = new Color(.28f, .82f, .8f, .5f);
+                _minimapVisual.gameObject.SetActive(true);
                 break;
             default:
                 transform.localScale = new Vector3(transform.localScale.x, 10, transform.localScale.z);
@@ -253,7 +256,8 @@ public class WallSegment : MonoBehaviour
                 _renderer.sharedMaterial = _wallMaterials[0];
                 _renderer.sharedMaterial.color = new Color(1, 1, 1, 1f);
                 GetComponent<Collider>().isTrigger = false;
-                _minimapVisual.SetActive(true);
+                _minimapVisual.color = new Color(.2f, .2f, .2f);
+                _minimapVisual.gameObject.SetActive(true);
                 break;
         }
     }
